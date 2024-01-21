@@ -28,15 +28,13 @@ static  FUN_00456800_t* FUN_00456800 = (FUN_00456800_t*)0x00456800;
 typedef const char*(FUN_00421360_t)(const char* param_1);
 static  FUN_00421360_t* FUN_00421360 = (FUN_00421360_t*)0x00421360;
 
-// FUN_0049eb80
 // sprintf, but idk whether it's custom or the LibC variant
-typedef int32_t (rcr_sprintf_t)(char* pDst, const char* pFormat, ...);
-static  rcr_sprintf_t* rcr_sprintf = (rcr_sprintf_t*)0x0049eb80;
+typedef int32_t (FUN_0049eb80_t)(char* pDst, const char* pFormat, ...);
+static  FUN_0049eb80_t* rcr_sprintf = (FUN_0049eb80_t*)0x0049eb80;
 
 typedef int32_t(FUN_004816b0_t)();
 static  FUN_004816b0_t* FUN_004816b0 = (FUN_004816b0_t*)0x004816b0;
 
-// FUN_00450530
 // Position in pixels from
 //   X:  0 - 320
 //   Y:  0 - 240
@@ -45,8 +43,8 @@ static  FUN_004816b0_t* FUN_004816b0 = (FUN_004816b0_t*)0x004816b0;
 //  ~f4  Small
 //  ~c   Centered
 //  ~s   Shadow
-typedef void(UIText_t)(int16_t PosX, int16_t PosY, uint8_t R, uint8_t G, uint8_t B, uint8_t A, const char* pText);
-static  UIText_t* UIText = (UIText_t*)0x00450530;
+typedef void(FUN_00450530_t)(int16_t PosX, int16_t PosY, uint8_t R, uint8_t G, uint8_t B, uint8_t A, const char* pText);
+static  FUN_00450530_t* UIText = (FUN_00450530_t*)0x00450530;
 
 typedef int32_t(FUN_00440620_t)(int32_t param_1);
 static  FUN_00440620_t* FUN_00440620 = (FUN_00440620_t*)0x00440620;
@@ -75,6 +73,21 @@ static  FUN_00454d40_t* FUN_00454d40 = (FUN_00454d40_t*)0x00454d40;
 
 typedef void(FUN_0041e5a0_t)();
 static  FUN_0041e5a0_t* FUN_0041e5a0 = (FUN_0041e5a0_t*)0x0041e5a0;
+
+typedef void(FUN_00440150_t)(int32_t param_1, int param_2);
+static  FUN_00440150_t* FUN_00440150 = (FUN_00440150_t*)0x00440150;
+
+typedef void(FUN_004285d0_t)(uint16_t ImgIdx, int32_t bVisible);
+static  FUN_004285d0_t* ImgVisible = (FUN_004285d0_t*)0x004285d0;
+
+typedef void(FUN_00428660_t)(uint16_t ImgIdx, uint16_t PosX, uint16_t PosY);
+static  FUN_00428660_t* ImgPosition = (FUN_00428660_t*)0x00428660;
+
+typedef void(FUN_004286f0_t)(uint16_t ImgIdx, float ScaleX, float ScaleY);
+static  FUN_004286f0_t* ImgScale = (FUN_004286f0_t*)0x004286f0;
+
+typedef void(FUN_00428740_t)(uint16_t ImgIdx, int8_t R, int8_t G, int8_t B, int8_t A);
+static  FUN_00428740_t* ImgColor = (FUN_00428740_t*)0x00428740;
 
 
 // FUN_0043b0b0
@@ -210,7 +223,7 @@ void MenuTrackSelection()
     int32_t uVar4;
     int32_t uVar5;
     int32_t uVar6;
-    char local_100[256]{};
+    char local_100[256];
     char CircuitIdx;
 
     UnknStruct0* pStruct = g_pUnknStruct0;
@@ -317,8 +330,7 @@ void MenuTrackSelection()
     FUN_0042de10(local_100, 0);
 
     // Idk about this shit...
-    //int64_t a = (uint64_t(pcVar2) << 32) | 0x37;
-    //FUN_00440150((int)a);
+    FUN_00440150(int32_t(pcVar2), 0x37);
 
     uint8_t R, G, B;
     const char* pTxtCircuit = nullptr;
@@ -363,24 +375,24 @@ void MenuTrackSelection()
             pTxtCircuit = FUN_00421360(BufferPage);
             B = 0xFF;
             G = 0x00;
-            R = 0x88;
+            R = 0xAA;
 
             constexpr uint16_t PosX = 20;
             constexpr uint16_t PosY = 180;
-            UIText(PosX, PosY, 0x32, 0xff, 0xff, 0xFF, "~f4~sPlace custom Tracks into Folder:");
+            UIText(PosX, PosY, 0x32, 0xFF, 0xFF, 0xFF, "~f4~sPlace custom Tracks into Folder:");
 
-            char BufferPath[128];
-            strcpy(BufferPath, "~f4~s");
+            char BufferPath[1024];
+            strcpy_s(BufferPath, sizeof(BufferPath), "~f4~s");
             GetCurrentDirectory(sizeof(BufferPath) - 5, BufferPath + 5);
-            for (uint16_t i = 0; i < strlen(BufferPath) && i < sizeof(BufferPath); i++)
+            for (uint16_t i = 0; i < strnlen_s(BufferPath, sizeof(BufferPath)) && i < sizeof(BufferPath); i++)
             {
                 if (BufferPath[i] == '\\')
                 {
                     BufferPath[i] = '/';
                 }
             }
-            strcat(BufferPath, "/tracks/");
-            UIText(PosX, PosY + 8, 0x32, 0xff, 0xff, 0xFF, BufferPath);
+            strcat_s(BufferPath, sizeof(BufferPath), "/tracks/");
+            UIText(PosX, PosY + 8, 0x32, 0xFF, 0xFF, 0xFF, BufferPath);
             break;
         }
     }
@@ -412,14 +424,39 @@ LAB_0043b5c4:
     UIText(0xa0, 0x18, 0x32, 0xff, 0xff, 0xff, local_100);
     FUN_004360e0(pStruct, DAT_0050c17c);
 
-    // Bruh...
-    //iVar1 = CONCAT22((short)((uint)unaff_EDI >> 0x10), (short)*(char*)((int)&g_UnknStruct1Array[pStruct->TrackID].UnknInt2 + 1)) + 0x45;
-    //FUN_004285d0(iVar1, 1);
-    //FUN_00428660(iVar1, 0xa0, 0x91);
-    //FUN_004286f0(iVar1, 0x3f800000, 0x3f800000);
-    //FUN_00428740(iVar1, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff);
+    const uint8_t PlanetIdx = g_UnknStruct1Array[pStruct->TrackID].PlanetIdx;
 
-    UIText(0xe0, 0x8a, 0, 0xff, 0, 0xff, DAT_00e98f5c + *(char*)((int)&g_UnknStruct1Array[pStruct->TrackID].UnknInt2 + 1) * 0x5c);
+    //static uint16_t ImgIdx = 69;
+    //static bool bDown[2] = { false, false };
+    //if (GetKeyState(VK_ADD) & 0xF0 && !bDown[0])
+    //{
+    //    bDown[0] = true;
+    //    ImgIdx++;
+    //}
+    //else if (!(GetKeyState(VK_ADD) & 0xF0) && bDown[0])
+    //{
+    //    bDown[0] = false;
+    //}    
+    //if (GetKeyState(VK_SUBTRACT) & 0xF0 && !bDown[1])
+    //{
+    //    bDown[1] = true;
+    //    ImgIdx--;
+    //}
+    //else if (!(GetKeyState(VK_SUBTRACT) & 0xF0) && bDown[1])
+    //{
+    //    bDown[1] = false;
+    //}
+
+    // Draw planet preview image
+    // Apparently, each ImgIdx can only be drawn once?
+    const uint16_t ImgIdx = g_UnknStruct1Array[pStruct->TrackID].PlanetIdx + 0x45;
+    ImgVisible(ImgIdx, true);
+    ImgPosition(ImgIdx, 160, 145);
+    ImgScale(ImgIdx, 1.0f, 1.0f);
+    ImgColor(ImgIdx, 0xFF, 0xFF, 0xFF, 0xFF);
+
+    const char* pPlanetName = g_PlanetNames[PlanetIdx].Name;
+    UIText(0xe0, 0x8a, 0, 0xff, 0, 0xff, pPlanetName);
     FUN_0043fe90(0x2d, 0x54, 0x1e);
     if (DAT_0050c54c == 0)
     {

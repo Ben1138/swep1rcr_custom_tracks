@@ -17,11 +17,17 @@ struct UnknStruct0
     uint8_t Field_0x70;
 };
 
-struct UnknStruct1
+struct TrackInfo
 {
     int32_t UnknInt0;
     int32_t UnknInt1;
-    int32_t UnknInt2;
+    uint8_t UnknInt2;
+    uint8_t PlanetIdx;
+};
+
+struct PlanetName
+{
+    char Name[92];
 };
 
 static_assert(offsetof(UnknStruct0, Field12_0x0C)    == 0x0C);
