@@ -13,7 +13,17 @@ static int32_t&      g_bCircuitIdxInRange              = *(int32_t*)     0x00e29
 static UnknStruct0*  g_pUnknStruct0                    =  (UnknStruct0*) 0x0050c454;
 static UnknStruct1*  g_UnknStruct1Array                =  (UnknStruct1*) 0x004bfee8;
 
+static const char*   g_TxtTimeAttack                   =  (const char*)  0x004c0dd0;        // "/SCREENTEXT_543/~c~sTime Attack"
+static const char*   g_Txt2Player                      =  (const char*)  0x004c0db0;        // "/SCREENTEXT_544/~c~s2 Player"
+static const char*   g_TxtFreePlay                     =  (const char*)  0x004c0d90;        // "/SCREENTEXT_542/~c~sFree Play"
+static const char*   g_TxtTournament                   =  (const char*)  0x004c0df0;        // "/SCREENTEXT_541/~c~sTournament"
+
 static const char*   g_TxtPlanetNotLoaded              =  (const char*)  0x004c0ee4;
+static const char*   g_TxtCircuitAmateur               =  (const char*)  0x004c0eb0;        // "/SCREENTEXT_530/~f0~c~sAmateur Podracing Circuit"
+static const char*   g_TxtCircuitSemiPro               =  (const char*)  0x004c0e7c;        // "/SCREENTEXT_531/~f0~c~sSemi-Pro Podracing Circuit"
+static const char*   g_TxtCircuitGalactic              =  (const char*)  0x004c0e48;        // "/SCREENTEXT_532/~f0~c~sGalactic Podracing Circuit"
+static const char*   g_TxtCircuitInvitational          =  (const char*)  0x004c0e10;        // "/SCREENTEXT_533/~f0~c~sInvitational Podracing Circuit"
+
 static const char*   g_TxtTrackID_00                   =  (const char*)  0x004c1728;        // "/SCREENTEXT_497/~~The Boonta Training Course"
 static const char*   g_TxtTrackID_01                   =  (const char*)  0x004c1700;        // "/SCREENTEXT_498/~~The Boonta Classic"
 static const char*   g_TxtTrackID_02                   =  (const char*)  0x004c16dc;        // "/SCREENTEXT_499/~~Beedo's Wild Ride"
@@ -50,4 +60,12 @@ static uint8_t&      DAT_0050c17c                      = *(uint8_t*)     0x0050c
 static uint32_t&     DAT_00e295d4                      = *(uint32_t*)    0x00e295d4;
 static float&        DAT_004ac86c                      = *(float*)       0x004ac86c;
 static float&        DAT_004ac93c                      = *(float*)       0x004ac93c;
-//static uint8_t&      DAT_004bfef1                      = *(uint8_t*)     0x004bfef1;
+static char*         DAT_00e98f5c                      =  (char*)        0x00e98f5c;
+static uint32_t&     DAT_0050c918                      = *(uint32_t*)    0x0050c918;
+static int32_t&      DAT_004eb39c                      = *(int32_t*)     0x004eb39c;
+static int32_t&      DAT_004d6b48                      = *(int32_t*)     0x004d6b48;
+static int32_t&      DAT_004eb1c8                      = *(int32_t*)     0x004eb1c8;
+static int32_t&      DAT_00e2a698                      = *(int32_t*)     0x00e2a698;
+static int32_t&      DAT_004d6b44                      = *(int32_t*)     0x004d6b44;
+static int32_t&      DAT_00ea02b0                      = *(int32_t*)     0x00ea02b0;        // TrackIdx !?
+static int32_t&      DAT_00ea05ac                      = *(int32_t*)     0x00ea05ac;
