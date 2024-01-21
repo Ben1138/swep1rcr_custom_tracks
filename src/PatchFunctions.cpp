@@ -23,7 +23,6 @@ inline void PatchFunction(void* pFunction)
     asm("mov %%cs, %0" : "=r" (Segment));
 #endif
 
-
     // TODO: Check whether function to patch is at least 7 bytes in size
     uint8_t Instructions[7] =
     {

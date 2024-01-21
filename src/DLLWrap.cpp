@@ -26,9 +26,9 @@ extern "C"
                 return E_POINTER;
             }
 
-            char MsgBuffer[128];
-            snprintf(MsgBuffer, sizeof(MsgBuffer), "Hooked 'DirectInputCreateA' at: %p", s_pDirectInputCreateA);
-            MessageBoxA(nullptr, MsgBuffer, "SWEP1RCR_ADVANCED", MB_ICONINFORMATION | MB_OK);
+            //char MsgBuffer[128];
+            //snprintf(MsgBuffer, sizeof(MsgBuffer), "Hooked 'DirectInputCreateA' at: %p", s_pDirectInputCreateA);
+            //MessageBoxA(nullptr, MsgBuffer, "SWEP1RCR_ADVANCED", MB_ICONINFORMATION | MB_OK);
 
             PatchAllFunctions();
         }
