@@ -11,7 +11,8 @@ static uint8_t&      g_bIsFreePlay                     = *(uint8_t*)     0x004d5
 static int32_t&      g_SelectedTrackIdx                = *(int32_t*)     0x00e295d0;
 static int32_t&      g_bCircuitIdxInRange              = *(int32_t*)     0x00e295c4;
 static UnknStruct0*  g_pUnknStruct0                    =  (UnknStruct0*) 0x0050c454;
-static UnknStruct1*  g_UnknStruct1Array                =  (UnknStruct1*) 0x004bfee8;
+static TrackInfo*  g_UnknStruct1Array                =  (TrackInfo*) 0x004bfee8;
+static PlanetName*   g_PlanetNames                     =  (PlanetName*)  0x00e98f5c;
 
 static const char*   g_TxtTimeAttack                   =  (const char*)  0x004c0dd0;        // "/SCREENTEXT_543/~c~sTime Attack"
 static const char*   g_Txt2Player                      =  (const char*)  0x004c0db0;        // "/SCREENTEXT_544/~c~s2 Player"
@@ -60,7 +61,6 @@ static uint8_t&      DAT_0050c17c                      = *(uint8_t*)     0x0050c
 static uint32_t&     DAT_00e295d4                      = *(uint32_t*)    0x00e295d4;
 static float&        DAT_004ac86c                      = *(float*)       0x004ac86c;
 static float&        DAT_004ac93c                      = *(float*)       0x004ac93c;
-static char*         DAT_00e98f5c                      =  (char*)        0x00e98f5c;
 static uint32_t&     DAT_0050c918                      = *(uint32_t*)    0x0050c918;
 static int32_t&      DAT_004eb39c                      = *(int32_t*)     0x004eb39c;
 static int32_t&      DAT_004d6b48                      = *(int32_t*)     0x004d6b48;
