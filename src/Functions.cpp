@@ -28,7 +28,7 @@ static  FUN_00456800_t* FUN_00456800 = (FUN_00456800_t*)0x00456800;
 typedef const char*(FUN_00421360_t)(const char* param_1);
 static  FUN_00421360_t* FUN_00421360 = (FUN_00421360_t*)0x00421360;
 
-// sprintf, but idk whether it's custom or the LibC variant
+// sprintf, but idk yet whether it's custom or the LibC variant
 typedef int32_t (FUN_0049eb80_t)(char* pDst, const char* pFormat, ...);
 static  FUN_0049eb80_t* rcr_sprintf = (FUN_0049eb80_t*)0x0049eb80;
 
@@ -58,7 +58,7 @@ static  FUN_004360e0_t* FUN_004360e0 = (FUN_004360e0_t*)0x004360e0;
 typedef void(FUN_0043fe90_t)(int param_1, int param_2, int param_3);
 static  FUN_0043fe90_t* FUN_0043fe90 = (FUN_0043fe90_t*)0x0043fe90;
 
-typedef void(FUN_00469c30_t)(int param_1, int param_2, int param_3);
+typedef void(FUN_00469c30_t)(int param_1, float param_2, int param_3);
 static  FUN_00469c30_t* FUN_00469c30 = (FUN_00469c30_t*)0x00469c30;
 
 typedef void(FUN_004118b0_t)();
@@ -86,41 +86,49 @@ static  FUN_00428660_t* ImgPosition = (FUN_00428660_t*)0x00428660;
 typedef void(FUN_004286f0_t)(uint16_t ImgIdx, float ScaleX, float ScaleY);
 static  FUN_004286f0_t* ImgScale = (FUN_004286f0_t*)0x004286f0;
 
-typedef void(FUN_00428740_t)(uint16_t ImgIdx, int8_t R, int8_t G, int8_t B, int8_t A);
+typedef void(FUN_00428740_t)(uint16_t ImgIdx, uint8_t R, uint8_t G, uint8_t B, uint8_t A);
 static  FUN_00428740_t* ImgColor = (FUN_00428740_t*)0x00428740;
 
 
 // FUN_0043b0b0
 void __cdecl HandleCircuit(UnknStruct0* pStruct)
 {
-    g_TracksInCircuits[4] = 3;
-
-    g_TournamentMaxCircuitIdx = 4;
+    g_TournamentMaxCircuitIdx = 3;
     g_TracksInCurrentCurcuit = 0;
 
     if (!pStruct->bIsTournament)
     {
-        //if (g_BeatTracksGlobal[3] == 0)
+        //if (g_aBeatTracksGlobal[3] == 0)
         //{
         //    g_TournamentMaxCircuitIdx = 2;
         //}
-        for (int i = 0; i < g_TracksInCircuits[pStruct->CircuitIdx]; i++)
+        g_TournamentMaxCircuitIdx = 4;
+
+        if (pStruct->CircuitIdx < 4)
         {
-            if ((g_BeatTracksGlobal[pStruct->CircuitIdx] & (1 << i)) != 0)
+            for (int i = 0; i < g_aTracksInCircuits[pStruct->CircuitIdx]; i++)
             {
-                g_TracksInCurrentCurcuit++;
+                if ((g_aBeatTracksGlobal[pStruct->CircuitIdx] & (1 << i)) != 0)
+                {
+                    g_TracksInCurrentCurcuit++;
+                }
             }
+        }
+        else
+        {
+            g_aTracksInCircuits[4] = 3;
+            g_TracksInCurrentCurcuit = 3;
         }
     }
     else
     {
-        //if (g_TracksSelectableTournament[3] == 0)
-        //{
-        //    g_TournamentMaxCircuitIdx = 2;
-        //}
-        for (uint8_t i = 0; i < g_TracksInCircuits[pStruct->CircuitIdx]; i++)
+        if (g_aTracksSelectableTournament[3] == 0)
         {
-            if ((g_TracksSelectableTournament[pStruct->CircuitIdx] & (1 << i)) != 0)
+            g_TournamentMaxCircuitIdx = 2;
+        }
+        for (uint8_t i = 0; i < g_aTracksInCircuits[pStruct->CircuitIdx]; i++)
+        {
+            if ((g_aTracksSelectableTournament[pStruct->CircuitIdx] & (1 << i)) != 0)
             {
                 g_TracksInCurrentCurcuit++;
             }
@@ -129,7 +137,7 @@ void __cdecl HandleCircuit(UnknStruct0* pStruct)
 
     if ((g_bIsFreePlay != 0) && (pStruct->CircuitIdx < 3))
     {
-        g_TracksInCurrentCurcuit = g_TracksInCircuits[pStruct->CircuitIdx];
+        g_TracksInCurrentCurcuit = g_aTracksInCircuits[pStruct->CircuitIdx];
     }
     if (g_SelectedTrackIdx >= g_TracksInCurrentCurcuit)
     {
@@ -150,55 +158,55 @@ const char* GetTrackName(int32_t TrackID)
     switch (TrackID)
     {
         case 0:
-            return FUN_00421360(g_TxtTrackID_00);
+            return FUN_00421360(g_pTxtTrackID_00);
         case 1:
-            return FUN_00421360(g_TxtTrackID_01);
+            return FUN_00421360(g_pTxtTrackID_01);
         case 2:
-            return FUN_00421360(g_TxtTrackID_02);
+            return FUN_00421360(g_pTxtTrackID_02);
         case 3:
-            return FUN_00421360(g_TxtTrackID_03);
+            return FUN_00421360(g_pTxtTrackID_03);
         case 4:
-            return FUN_00421360(g_TxtTrackID_04);
+            return FUN_00421360(g_pTxtTrackID_04);
         case 5:
-            return FUN_00421360(g_TxtTrackID_05);
+            return FUN_00421360(g_pTxtTrackID_05);
         case 6:
-            return FUN_00421360(g_TxtTrackID_06);
+            return FUN_00421360(g_pTxtTrackID_06);
         case 7:
-            return FUN_00421360(g_TxtTrackID_07);
+            return FUN_00421360(g_pTxtTrackID_07);
         case 8:
-            return FUN_00421360(g_TxtTrackID_08);
+            return FUN_00421360(g_pTxtTrackID_08);
         case 9:
-            return FUN_00421360(g_TxtTrackID_09);
+            return FUN_00421360(g_pTxtTrackID_09);
         case 10:
-            return FUN_00421360(g_TxtTrackID_10);
+            return FUN_00421360(g_pTxtTrackID_10);
         case 11:
-            return FUN_00421360(g_TxtTrackID_11);
+            return FUN_00421360(g_pTxtTrackID_11);
         case 12:
-            return FUN_00421360(g_TxtTrackID_12);
+            return FUN_00421360(g_pTxtTrackID_12);
         case 13:
-            return FUN_00421360(g_TxtTrackID_13);
+            return FUN_00421360(g_pTxtTrackID_13);
         case 14:
-            return FUN_00421360(g_TxtTrackID_14);
+            return FUN_00421360(g_pTxtTrackID_14);
         case 15:
-            return FUN_00421360(g_TxtTrackID_15);
+            return FUN_00421360(g_pTxtTrackID_15);
         case 16:
-            return FUN_00421360(g_TxtTrackID_16);
+            return FUN_00421360(g_pTxtTrackID_16);
         case 17:
-            return FUN_00421360(g_TxtTrackID_17);
+            return FUN_00421360(g_pTxtTrackID_17);
         case 18:
-            return FUN_00421360(g_TxtTrackID_18);
+            return FUN_00421360(g_pTxtTrackID_18);
         case 19:
-            return FUN_00421360(g_TxtTrackID_19);
+            return FUN_00421360(g_pTxtTrackID_19);
         case 20:
-            return FUN_00421360(g_TxtTrackID_20);
+            return FUN_00421360(g_pTxtTrackID_20);
         case 21:
-            return FUN_00421360(g_TxtTrackID_21);
+            return FUN_00421360(g_pTxtTrackID_21);
         case 22:
-            return FUN_00421360(g_TxtTrackID_22);
+            return FUN_00421360(g_pTxtTrackID_22);
         case 23:
-            return FUN_00421360(g_TxtTrackID_23);
+            return FUN_00421360(g_pTxtTrackID_23);
         case 24:
-            return FUN_00421360(g_TxtTrackID_24);
+            return FUN_00421360(g_pTxtTrackID_24);
     }
     return nullptr;
 }
@@ -219,9 +227,6 @@ void MenuTrackSelection()
 {
     int iVar1;
     char* pcVar2;
-    int32_t uVar3;
-    int32_t uVar4;
-    int32_t uVar5;
     int32_t uVar6;
     char local_100[256];
     char CircuitIdx;
@@ -247,7 +252,7 @@ void MenuTrackSelection()
         if ((iVar1 == 9) || (iVar1 == 1))
         {
             g_SelectedTrackIdx = 0;
-            if (pStruct->bIsTournament != false)
+            if (pStruct->bIsTournament)
             {
                 // TODO: Verify whether this is correct
                 const int32_t param_2 = (iVar1 & 0xFFFFFF00) | (uint8_t(g_TracksInCurrentCurcuit) - 1);
@@ -265,7 +270,7 @@ void MenuTrackSelection()
         }
 
         FUN_004584a0(pStruct, 1);
-        DAT_0050c134 = *(char*)((int)&g_UnknStruct1Array[pStruct->TrackID].UnknInt2 + 1);
+        DAT_0050c134 = *(char*)((int)&g_aUnknStruct1Array[pStruct->TrackID].UnknInt2 + 1);
         DAT_0050c17c = pStruct->CircuitIdx;
     }
 
@@ -274,7 +279,7 @@ void MenuTrackSelection()
         if (DAT_00e295d4 == g_SelectedTrackIdx)
         {
             uVar6 = 0x40533333;
-            DAT_0050c134 = *(char*)((int)&g_UnknStruct1Array[pStruct->TrackID].UnknInt2 + 1);
+            DAT_0050c134 = *(char*)((int)&g_aUnknStruct1Array[pStruct->TrackID].UnknInt2 + 1);
             DAT_0050c17c = pStruct->CircuitIdx;
             goto LAB_0043b357;
         }
@@ -287,7 +292,7 @@ void MenuTrackSelection()
     }
 
     iVar1 = FUN_00440af0(pStruct, g_SelectedTrackIdx);
-    pStruct->TrackID = *(int8_t*)(g_TrackLoadIndices + iVar1 + pStruct->CircuitIdx * 7);
+    pStruct->TrackID = *(int8_t*)(g_aTrackLoadIndices + iVar1 + pStruct->CircuitIdx * 7);
 
     if (DAT_00e295a0 > 0.0f)
     {
@@ -299,9 +304,9 @@ void MenuTrackSelection()
     }
 
     iVar1 = pStruct->TrackID * 0xc;
-    if ((g_UnknStruct1Array[pStruct->TrackID].UnknInt0 == -1) || (g_UnknStruct1Array[pStruct->TrackID].UnknInt1 == -1))
+    if ((g_aUnknStruct1Array[pStruct->TrackID].UnknInt0 == -1) || (g_aUnknStruct1Array[pStruct->TrackID].UnknInt1 == -1))
     {
-        const char* pText = FUN_00421360(g_TxtPlanetNotLoaded);
+        const char* pText = FUN_00421360(g_pTxtPlanetNotLoaded);
         rcr_sprintf(local_100, pText);
 
         // The following I decompiled by hand, Ghidra returned just trash
@@ -324,12 +329,12 @@ void MenuTrackSelection()
     const char* pText = FUN_00421360("~c~s%s");
     
     rcr_sprintf(local_100, pText, pTrackName);
-    UIText(0xa0, 0x36, 0, 0xff, 0, 0xff, local_100);
+    UIText(160, 54, 0, 0xFF, 0, 0xFF, local_100);
     pcVar2 = local_100;
     FUN_0042de10(pcVar2, 0);
     FUN_0042de10(local_100, 0);
 
-    // Idk about this shit...
+    // Horizontal selection
     FUN_00440150(int32_t(pcVar2), 0x37);
 
     uint8_t R, G, B;
@@ -338,7 +343,7 @@ void MenuTrackSelection()
     {
         case 0:
         {
-            pTxtCircuit = FUN_00421360(g_TxtCircuitAmateur);
+            pTxtCircuit = FUN_00421360(g_pTxtCircuitAmateur);
             B = 0xff;
             G = 0xff;
             R = 0x32;
@@ -346,7 +351,7 @@ void MenuTrackSelection()
         }
         case 1:
         {
-            pTxtCircuit = FUN_00421360(g_TxtCircuitSemiPro);
+            pTxtCircuit = FUN_00421360(g_pTxtCircuitSemiPro);
             B = 0x3e;
             G = 0xff;
             R = 0x44;
@@ -354,7 +359,7 @@ void MenuTrackSelection()
         }
         case 2:
         {
-            pTxtCircuit = FUN_00421360(g_TxtCircuitGalactic);
+            pTxtCircuit = FUN_00421360(g_pTxtCircuitGalactic);
             B = 0x11;
             G = 0xbe;
             R = 0xa3;
@@ -362,7 +367,7 @@ void MenuTrackSelection()
         }
         case 3:
         {
-            pTxtCircuit = FUN_00421360(g_TxtCircuitInvitational);
+            pTxtCircuit = FUN_00421360(g_pTxtCircuitInvitational);
             B = 0x20;
             G = 0x59;
             R = 0x9d;
@@ -399,23 +404,23 @@ void MenuTrackSelection()
     UIText(160, 34, R, G, B, 0xFF, pTxtCircuit);
 
     const char* pTextMode = nullptr;
-    if (pStruct->bIsTournament == false)
+    if (!pStruct->bIsTournament)
     {
         if (pStruct->Field_0x6D != 0)
         {
-            pTextMode = FUN_00421360(g_TxtTimeAttack);
+            pTextMode = FUN_00421360(g_pTxtTimeAttack);
             goto LAB_0043b5c4;
         }
         if (pStruct->Field_0x70 == 2)
         {
-            pTextMode = FUN_00421360(g_Txt2Player);
+            pTextMode = FUN_00421360(g_pTxt2Player);
             goto LAB_0043b5c4;
         }
-        pTextMode = g_TxtFreePlay;
+        pTextMode = g_pTxtFreePlay;
     }
     else
     {
-        pTextMode = g_TxtTournament;
+        pTextMode = g_pTxtTournament;
     }
     pTextMode = FUN_00421360(pTextMode);
 
@@ -424,7 +429,7 @@ LAB_0043b5c4:
     UIText(0xa0, 0x18, 0x32, 0xff, 0xff, 0xff, local_100);
     FUN_004360e0(pStruct, DAT_0050c17c);
 
-    const uint8_t PlanetIdx = g_UnknStruct1Array[pStruct->TrackID].PlanetIdx;
+    const uint8_t PlanetIdx = g_aUnknStruct1Array[pStruct->TrackID].PlanetIdx;
 
     //static uint16_t ImgIdx = 69;
     //static bool bDown[2] = { false, false };
@@ -449,7 +454,7 @@ LAB_0043b5c4:
 
     // Draw planet preview image
     // Apparently, each ImgIdx can only be drawn once?
-    const uint16_t ImgIdx = g_UnknStruct1Array[pStruct->TrackID].PlanetIdx + 0x45;
+    const uint16_t ImgIdx = g_aUnknStruct1Array[pStruct->TrackID].PlanetIdx + 0x45;
     ImgVisible(ImgIdx, true);
     ImgPosition(ImgIdx, 160, 145);
     ImgScale(ImgIdx, 1.0f, 1.0f);
@@ -460,7 +465,7 @@ LAB_0043b5c4:
     FUN_0043fe90(0x2d, 0x54, 0x1e);
     if (DAT_0050c54c == 0)
     {
-        FUN_00469c30(0, 0x3f800000, 1);
+        FUN_00469c30(0, 1.0f, 1);
         uint32_t& puVar2 = DAT_0050c918;
         if (DAT_004eb39c == 0)
         {
@@ -501,11 +506,12 @@ LAB_0043b5c4:
         CircuitIdx = pStruct->CircuitIdx;
         if (DAT_0050c17c == CircuitIdx)
         {
+            // Move down
             if ((puVar2 & 0x8000) != 0)
             {
                 if (CircuitIdx < g_TournamentMaxCircuitIdx)
                 {
-                    pStruct->CircuitIdx = CircuitIdx + 1;
+                    pStruct->CircuitIdx++;
                     DAT_00e295d4 = -1;
                     FUN_00440550(0x58);
                     HandleCircuit(pStruct);
@@ -515,6 +521,8 @@ LAB_0043b5c4:
                     FUN_00440550(0x4b);
                 }
             }
+
+            // Move up
             if ((puVar2 & 0x4000) != 0)
             {
                 if (pStruct->CircuitIdx < 1)
@@ -523,7 +531,7 @@ LAB_0043b5c4:
                 }
                 else
                 {
-                    pStruct->CircuitIdx = pStruct->CircuitIdx + -1;
+                    pStruct->CircuitIdx--;
                     DAT_00e295d4 = -1;
                     FUN_00440550(0x58);
                     HandleCircuit(pStruct);
@@ -534,7 +542,7 @@ LAB_0043b5c4:
         iVar1 = IsFreePlay();
         if ((iVar1 == 0) || (iVar1 = FUN_0041d6c0(), iVar1 != 0))
         {
-            DAT_00ea05ac = g_UnknStruct1Array[pStruct->TrackID].UnknInt0;
+            DAT_00ea05ac = g_aUnknStruct1Array[pStruct->TrackID].UnknInt0;
             FUN_0041e5a0();
         }
     }
