@@ -11,6 +11,7 @@ static  FUN_00440a20_t* FUN_00440a20 = (FUN_00440a20_t*)0x00440a20;
 typedef void(__cdecl FUN_0043b1d0_t)(UnknStruct0* pStruct);
 static  FUN_0043b1d0_t* FUN_0043b1d0 = (FUN_0043b1d0_t*)0x0043b1d0;
 
+// DrawCircuitTracks
 typedef void(__cdecl FUN_004584a0_t)(UnknStruct0* pStruct, int param_2);
 static  FUN_004584a0_t* FUN_004584a0 = (FUN_004584a0_t*)0x004584a0;
 
@@ -89,12 +90,18 @@ static  FUN_004286f0_t* ImgScale = (FUN_004286f0_t*)0x004286f0;
 typedef void(FUN_00428740_t)(uint16_t ImgIdx, uint8_t R, uint8_t G, uint8_t B, uint8_t A);
 static  FUN_00428740_t* ImgColor = (FUN_00428740_t*)0x00428740;
 
+typedef void(FUN_004282f0_t)(uint16_t ImgIdx, int32_t NotUsed);
+static  FUN_004282f0_t* ImgReset = (FUN_004282f0_t*)0x004282f0;
+
+typedef void(FUN_004287e0_t)(uint16_t ImgIdx, uint32_t Flag);
+static  FUN_004287e0_t* ImgSetFlag = (FUN_004287e0_t*)0x004287e0;
+
 
 // FUN_0043b0b0
 void __cdecl HandleCircuit(UnknStruct0* pStruct)
 {
     g_TournamentMaxCircuitIdx = 3;
-    g_TracksInCurrentCurcuit = 0;
+    g_TracksInCurrentCircuit = 0;
 
     if (!pStruct->bIsTournament)
     {
@@ -110,14 +117,15 @@ void __cdecl HandleCircuit(UnknStruct0* pStruct)
             {
                 if ((g_aBeatTracksGlobal[pStruct->CircuitIdx] & (1 << i)) != 0)
                 {
-                    g_TracksInCurrentCurcuit++;
+                    g_TracksInCurrentCircuit++;
                 }
             }
         }
         else
         {
+            // TODO: Reverse rendering and get rid of this hack
             g_aTracksInCircuits[4] = 3;
-            g_TracksInCurrentCurcuit = 3;
+            g_TracksInCurrentCircuit = 3;
         }
     }
     else
@@ -130,26 +138,49 @@ void __cdecl HandleCircuit(UnknStruct0* pStruct)
         {
             if ((g_aTracksSelectableTournament[pStruct->CircuitIdx] & (1 << i)) != 0)
             {
-                g_TracksInCurrentCurcuit++;
+                g_TracksInCurrentCircuit++;
             }
         }
     }
 
     if ((g_bIsFreePlay != 0) && (pStruct->CircuitIdx < 3))
     {
-        g_TracksInCurrentCurcuit = g_aTracksInCircuits[pStruct->CircuitIdx];
+        g_TracksInCurrentCircuit = g_aTracksInCircuits[pStruct->CircuitIdx];
     }
-    if (g_SelectedTrackIdx >= g_TracksInCurrentCurcuit)
+    if (g_SelectedTrackIdx >= g_TracksInCurrentCircuit)
     {
-        g_SelectedTrackIdx = g_TracksInCurrentCurcuit - 1;
+        g_SelectedTrackIdx = g_TracksInCurrentCircuit - 1;
     }
-    if (g_TracksInCurrentCurcuit > 0 && g_SelectedTrackIdx < 0)
+    if (g_TracksInCurrentCircuit > 0 && g_SelectedTrackIdx < 0)
     {
         g_SelectedTrackIdx = 0;
     }
 
     DAT_00e295c0 = (uint32_t)(pStruct->CircuitIdx > 0);
     g_bCircuitIdxInRange = (int32_t)(pStruct->CircuitIdx < g_TournamentMaxCircuitIdx);
+}
+
+// FUN_00440aa0
+bool IsTrackPlayable(UnknStruct0* pStruct, uint8_t CircuitIdx, uint8_t TrackIdx)
+{
+    uint8_t TracksBitMask = g_aTracksSelectableTournament[CircuitIdx];
+    if (g_bIsFreePlay && CircuitIdx < 3)
+    {
+        return true;
+    }
+    if (!pStruct->bIsTournament)
+    {
+        if (CircuitIdx < 4)
+        {
+            TracksBitMask = g_aBeatTracksGlobal[CircuitIdx];
+        }
+        else
+        {
+            // Custom Tracks are always playable
+            return true;
+        }
+    }
+    return ((uint8_t)(1 << TrackIdx) & TracksBitMask) != 0;
 }
 
 // FUN_00440620
@@ -208,7 +239,10 @@ const char* GetTrackName(int32_t TrackID)
         case 24:
             return FUN_00421360(g_pTxtTrackID_24);
     }
-    return nullptr;
+
+    static char CustomTrackName[128];
+    rcr_sprintf(CustomTrackName, "Custom Track %d", TrackID - 24);
+    return CustomTrackName;
 }
 
 // FUN_0041d6b0
@@ -220,6 +254,110 @@ bool IsFreePlay()
 int32_t FUN_0041d6c0()
 {
     return DAT_004eb1c8;
+}
+
+// FUN_004584a0
+void __cdecl DrawCircuitTracks(UnknStruct0* pStruct, bool bDrawTracks)
+{
+    // TODO: Remove FUN_004584a0 function declaration
+    FUN_004584a0(pStruct, (int)bDrawTracks);
+    ImgColor(99, 255, 0, 0, 255);
+    ImgColor(127, 255, 0, 0, 255);
+    return;
+
+    for (uint16_t local_8 = 0x82; local_8 < 0xa2; local_8++)
+    {
+        ImgReset(local_8, pStruct[1].Field_0x38);
+    }
+    if (bDrawTracks)
+    {
+        for (int32_t CircuitIdx = 0; CircuitIdx < 4; CircuitIdx++)
+        {
+            for (int32_t TrackIdx = 0; TrackIdx < 7; TrackIdx++)
+            {
+                const uint16_t StartImgIdxBack   = 99;
+                const uint16_t StartImgIdxBorder = 127;
+
+                //uint8_t Mask = (uint8_t)(TrackIdx << 1);
+                //uint16_t local_4 = DAT_00e35a8a[CircuitIdx] >> (Mask) & 3;
+                int iVar1 = CircuitIdx * 7 + StartImgIdxBack + TrackIdx;
+                ImgReset(iVar1, pStruct[1].Field_0x30);
+                ImgSetFlag(iVar1, IMG_UNKN_15);
+
+                uint8_t R, G, B;
+                switch (CircuitIdx)
+                {
+                    case 0:
+                    {
+                        B = 0xff;
+                        G = 0xff;
+                        R = 0x32;
+                        break;
+                    }
+                    case 1:
+                    {
+                        B = 0x3e;
+                        G = 0xff;
+                        R = 0x44;
+                        break;
+                    }
+                    case 2:
+                    {
+                        B = 0x11;
+                        G = 0xbe;
+                        R = 0xa3;
+                        break;
+                    }
+                    case 3:
+                    {
+                        B = 0x20;
+                        G = 0x59;
+                        R = 0x9d;
+                        break;
+                    }
+                    default:
+                    {
+                        B = 0xFF;
+                        G = 0x00;
+                        R = 0xAA;
+                        break;
+                    }
+                }
+                ImgColor(iVar1, R, G, B, 0xfe);
+
+                const bool bIsPlayable = IsTrackPlayable(pStruct, CircuitIdx, TrackIdx);
+                if (!bIsPlayable)
+                {
+                    ImgColor(iVar1, 0x80, 0x80, 0x80, 0xfe);
+                }
+                //if (pStruct->bIsTournament)
+                //{
+                //    int32_t uVar3;
+                //    switch (local_4)
+                //    {
+                //        // Direct fall through?
+                //        default:
+                //            goto switchD_00458610_caseD_0;
+
+                //        case 1:
+                //            uVar3 = pStruct[1].Field_0x2C;
+                //            break;
+                //        case 2:
+                //            uVar3 = pStruct[1].Field_0x28;
+                //            break;
+                //        case 3:
+                //            uVar3 = pStruct[1].Field_0x24;
+                //    }
+                //    FUN_004282f0(iVar1, uVar3);
+                //}
+
+            switchD_00458610_caseD_0:
+                ImgReset(iVar1 + 0x1c, pStruct[1].Field_0x34);
+                ImgSetFlag(iVar1 + 0x1c, IMG_UNKN_15);
+                ImgColor(iVar1 + 0x1c, 0xa3, 0xbe, 0x11, 0xfe);
+            }
+        }
+    }
 }
 
 // FUN_0043b240
@@ -255,12 +393,12 @@ void MenuTrackSelection()
             if (pStruct->bIsTournament)
             {
                 // TODO: Verify whether this is correct
-                const int32_t param_2 = (iVar1 & 0xFFFFFF00) | (uint8_t(g_TracksInCurrentCurcuit) - 1);
+                const int32_t param_2 = (iVar1 & 0xFFFFFF00) | (uint8_t(g_TracksInCurrentCircuit) - 1);
 
                 iVar1 = FUN_00440a20(pStruct->CircuitIdx, param_2);
                 if (iVar1 != 0)
                 {
-                    g_SelectedTrackIdx = g_TracksInCurrentCurcuit - 1;
+                    g_SelectedTrackIdx = g_TracksInCurrentCircuit - 1;
                 }
             }
         }
@@ -269,7 +407,7 @@ void MenuTrackSelection()
             FUN_0043b1d0(pStruct);
         }
 
-        FUN_004584a0(pStruct, 1);
+        DrawCircuitTracks(pStruct, true);
         DAT_0050c134 = *(char*)((int)&g_aUnknStruct1Array[pStruct->TrackID].UnknInt2 + 1);
         DAT_0050c17c = pStruct->CircuitIdx;
     }
@@ -292,7 +430,15 @@ void MenuTrackSelection()
     }
 
     iVar1 = FUN_00440af0(pStruct, g_SelectedTrackIdx);
-    pStruct->TrackID = *(int8_t*)(g_aTrackLoadIndices + iVar1 + pStruct->CircuitIdx * 7);
+
+    if (pStruct->CircuitIdx < 4)
+    {
+        pStruct->TrackID = *(int8_t*)(g_aTrackLoadIndices + iVar1 + pStruct->CircuitIdx * 7);
+    }
+    else
+    {
+        pStruct->TrackID = 16; // Mon Gaza Speedway
+    }
 
     if (DAT_00e295a0 > 0.0f)
     {
@@ -326,9 +472,7 @@ void MenuTrackSelection()
     }
 
     const char* pTrackName = GetTrackName(pStruct->TrackID);
-    const char* pText = FUN_00421360("~c~s%s");
-    
-    rcr_sprintf(local_100, pText, pTrackName);
+    rcr_sprintf(local_100, "~c~s%s", pTrackName);
     UIText(160, 54, 0, 0xFF, 0, 0xFF, local_100);
     pcVar2 = local_100;
     FUN_0042de10(pcVar2, 0);
@@ -431,7 +575,7 @@ LAB_0043b5c4:
 
     const uint8_t PlanetIdx = g_aUnknStruct1Array[pStruct->TrackID].PlanetIdx;
 
-    //static uint16_t ImgIdx = 69;
+    //static uint16_t ImgIdx = 99;
     //static bool bDown[2] = { false, false };
     //if (GetKeyState(VK_ADD) & 0xF0 && !bDown[0])
     //{
@@ -481,7 +625,7 @@ LAB_0043b5c4:
                     return;
                 }
                 FUN_00440550(0x54);
-                FUN_004584a0(pStruct, 0);
+                DrawCircuitTracks(pStruct, false);
                 FUN_00454d40(pStruct, 0xd);
                 DAT_0050c54c = 1;
                 return;
@@ -498,7 +642,7 @@ LAB_0043b5c4:
                 if ((iVar1 != 0) && (iVar1 = FUN_0041d6c0(), iVar1 != 0)) {
                     return;
                 }
-                FUN_004584a0(pStruct, 0);
+                DrawCircuitTracks(pStruct, false);
                 FUN_00454d40(pStruct, 9);
                 return;
             }
