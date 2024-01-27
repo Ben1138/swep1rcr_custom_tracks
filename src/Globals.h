@@ -1,18 +1,19 @@
 #pragma once
 #include "Types.h"
 
-static int32_t&       g_TournamentMaxCircuitIdx         = *(int32_t*)      0x00e295c8;
+static int32_t&       g_TournamentMaxCircuitIdx         = *(int32_t*)      0x00e295c8;        // Max: 255
 static uint8_t*       g_aTracksSelectableTournament     =  (uint8_t*)      0x00e35a85;        // Length: 4
-static int32_t&       g_TracksInCurrentCurcuit          = *(int32_t*)      0x00e295cc;
+static int32_t&       g_TracksInCurrentCircuit          = *(int32_t*)      0x00e295cc;
 static uint8_t*       g_aTracksInCircuits               =  (uint8_t*)      0x004bfee0;        // Length: 4
 static uint32_t*      g_aTrackLoadIndices               =  (uint32_t*)     0x004c0018;        // Length: 25 + 3 padding
 static uint8_t*       g_aBeatTracksGlobal               =  (uint8_t*)      0x00e364ac;        // Length: 4
-static uint8_t&       g_bIsFreePlay                     = *(uint8_t*)      0x004d5e00;
+static uint8_t&       g_bIsFreePlay                     = *(uint8_t*)      0x004d5e00;        // Might actually be Time Attack?
 static int32_t&       g_SelectedTrackIdx                = *(int32_t*)      0x00e295d0;
 static int32_t&       g_bCircuitIdxInRange              = *(int32_t*)      0x00e295c4;
 static UnknStruct0*&  g_pUnknStruct0                    = *(UnknStruct0**) 0x0050c454;
 static TrackInfo*     g_aUnknStruct1Array               =  (TrackInfo*)    0x004bfee8;        // Length: ?
 static PlanetName*    g_PlanetNames                     =  (PlanetName*)   0x00e98f5c;        // Length: 25
+static ImgParam*      g_aImgageParams                   =  (ImgParam*)     0x00e9ba60;        // Length: 251 ?
                                                                            
 static const char*    g_pTxtTimeAttack                  =  (const char*)   0x004c0dd0;        // "/SCREENTEXT_543/~c~sTime Attack"
 static const char*    g_pTxt2Player                     =  (const char*)   0x004c0db0;        // "/SCREENTEXT_544/~c~s2 Player"
@@ -69,3 +70,4 @@ static int32_t&       DAT_00e2a698                      = *(int32_t*)      0x00e
 static int32_t&       DAT_004d6b44                      = *(int32_t*)      0x004d6b44;
 static int32_t&       DAT_00ea02b0                      = *(int32_t*)      0x00ea02b0;        // TrackIdx !?
 static int32_t&       DAT_00ea05ac                      = *(int32_t*)      0x00ea05ac;
+static uint16_t*      DAT_00e35a8a                      =  (uint16_t*)     0x00e35a8a;        // Length: 4
