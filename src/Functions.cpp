@@ -423,7 +423,7 @@ void DrawTracks(MenuState* pState, uint8_t CircuitIdx)
         }
         ImgColor(ImgIdx, R, G, B, A);
 
-        char TxtTrackNum[4];
+        char TxtTrackNum[16];
         rcr_sprintf(TxtTrackNum, "~f2~s%d", TrackIdx + 1);
         if (!pState->bIsTournament || (ImgIdx = FUN_00440a20(CircuitIdx, TrackIdx), ImgIdx != 0))
         {
