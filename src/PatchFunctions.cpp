@@ -23,7 +23,7 @@ inline void PatchFunction(void* pFunction)
     asm("mov %%cs, %0" : "=r" (Segment));
 #endif
 
-    // TODO: Check whether function to patch is at least 7 bytes in size
+    // TODO: Check whether the function to patch is at least 7 bytes in size
     uint8_t Instructions[7] =
     {
         0xEA, 0xDD, 0xCC, 0xBB, 0xAA, 0xFF, 0xEE    // jmp 0xEEFF:0xAABBCCDD 
@@ -52,8 +52,10 @@ void PatchAllFunctions()
     PatchFunction<0x00440aa0>(&IsTrackPlayable);
     PatchFunction<0x00440620>(&GetTrackName);
     PatchFunction<0x0041d6b0>(&IsFreePlay);
-    PatchFunction<0x004584a0>(&DrawCircuitTracks);
+    PatchFunction<0x004584a0>(&InitTracks);
+    //PatchFunction<0x004360e0>(&DrawTracks);               // Patching unnecessary, get's called just once in MenuTrackSelection()
     PatchFunction<0x0043b240>(&MenuTrackSelection);
+    PatchFunction<0x00440af0>(&VerifySelectedTrack);
 
     PatchFunction<0x0041d6c0>(&FUN_0041d6c0);
 }
