@@ -10,8 +10,8 @@ static uint8_t*       g_aBeatTracksGlobal               =  (uint8_t*)      0x00e
 static uint8_t&       g_bIsFreePlay                     = *(uint8_t*)      0x004d5e00;        // Might actually be Time Attack?
 static int32_t&       g_SelectedTrackIdx                = *(int32_t*)      0x00e295d0;
 static int32_t&       g_bCircuitIdxInRange              = *(int32_t*)      0x00e295c4;
-static UnknStruct0*&  g_pUnknStruct0                    = *(UnknStruct0**) 0x0050c454;
-static TrackInfo*     g_aUnknStruct1Array               =  (TrackInfo*)    0x004bfee8;        // Length: ?
+static MenuState*&    g_pMenuState                      = *(MenuState**)   0x0050c454;
+static TrackInfo*     g_aTrackInfos                     =  (TrackInfo*)    0x004bfee8;        // Length: 25 ?
 static PlanetName*    g_PlanetNames                     =  (PlanetName*)   0x00e98f5c;        // Length: 25
 static ImgParam*      g_aImgageParams                   =  (ImgParam*)     0x00e9ba60;        // Length: 251 ?
 
@@ -30,7 +30,7 @@ static const char*    g_pTxtTournament                  =  (const char*)   0x004
 static const char*    g_pTxtRace                        =  (const char*)   0x004c0924;        // "/SCREENTEXT_585/~f4~c~sRace"
 static const char*    g_pTxt4th                         =  (const char*)   0x004c0908;        // "/SCREENTEXT_229/~f4~s4th"
                                                                            
-static const char*    g_pTxtPlanetNotLoaded             =  (const char*)   0x004c0ee4;
+static const char*    g_pTxtPlanetNotLoaded             =  (const char*)   0x004c0ee4;        // "~c~s---Planet not loaded!!!---"
 static const char*    g_pTxtCircuitAmateur              =  (const char*)   0x004c0eb0;        // "/SCREENTEXT_530/~f0~c~sAmateur Podracing Circuit"
 static const char*    g_pTxtCircuitSemiPro              =  (const char*)   0x004c0e7c;        // "/SCREENTEXT_531/~f0~c~sSemi-Pro Podracing Circuit"
 static const char*    g_pTxtCircuitGalactic             =  (const char*)   0x004c0e48;        // "/SCREENTEXT_532/~f0~c~sGalactic Podracing Circuit"
