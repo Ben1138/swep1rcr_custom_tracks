@@ -6,7 +6,7 @@ typedef long double float10;
 struct ImgDat;
 struct UnknStruct2;
 
-struct UnknStruct0
+struct MenuState
 {
     uint8_t  Unkn0[0x0C];
     int32_t  Field_0x0C;
@@ -21,13 +21,13 @@ struct UnknStruct0
     uint8_t  Unkn5[0x40];
     ImgDat*  aImages[6];
 };
-static_assert(offsetof(UnknStruct0, Field_0x0C)     == 0x0C);
-static_assert(offsetof(UnknStruct0, TrackID)        == 0x5D);
-static_assert(offsetof(UnknStruct0, CircuitIdx)     == 0x5E);
-static_assert(offsetof(UnknStruct0, bIsTournament)  == 0x6C);
-static_assert(offsetof(UnknStruct0, Field_0x6D)     == 0x6D);
-static_assert(offsetof(UnknStruct0, Field_0x70)     == 0x70);
-static_assert(offsetof(UnknStruct0, aImages)        == 0xB4);
+static_assert(offsetof(MenuState, Field_0x0C)     == 0x0C);
+static_assert(offsetof(MenuState, TrackID)        == 0x5D);
+static_assert(offsetof(MenuState, CircuitIdx)     == 0x5E);
+static_assert(offsetof(MenuState, bIsTournament)  == 0x6C);
+static_assert(offsetof(MenuState, Field_0x6D)     == 0x6D);
+static_assert(offsetof(MenuState, Field_0x70)     == 0x70);
+static_assert(offsetof(MenuState, aImages)        == 0xB4);
 
 
 struct ImgDat
@@ -44,9 +44,9 @@ struct UnknStruct2
 
 struct TrackInfo
 {
-    int32_t  UnknInt0;
-    int32_t  UnknInt1;
-    uint8_t  UnknInt2;
+    int32_t  LoadModel;
+    int32_t  LoadSpline;
+    uint8_t  Unkn0;
     uint8_t  PlanetIdx;
 };
 
