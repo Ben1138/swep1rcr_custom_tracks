@@ -3,37 +3,44 @@
 
 typedef long double float10;
 
+struct UnknStruct1;
+struct UnknStruct2;
+
 struct UnknStruct0
 {
-    uint8_t  Unkn0[0x0C];
-    int32_t  Field12_0x0C;
-    uint8_t  Unkn1[0x14];
-    int32_t  Field_0x24;
-    int32_t  Field_0x28;
-    int32_t  Field_0x2C;
-    int32_t  Field_0x30;
-    int32_t  Field_0x34;
-    int32_t  Field_0x38;
-    uint8_t  Unkn2[0x21];
-    int8_t   TrackID;
-    uint8_t  CircuitIdx;
-    uint8_t  Unkn3[0xD];
-    uint8_t  bIsTournament;
-    uint8_t  Field_0x6D;
-    uint8_t  Unkn4[0x02];
-    uint8_t  Field_0x70;
+    uint8_t       Unkn0[0x0C];
+    int32_t       Field_0x0C;
+    uint8_t       Unkn1[0x4D];
+    int8_t        TrackID;
+    uint8_t       CircuitIdx;
+    uint8_t       Unkn3[0xD];
+    uint8_t       bIsTournament;
+    uint8_t       Field_0x6D;
+    uint8_t       Unkn4[0x02];
+    uint8_t       Field_0x70;
+    uint8_t       Unkn5[0x40];
+    UnknStruct1*  aUnknStruct1[6];
 };
-static_assert(offsetof(UnknStruct0, Field12_0x0C) == 0x0C);
-static_assert(offsetof(UnknStruct0, Field_0x24) == 0x24);
-static_assert(offsetof(UnknStruct0, Field_0x28) == 0x28);
-static_assert(offsetof(UnknStruct0, Field_0x2C) == 0x2C);
-static_assert(offsetof(UnknStruct0, Field_0x30) == 0x30);
-static_assert(offsetof(UnknStruct0, Field_0x38) == 0x38);
-static_assert(offsetof(UnknStruct0, TrackID) == 0x5D);
-static_assert(offsetof(UnknStruct0, CircuitIdx) == 0x5E);
-static_assert(offsetof(UnknStruct0, bIsTournament) == 0x6C);
-static_assert(offsetof(UnknStruct0, Field_0x6D) == 0x6D);
-static_assert(offsetof(UnknStruct0, Field_0x70) == 0x70);
+static_assert(offsetof(UnknStruct0, Field_0x0C)     == 0x0C);
+static_assert(offsetof(UnknStruct0, TrackID)        == 0x5D);
+static_assert(offsetof(UnknStruct0, CircuitIdx)     == 0x5E);
+static_assert(offsetof(UnknStruct0, bIsTournament)  == 0x6C);
+static_assert(offsetof(UnknStruct0, Field_0x6D)     == 0x6D);
+static_assert(offsetof(UnknStruct0, Field_0x70)     == 0x70);
+static_assert(offsetof(UnknStruct0, aUnknStruct1)   == 0xB4);
+
+
+struct UnknStruct1
+{
+    int16_t       Unkn0[8];
+    UnknStruct2*  pUnknStruct2;
+};
+
+struct UnknStruct2
+{
+    int16_t  Unkn0[2];
+    int32_t  Unkn1;
+};
 
 struct TrackInfo
 {
@@ -67,18 +74,19 @@ enum ImgFlags
 
 struct ImgParam
 {
-    uint16_t  PosX;
-    uint16_t  PosY;
-    int32_t   Unkn0;
-    float     ScaleX;
-    float     ScaleY;
-    float     Unkn1;
-    ImgFlags  Flags;
-    uint8_t   R;
-    uint8_t   G;
-    uint8_t   B;
-    uint8_t   A;
-    int32_t   Unkn3;
+    uint16_t      PosX;
+    uint16_t      PosY;
+    int16_t       Unkn0;
+    int16_t       Unkn1;
+    float         ScaleX;
+    float         ScaleY;
+    float         Unkn2;
+    ImgFlags      Flags;
+    uint8_t       R;
+    uint8_t       G;
+    uint8_t       B;
+    uint8_t       A;
+    UnknStruct1*  pUnknStruct1;
 };
 static_assert(sizeof(ImgParam) == 0x20);
 static_assert(sizeof(ImgFlags) == sizeof(int32_t));

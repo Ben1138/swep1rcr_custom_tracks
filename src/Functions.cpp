@@ -84,17 +84,25 @@ static  FUN_004285d0_t* ImgVisible = (FUN_004285d0_t*)0x004285d0;
 typedef void(FUN_00428660_t)(uint16_t ImgIdx, uint16_t PosX, uint16_t PosY);
 static  FUN_00428660_t* ImgPosition = (FUN_00428660_t*)0x00428660;
 
+// ImgSize ?
+typedef void(FUN_004286c0_t)(uint16_t ImgIdx, uint16_t param_2, uint16_t param_3);
+static  FUN_004286c0_t* FUN_004286c0 = (FUN_004286c0_t*)0x004286c0;
+
 typedef void(FUN_004286f0_t)(uint16_t ImgIdx, float ScaleX, float ScaleY);
 static  FUN_004286f0_t* ImgScale = (FUN_004286f0_t*)0x004286f0;
 
 typedef void(FUN_00428740_t)(uint16_t ImgIdx, uint8_t R, uint8_t G, uint8_t B, uint8_t A);
 static  FUN_00428740_t* ImgColor = (FUN_00428740_t*)0x00428740;
 
-typedef void(FUN_004282f0_t)(uint16_t ImgIdx, int32_t NotUsed);
+typedef void(FUN_004282f0_t)(uint16_t ImgIdx, UnknStruct1* pUnknStruct1);
 static  FUN_004282f0_t* ImgReset = (FUN_004282f0_t*)0x004282f0;
 
 typedef void(FUN_004287e0_t)(uint16_t ImgIdx, uint32_t Flag);
 static  FUN_004287e0_t* ImgSetFlag = (FUN_004287e0_t*)0x004287e0;
+
+typedef void(FUN_00428800_t)(uint16_t ImgIdx, uint32_t Flag);
+static  FUN_00428800_t* ImgResetFlag = (FUN_00428800_t*)0x00428800;
+
 
 
 // FUN_0043b0b0
@@ -260,14 +268,16 @@ int32_t FUN_0041d6c0()
 void __cdecl DrawCircuitTracks(UnknStruct0* pStruct, bool bDrawTracks)
 {
     // TODO: Remove FUN_004584a0 function declaration
-    FUN_004584a0(pStruct, (int)bDrawTracks);
-    ImgColor(99, 255, 0, 0, 255);
-    ImgColor(127, 255, 0, 0, 255);
-    return;
+    //FUN_004584a0(pStruct, (int)bDrawTracks);
+    //ImgColor(99, 255, 0, 0, 255);
+    //ImgColor(127, 255, 0, 0, 255);
+    //ImgPosition(99, 150, 150);
+    //ImgScale(99, 2.0f, 2.0f);
+    //return;
 
     for (uint16_t local_8 = 0x82; local_8 < 0xa2; local_8++)
     {
-        ImgReset(local_8, pStruct[1].Field_0x38);
+        ImgReset(local_8, pStruct->aUnknStruct1[5]);
     }
     if (bDrawTracks)
     {
@@ -278,15 +288,16 @@ void __cdecl DrawCircuitTracks(UnknStruct0* pStruct, bool bDrawTracks)
                 const uint16_t StartImgIdxBack   = 99;
                 const uint16_t StartImgIdxBorder = 127;
 
-                //uint8_t Mask = (uint8_t)(TrackIdx << 1);
-                //uint16_t local_4 = DAT_00e35a8a[CircuitIdx] >> (Mask) & 3;
-                int iVar1 = CircuitIdx * 7 + StartImgIdxBack + TrackIdx;
-                ImgReset(iVar1, pStruct[1].Field_0x30);
-                ImgSetFlag(iVar1, IMG_UNKN_15);
+                const uint8_t Bits = (uint8_t)(TrackIdx * 2);
+                const uint16_t Beat = (g_aBeatTrackPlace[CircuitIdx] >> Bits) & 3;
+                const uint16_t ImgIdx = CircuitIdx * 7 + StartImgIdxBack + TrackIdx;
+                ImgReset(ImgIdx, pStruct->aUnknStruct1[3]);
+                ImgSetFlag(ImgIdx, IMG_UNKN_15);
 
                 uint8_t R, G, B;
                 switch (CircuitIdx)
                 {
+                    // Amateur
                     case 0:
                     {
                         B = 0xff;
@@ -294,6 +305,8 @@ void __cdecl DrawCircuitTracks(UnknStruct0* pStruct, bool bDrawTracks)
                         R = 0x32;
                         break;
                     }
+
+                    // Semi-Pro
                     case 1:
                     {
                         B = 0x3e;
@@ -301,6 +314,8 @@ void __cdecl DrawCircuitTracks(UnknStruct0* pStruct, bool bDrawTracks)
                         R = 0x44;
                         break;
                     }
+
+                    // Galactic
                     case 2:
                     {
                         B = 0x11;
@@ -308,6 +323,8 @@ void __cdecl DrawCircuitTracks(UnknStruct0* pStruct, bool bDrawTracks)
                         R = 0xa3;
                         break;
                     }
+
+                    // Invitational
                     case 3:
                     {
                         B = 0x20;
@@ -315,6 +332,8 @@ void __cdecl DrawCircuitTracks(UnknStruct0* pStruct, bool bDrawTracks)
                         R = 0x9d;
                         break;
                     }
+
+                    // Custom Tracks
                     default:
                     {
                         B = 0xFF;
@@ -323,38 +342,51 @@ void __cdecl DrawCircuitTracks(UnknStruct0* pStruct, bool bDrawTracks)
                         break;
                     }
                 }
-                ImgColor(iVar1, R, G, B, 0xfe);
+                ImgColor(ImgIdx, R, G, B, 0xfe);
 
                 const bool bIsPlayable = IsTrackPlayable(pStruct, CircuitIdx, TrackIdx);
                 if (!bIsPlayable)
                 {
-                    ImgColor(iVar1, 0x80, 0x80, 0x80, 0xfe);
+                    ImgColor(ImgIdx, 0x80, 0x80, 0x80, 0xfe);
                 }
-                //if (pStruct->bIsTournament)
-                //{
-                //    int32_t uVar3;
-                //    switch (local_4)
-                //    {
-                //        // Direct fall through?
-                //        default:
-                //            goto switchD_00458610_caseD_0;
+                if (pStruct->bIsTournament)
+                {
+                    UnknStruct1* pUnknStruct1;
+                    switch (Beat)
+                    {
+                        // 3rd place
+                        case 1:
+                        {
+                            pUnknStruct1 = pStruct->aUnknStruct1[2];
+                            break;
+                        }
 
-                //        case 1:
-                //            uVar3 = pStruct[1].Field_0x2C;
-                //            break;
-                //        case 2:
-                //            uVar3 = pStruct[1].Field_0x28;
-                //            break;
-                //        case 3:
-                //            uVar3 = pStruct[1].Field_0x24;
-                //    }
-                //    FUN_004282f0(iVar1, uVar3);
-                //}
+                        // 2nd place
+                        case 2:
+                        {
+                            pUnknStruct1 = pStruct->aUnknStruct1[1];
+                            break;
+                        }
+
+                        // 1st place
+                        case 3:
+                        {
+                            pUnknStruct1 = pStruct->aUnknStruct1[0];
+                            break;
+                        }
+
+                        default:
+                        {
+                            goto switchD_00458610_caseD_0;
+                        }
+                    }
+                    ImgReset(ImgIdx, pUnknStruct1);
+                }
 
             switchD_00458610_caseD_0:
-                ImgReset(iVar1 + 0x1c, pStruct[1].Field_0x34);
-                ImgSetFlag(iVar1 + 0x1c, IMG_UNKN_15);
-                ImgColor(iVar1 + 0x1c, 0xa3, 0xbe, 0x11, 0xfe);
+                ImgReset(ImgIdx + 0x1c, pStruct->aUnknStruct1[4]);
+                ImgSetFlag(ImgIdx + 0x1c, IMG_UNKN_15);
+                ImgColor(ImgIdx + 0x1c, 0xa3, 0xbe, 0x11, 0xfe);
             }
         }
     }
@@ -376,17 +408,17 @@ void MenuTrackSelection()
         FUN_0045bee0(pStruct, 0x25, 0xffffffff, 0);
         DAT_0050c54c = 0;
 
-        if (pStruct->Field12_0x0C == 0xc)
+        if (pStruct->Field_0x0C == 0xc)
         {
             DAT_00e295a0 = 1.0f;
         }
-        if ((pStruct->Field12_0x0C == 9) || (pStruct->Field12_0x0C == 1))
+        if ((pStruct->Field_0x0C == 9) || (pStruct->Field_0x0C == 1))
         {
             pStruct->CircuitIdx = 0;
         }
 
         HandleCircuit(pStruct);
-        iVar1 = pStruct->Field12_0x0C;
+        iVar1 = pStruct->Field_0x0C;
         if ((iVar1 == 9) || (iVar1 == 1))
         {
             g_SelectedTrackIdx = 0;
