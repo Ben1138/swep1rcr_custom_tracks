@@ -26,6 +26,9 @@ static const char*    g_pTxtTimeAttack                  =  (const char*)   0x004
 static const char*    g_pTxt2Player                     =  (const char*)   0x004c0db0;        // "/SCREENTEXT_544/~c~s2 Player"
 static const char*    g_pTxtFreePlay                    =  (const char*)   0x004c0d90;        // "/SCREENTEXT_542/~c~sFree Play"
 static const char*    g_pTxtTournament                  =  (const char*)   0x004c0df0;        // "/SCREENTEXT_541/~c~sTournament"
+
+static const char*    g_pTxtRace                        =  (const char*)   0x004c0924;        // "/SCREENTEXT_585/~f4~c~sRace"
+static const char*    g_pTxt4th                         =  (const char*)   0x004c0908;        // "/SCREENTEXT_229/~f4~s4th"
                                                                            
 static const char*    g_pTxtPlanetNotLoaded             =  (const char*)   0x004c0ee4;
 static const char*    g_pTxtCircuitAmateur              =  (const char*)   0x004c0eb0;        // "/SCREENTEXT_530/~f0~c~sAmateur Podracing Circuit"
@@ -77,3 +80,4 @@ static int32_t&       DAT_00e2a698                      = *(int32_t*)      0x00e
 static int32_t&       DAT_004d6b44                      = *(int32_t*)      0x004d6b44;
 static int32_t&       DAT_00ea02b0                      = *(int32_t*)      0x00ea02b0;        // TrackIdx !?
 static int32_t&       DAT_00ea05ac                      = *(int32_t*)      0x00ea05ac;
+static float&         DAT_004ac7a4                      = *(float*)        0x004ac7a4;

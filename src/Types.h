@@ -3,23 +3,23 @@
 
 typedef long double float10;
 
-struct UnknStruct1;
+struct ImgDat;
 struct UnknStruct2;
 
 struct UnknStruct0
 {
-    uint8_t       Unkn0[0x0C];
-    int32_t       Field_0x0C;
-    uint8_t       Unkn1[0x4D];
-    int8_t        TrackID;
-    uint8_t       CircuitIdx;
-    uint8_t       Unkn3[0xD];
-    uint8_t       bIsTournament;
-    uint8_t       Field_0x6D;
-    uint8_t       Unkn4[0x02];
-    uint8_t       Field_0x70;
-    uint8_t       Unkn5[0x40];
-    UnknStruct1*  aUnknStruct1[6];
+    uint8_t  Unkn0[0x0C];
+    int32_t  Field_0x0C;
+    uint8_t  Unkn1[0x4D];
+    int8_t   TrackID;
+    uint8_t  CircuitIdx;
+    uint8_t  Unkn3[0xD];
+    uint8_t  bIsTournament;
+    uint8_t  Field_0x6D;
+    uint8_t  Unkn4[0x02];
+    uint8_t  Field_0x70;
+    uint8_t  Unkn5[0x40];
+    ImgDat*  aImages[6];
 };
 static_assert(offsetof(UnknStruct0, Field_0x0C)     == 0x0C);
 static_assert(offsetof(UnknStruct0, TrackID)        == 0x5D);
@@ -27,10 +27,10 @@ static_assert(offsetof(UnknStruct0, CircuitIdx)     == 0x5E);
 static_assert(offsetof(UnknStruct0, bIsTournament)  == 0x6C);
 static_assert(offsetof(UnknStruct0, Field_0x6D)     == 0x6D);
 static_assert(offsetof(UnknStruct0, Field_0x70)     == 0x70);
-static_assert(offsetof(UnknStruct0, aUnknStruct1)   == 0xB4);
+static_assert(offsetof(UnknStruct0, aImages)        == 0xB4);
 
 
-struct UnknStruct1
+struct ImgDat
 {
     int16_t       Unkn0[8];
     UnknStruct2*  pUnknStruct2;
@@ -74,19 +74,19 @@ enum ImgFlags
 
 struct ImgParam
 {
-    uint16_t      PosX;
-    uint16_t      PosY;
-    int16_t       Unkn0;
-    int16_t       Unkn1;
-    float         ScaleX;
-    float         ScaleY;
-    float         Unkn2;
-    ImgFlags      Flags;
-    uint8_t       R;
-    uint8_t       G;
-    uint8_t       B;
-    uint8_t       A;
-    UnknStruct1*  pUnknStruct1;
+    uint16_t  PosX;
+    uint16_t  PosY;
+    int16_t   Unkn0;            // SizeX ?
+    int16_t   Unkn1;            // SizeY ?
+    float     ScaleX;
+    float     ScaleY;
+    float     Unkn2;
+    ImgFlags  Flags;
+    uint8_t   R;
+    uint8_t   G;
+    uint8_t   B;
+    uint8_t   A;
+    ImgDat*   pUnknStruct1;
 };
 static_assert(sizeof(ImgParam) == 0x20);
 static_assert(sizeof(ImgFlags) == sizeof(int32_t));

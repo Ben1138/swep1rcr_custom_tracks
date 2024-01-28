@@ -11,15 +11,11 @@ static  FUN_00440a20_t* FUN_00440a20 = (FUN_00440a20_t*)0x00440a20;
 typedef void(__cdecl FUN_0043b1d0_t)(UnknStruct0* pStruct);
 static  FUN_0043b1d0_t* FUN_0043b1d0 = (FUN_0043b1d0_t*)0x0043b1d0;
 
-// DrawCircuitTracks
-typedef void(__cdecl FUN_004584a0_t)(UnknStruct0* pStruct, int param_2);
-static  FUN_004584a0_t* FUN_004584a0 = (FUN_004584a0_t*)0x004584a0;
-
 typedef float10(FUN_00469b90_t)(float param_1);
 static  FUN_00469b90_t* FUN_00469b90 = (FUN_00469b90_t*)0x00469b90;
 
-typedef int(FUN_00440af0_t)(UnknStruct0* pStruct, int param_2);
-static  FUN_00440af0_t* FUN_00440af0 = (FUN_00440af0_t*)0x00440af0;
+//typedef int(FUN_00440af0_t)(UnknStruct0* pStruct, int param_2);
+//static  FUN_00440af0_t* FUN_00440af0 = (FUN_00440af0_t*)0x00440af0;
 
 typedef void(FUN_00456800_t)(UnknStruct0* pStruct, int param_2, float param_3);
 static  FUN_00456800_t* FUN_00456800 = (FUN_00456800_t*)0x00456800;
@@ -27,7 +23,7 @@ static  FUN_00456800_t* FUN_00456800 = (FUN_00456800_t*)0x00456800;
 // Something with strings
 // "/SCREENTEXT_508/~~Abyss" -> "Abyss"
 typedef const char*(FUN_00421360_t)(const char* param_1);
-static  FUN_00421360_t* FUN_00421360 = (FUN_00421360_t*)0x00421360;
+static  FUN_00421360_t* StrSanitise = (FUN_00421360_t*)0x00421360;
 
 // sprintf, but idk yet whether it's custom or the LibC variant
 typedef int32_t (FUN_0049eb80_t)(char* pDst, const char* pFormat, ...);
@@ -53,8 +49,8 @@ static  FUN_00440620_t* FUN_00440620 = (FUN_00440620_t*)0x00440620;
 typedef void(FUN_0042de10_t)(char* param_1, int param_2);
 static  FUN_0042de10_t* FUN_0042de10 = (FUN_0042de10_t*)0x0042de10;
 
-typedef void(FUN_004360e0_t)(UnknStruct0* param_1, char param_2);
-static  FUN_004360e0_t* FUN_004360e0 = (FUN_004360e0_t*)0x004360e0;
+//typedef void(FUN_004360e0_t)(UnknStruct0* param_1, char param_2);
+//static  FUN_004360e0_t* FUN_004360e0 = (FUN_004360e0_t*)0x004360e0;
 
 typedef void(FUN_0043fe90_t)(int param_1, int param_2, int param_3);
 static  FUN_0043fe90_t* FUN_0043fe90 = (FUN_0043fe90_t*)0x0043fe90;
@@ -75,7 +71,7 @@ static  FUN_00454d40_t* FUN_00454d40 = (FUN_00454d40_t*)0x00454d40;
 typedef void(FUN_0041e5a0_t)();
 static  FUN_0041e5a0_t* FUN_0041e5a0 = (FUN_0041e5a0_t*)0x0041e5a0;
 
-typedef void(FUN_00440150_t)(int32_t param_1, int param_2);
+typedef void(FUN_00440150_t)(char* pText, int param_2);
 static  FUN_00440150_t* FUN_00440150 = (FUN_00440150_t*)0x00440150;
 
 typedef void(FUN_004285d0_t)(uint16_t ImgIdx, int32_t bVisible);
@@ -94,7 +90,7 @@ static  FUN_004286f0_t* ImgScale = (FUN_004286f0_t*)0x004286f0;
 typedef void(FUN_00428740_t)(uint16_t ImgIdx, uint8_t R, uint8_t G, uint8_t B, uint8_t A);
 static  FUN_00428740_t* ImgColor = (FUN_00428740_t*)0x00428740;
 
-typedef void(FUN_004282f0_t)(uint16_t ImgIdx, UnknStruct1* pUnknStruct1);
+typedef void(FUN_004282f0_t)(uint16_t ImgIdx, ImgDat* pUnknStruct1);
 static  FUN_004282f0_t* ImgReset = (FUN_004282f0_t*)0x004282f0;
 
 typedef void(FUN_004287e0_t)(uint16_t ImgIdx, uint32_t Flag);
@@ -103,6 +99,12 @@ static  FUN_004287e0_t* ImgSetFlag = (FUN_004287e0_t*)0x004287e0;
 typedef void(FUN_00428800_t)(uint16_t ImgIdx, uint32_t Flag);
 static  FUN_00428800_t* ImgResetFlag = (FUN_00428800_t*)0x00428800;
 
+
+constexpr uint8_t CustomR = 150;
+constexpr uint8_t CustomG = 80;
+constexpr uint8_t CustomB = 220;
+
+constexpr uint8_t NumCustomTracks = 3;
 
 
 // FUN_0043b0b0
@@ -131,9 +133,7 @@ void __cdecl HandleCircuit(UnknStruct0* pStruct)
         }
         else
         {
-            // TODO: Reverse rendering and get rid of this hack
-            g_aTracksInCircuits[4] = 3;
-            g_TracksInCurrentCircuit = 3;
+            g_TracksInCurrentCircuit = NumCustomTracks;
         }
     }
     else
@@ -151,7 +151,7 @@ void __cdecl HandleCircuit(UnknStruct0* pStruct)
         }
     }
 
-    if ((g_bIsFreePlay != 0) && (pStruct->CircuitIdx < 3))
+    if ((g_bIsFreePlay) && (pStruct->CircuitIdx < 3))
     {
         g_TracksInCurrentCircuit = g_aTracksInCircuits[pStruct->CircuitIdx];
     }
@@ -194,61 +194,67 @@ bool IsTrackPlayable(UnknStruct0* pStruct, uint8_t CircuitIdx, uint8_t TrackIdx)
 // FUN_00440620
 const char* GetTrackName(int32_t TrackID)
 {
+    static char CustomTrackName[128];
+    if (TrackID < 0)
+    {
+        strcpy_s(CustomTrackName, sizeof(CustomTrackName), "Invalid Track!");
+        return CustomTrackName;
+    }
+
     switch (TrackID)
     {
         case 0:
-            return FUN_00421360(g_pTxtTrackID_00);
+            return StrSanitise(g_pTxtTrackID_00);
         case 1:
-            return FUN_00421360(g_pTxtTrackID_01);
+            return StrSanitise(g_pTxtTrackID_01);
         case 2:
-            return FUN_00421360(g_pTxtTrackID_02);
+            return StrSanitise(g_pTxtTrackID_02);
         case 3:
-            return FUN_00421360(g_pTxtTrackID_03);
+            return StrSanitise(g_pTxtTrackID_03);
         case 4:
-            return FUN_00421360(g_pTxtTrackID_04);
+            return StrSanitise(g_pTxtTrackID_04);
         case 5:
-            return FUN_00421360(g_pTxtTrackID_05);
+            return StrSanitise(g_pTxtTrackID_05);
         case 6:
-            return FUN_00421360(g_pTxtTrackID_06);
+            return StrSanitise(g_pTxtTrackID_06);
         case 7:
-            return FUN_00421360(g_pTxtTrackID_07);
+            return StrSanitise(g_pTxtTrackID_07);
         case 8:
-            return FUN_00421360(g_pTxtTrackID_08);
+            return StrSanitise(g_pTxtTrackID_08);
         case 9:
-            return FUN_00421360(g_pTxtTrackID_09);
+            return StrSanitise(g_pTxtTrackID_09);
         case 10:
-            return FUN_00421360(g_pTxtTrackID_10);
+            return StrSanitise(g_pTxtTrackID_10);
         case 11:
-            return FUN_00421360(g_pTxtTrackID_11);
+            return StrSanitise(g_pTxtTrackID_11);
         case 12:
-            return FUN_00421360(g_pTxtTrackID_12);
+            return StrSanitise(g_pTxtTrackID_12);
         case 13:
-            return FUN_00421360(g_pTxtTrackID_13);
+            return StrSanitise(g_pTxtTrackID_13);
         case 14:
-            return FUN_00421360(g_pTxtTrackID_14);
+            return StrSanitise(g_pTxtTrackID_14);
         case 15:
-            return FUN_00421360(g_pTxtTrackID_15);
+            return StrSanitise(g_pTxtTrackID_15);
         case 16:
-            return FUN_00421360(g_pTxtTrackID_16);
+            return StrSanitise(g_pTxtTrackID_16);
         case 17:
-            return FUN_00421360(g_pTxtTrackID_17);
+            return StrSanitise(g_pTxtTrackID_17);
         case 18:
-            return FUN_00421360(g_pTxtTrackID_18);
+            return StrSanitise(g_pTxtTrackID_18);
         case 19:
-            return FUN_00421360(g_pTxtTrackID_19);
+            return StrSanitise(g_pTxtTrackID_19);
         case 20:
-            return FUN_00421360(g_pTxtTrackID_20);
+            return StrSanitise(g_pTxtTrackID_20);
         case 21:
-            return FUN_00421360(g_pTxtTrackID_21);
+            return StrSanitise(g_pTxtTrackID_21);
         case 22:
-            return FUN_00421360(g_pTxtTrackID_22);
+            return StrSanitise(g_pTxtTrackID_22);
         case 23:
-            return FUN_00421360(g_pTxtTrackID_23);
+            return StrSanitise(g_pTxtTrackID_23);
         case 24:
-            return FUN_00421360(g_pTxtTrackID_24);
+            return StrSanitise(g_pTxtTrackID_24);
     }
 
-    static char CustomTrackName[128];
     rcr_sprintf(CustomTrackName, "Custom Track %d", TrackID - 24);
     return CustomTrackName;
 }
@@ -265,132 +271,227 @@ int32_t FUN_0041d6c0()
 }
 
 // FUN_004584a0
-void __cdecl DrawCircuitTracks(UnknStruct0* pStruct, bool bDrawTracks)
+void __cdecl InitTracks(UnknStruct0* pStruct, bool bInitTracks)
 {
-    // TODO: Remove FUN_004584a0 function declaration
-    //FUN_004584a0(pStruct, (int)bDrawTracks);
-    //ImgColor(99, 255, 0, 0, 255);
-    //ImgColor(127, 255, 0, 0, 255);
-    //ImgPosition(99, 150, 150);
-    //ImgScale(99, 2.0f, 2.0f);
-    //return;
-
     for (uint16_t local_8 = 0x82; local_8 < 0xa2; local_8++)
     {
-        ImgReset(local_8, pStruct->aUnknStruct1[5]);
+        ImgReset(local_8, pStruct->aImages[5]);
     }
-    if (bDrawTracks)
+    if (bInitTracks)
     {
-        for (int32_t CircuitIdx = 0; CircuitIdx < 4; CircuitIdx++)
+        for (int32_t CircuitIdx = 0; CircuitIdx < 5; CircuitIdx++)
         {
             for (int32_t TrackIdx = 0; TrackIdx < 7; TrackIdx++)
             {
-                const uint16_t StartImgIdxBack   = 99;
-                const uint16_t StartImgIdxBorder = 127;
-
-                const uint8_t Bits = (uint8_t)(TrackIdx * 2);
+                const uint8_t Bits = TrackIdx * 2;
                 const uint16_t Beat = (g_aBeatTrackPlace[CircuitIdx] >> Bits) & 3;
-                const uint16_t ImgIdx = CircuitIdx * 7 + StartImgIdxBack + TrackIdx;
-                ImgReset(ImgIdx, pStruct->aUnknStruct1[3]);
+                const uint16_t ImgIdx = CircuitIdx * 7 + 99 + TrackIdx;
+                ImgReset(ImgIdx, pStruct->aImages[3]);
                 ImgSetFlag(ImgIdx, IMG_UNKN_15);
 
-                uint8_t R, G, B;
-                switch (CircuitIdx)
-                {
-                    // Amateur
-                    case 0:
-                    {
-                        B = 0xff;
-                        G = 0xff;
-                        R = 0x32;
-                        break;
-                    }
+                ImgReset(ImgIdx + 0x1c, pStruct->aImages[4]);
+                ImgSetFlag(ImgIdx + 0x1c, IMG_UNKN_15);
 
-                    // Semi-Pro
-                    case 1:
-                    {
-                        B = 0x3e;
-                        G = 0xff;
-                        R = 0x44;
-                        break;
-                    }
-
-                    // Galactic
-                    case 2:
-                    {
-                        B = 0x11;
-                        G = 0xbe;
-                        R = 0xa3;
-                        break;
-                    }
-
-                    // Invitational
-                    case 3:
-                    {
-                        B = 0x20;
-                        G = 0x59;
-                        R = 0x9d;
-                        break;
-                    }
-
-                    // Custom Tracks
-                    default:
-                    {
-                        B = 0xFF;
-                        G = 0x00;
-                        R = 0xAA;
-                        break;
-                    }
-                }
-                ImgColor(ImgIdx, R, G, B, 0xfe);
-
-                const bool bIsPlayable = IsTrackPlayable(pStruct, CircuitIdx, TrackIdx);
-                if (!bIsPlayable)
-                {
-                    ImgColor(ImgIdx, 0x80, 0x80, 0x80, 0xfe);
-                }
                 if (pStruct->bIsTournament)
                 {
-                    UnknStruct1* pUnknStruct1;
                     switch (Beat)
                     {
                         // 3rd place
                         case 1:
                         {
-                            pUnknStruct1 = pStruct->aUnknStruct1[2];
+                            ImgReset(ImgIdx, pStruct->aImages[2]);
                             break;
                         }
 
                         // 2nd place
                         case 2:
                         {
-                            pUnknStruct1 = pStruct->aUnknStruct1[1];
+                            ImgReset(ImgIdx, pStruct->aImages[1]);
                             break;
                         }
 
                         // 1st place
                         case 3:
                         {
-                            pUnknStruct1 = pStruct->aUnknStruct1[0];
+                            ImgReset(ImgIdx, pStruct->aImages[0]);
                             break;
                         }
-
-                        default:
-                        {
-                            goto switchD_00458610_caseD_0;
-                        }
                     }
-                    ImgReset(ImgIdx, pUnknStruct1);
                 }
-
-            switchD_00458610_caseD_0:
-                ImgReset(ImgIdx + 0x1c, pStruct->aUnknStruct1[4]);
-                ImgSetFlag(ImgIdx + 0x1c, IMG_UNKN_15);
-                ImgColor(ImgIdx + 0x1c, 0xa3, 0xbe, 0x11, 0xfe);
             }
         }
     }
 }
+
+// FUN_004360e0
+// Get's called just at once place: MenuTrackSelection()
+void DrawTracks(UnknStruct0* pStruct, uint8_t CircuitIdx)
+{
+    int iVar1;
+    int32_t uVar8;
+
+    const uint8_t NumTracks = CircuitIdx < 4 ? g_aTracksInCircuits[CircuitIdx] : NumCustomTracks;
+    if (NumTracks == 0)
+    {
+        return;
+    }
+
+    uint8_t R, G, B, A;
+    uint16_t Beat = 0;
+    for (uint8_t TrackIdx = 0; TrackIdx < NumTracks; TrackIdx++)
+    {
+        if (pStruct->bIsTournament)
+        {
+            const uint8_t Bits = TrackIdx * 2;
+            Beat = (g_aBeatTrackPlace[CircuitIdx] >> Bits) & 3;
+        }
+
+        // Draw Background
+        uint16_t ImgIdx = CircuitIdx * 7 + 99 + TrackIdx;
+        iVar1 = TrackIdx * 35;
+        ImgVisible(ImgIdx, true);
+        ImgPosition(ImgIdx, iVar1 + 55, 94);
+        ImgScale(ImgIdx, 0.6667f, 0.6667f);
+
+        A = 255;
+        if (CircuitIdx != pStruct->CircuitIdx)
+        {
+            // Circuit transition animation
+            A = uint8_t(DAT_00e295a0 * DAT_004ac7a4);
+        }
+
+        switch (CircuitIdx)
+        {
+            // Amateur
+            case 0:
+            {
+                B = 255;
+                G = 255;
+                R = 50;
+                break;
+            }
+
+            // Semi-Pro
+            case 1:
+            {
+                B = 62;
+                G = 255;
+                R = 68;
+                break;
+            }
+
+            // Galactic
+            case 2:
+            {
+                B = 17;
+                G = 190;
+                R = 163;
+                break;
+            }
+
+            // Invitational
+            case 3:
+            {
+                B = 32;
+                G = 89;
+                R = 157;
+                break;
+            }
+
+            // Custom Tracks
+            default:
+            {
+                B = CustomB;
+                G = CustomG;
+                R = CustomR;
+                break;
+            }
+        }
+
+        const bool bIsPlayable = IsTrackPlayable(pStruct, CircuitIdx, (byte)TrackIdx);
+        if (!bIsPlayable)
+        {
+            B = 128;
+            G = 128;
+            R = 128;
+        }
+        else if (Beat != 0)
+        {
+            B = 255;
+            G = 255;
+            R = 255;
+        }
+        ImgColor(ImgIdx, R, G, B, A);
+
+        char TxtTrackNum[32];
+        rcr_sprintf(TxtTrackNum, "~f2~s%d", TrackIdx + 1);
+        if (!pStruct->bIsTournament || (ImgIdx = FUN_00440a20(CircuitIdx, TrackIdx), ImgIdx != 0))
+        {
+            // Draw Track Number
+            UIText(iVar1 + 60, 109, R, G, B, A, TxtTrackNum);
+
+            // Draw "Race" string
+            const char* pTxtRace = StrSanitise(g_pTxtRace);
+            UIText(iVar1 + 67, 111, R, G, B, A, pTxtRace);
+        }
+
+        if ((pStruct->bIsTournament && (Beat == 0)) && (ImgIdx = FUN_00440a20(CircuitIdx, TrackIdx), ImgIdx == 0))
+        {
+            // Draw 4th place Text
+            const char* pTxt4th = StrSanitise(g_pTxt4th);
+            UIText(iVar1 + 58, 111, R, G, B, A, pTxt4th);
+        }
+
+        // Draw Border
+        ImgIdx = CircuitIdx * 7 + 127 + TrackIdx;
+        ImgVisible(ImgIdx, true);
+        ImgPosition(ImgIdx, iVar1 + 53, 92);
+        ImgScale(ImgIdx, 0.6667f, 0.6667f);
+        ImgColor(ImgIdx, 163, 190, 17, A);
+        if (!bIsPlayable)
+        {
+            ImgColor(ImgIdx, 128, 128, 128, A);
+        }
+
+        // Draw current selection
+        if ((CircuitIdx == pStruct->CircuitIdx) && (uVar8 = VerifySelectedTrack(pStruct, g_SelectedTrackIdx), TrackIdx == uVar8))
+        {
+            ImgVisible(ImgIdx, false);
+            ImgVisible(98, true);
+            ImgPosition(98, iVar1 + 50, 89);
+            ImgScale(98, 0.6667f, 0.6667f);
+            ImgColor(98, 50, 255, 255, 255);
+        }
+    }
+}
+
+// FUN_00440af0
+int32_t VerifySelectedTrack(UnknStruct0* pStruct, int32_t SelectedTrackIdx)
+{
+    bool bIsPlayable;
+    int iVar2;
+    uint8_t TrackCount;
+
+    iVar2 = -1;
+    TrackCount = 0;
+
+    const uint8_t NumTracksAvail = pStruct->CircuitIdx < 4 ? g_aTracksInCircuits[pStruct->CircuitIdx] : NumCustomTracks;
+    if (NumTracksAvail == 0)
+    {
+        return -1;
+    }
+
+    while ((bIsPlayable = IsTrackPlayable(pStruct, pStruct->CircuitIdx, TrackCount), !bIsPlayable || (TrackCount != SelectedTrackIdx)))
+    {
+        TrackCount++;
+        if (TrackCount >= NumTracksAvail)
+        {
+            return -1;
+        }
+    }
+    return TrackCount;
+}
+
 
 // FUN_0043b240
 void MenuTrackSelection()
@@ -399,7 +500,6 @@ void MenuTrackSelection()
     char* pcVar2;
     int32_t uVar6;
     char local_100[256];
-    char CircuitIdx;
 
     UnknStruct0* pStruct = g_pUnknStruct0;
     if (DAT_004c4000 != 0)
@@ -439,7 +539,7 @@ void MenuTrackSelection()
             FUN_0043b1d0(pStruct);
         }
 
-        DrawCircuitTracks(pStruct, true);
+        InitTracks(pStruct, true);
         DAT_0050c134 = *(char*)((int)&g_aUnknStruct1Array[pStruct->TrackID].UnknInt2 + 1);
         DAT_0050c17c = pStruct->CircuitIdx;
     }
@@ -461,17 +561,6 @@ void MenuTrackSelection()
         FUN_00469b90(float(uVar6));
     }
 
-    iVar1 = FUN_00440af0(pStruct, g_SelectedTrackIdx);
-
-    if (pStruct->CircuitIdx < 4)
-    {
-        pStruct->TrackID = *(int8_t*)(g_aTrackLoadIndices + iVar1 + pStruct->CircuitIdx * 7);
-    }
-    else
-    {
-        pStruct->TrackID = 16; // Mon Gaza Speedway
-    }
-
     if (DAT_00e295a0 > 0.0f)
     {
         FUN_00456800(pStruct, (int)DAT_0050c134, DAT_00e295a0 * 0.5f);
@@ -481,37 +570,53 @@ void MenuTrackSelection()
         return;
     }
 
-    iVar1 = pStruct->TrackID * 0xc;
-    if ((g_aUnknStruct1Array[pStruct->TrackID].UnknInt0 == -1) || (g_aUnknStruct1Array[pStruct->TrackID].UnknInt1 == -1))
+    const int32_t SelectedTrackIdx = VerifySelectedTrack(pStruct, g_SelectedTrackIdx);
+    if (SelectedTrackIdx >= 0)
     {
-        const char* pText = FUN_00421360(g_pTxtPlanetNotLoaded);
-        rcr_sprintf(local_100, pText);
+        if (pStruct->CircuitIdx < 4)
+        {
+            pStruct->TrackID = *(int8_t*)(g_aTrackLoadIndices + SelectedTrackIdx + pStruct->CircuitIdx * 7);
+        }
+        else
+        {
+            pStruct->TrackID = 16; // Mon Gaza Speedway
+        }
 
-        // The following I decompiled by hand, Ghidra returned just trash
-        int32_t a = FUN_004816b0();
-        float b = float(a) * DAT_004ac86c * DAT_004ac93c;
-        int32_t B = int32_t(b);
+        if ((g_aUnknStruct1Array[pStruct->TrackID].UnknInt0 == -1) || (g_aUnknStruct1Array[pStruct->TrackID].UnknInt1 == -1))
+        {
+            const char* pText = StrSanitise(g_pTxtPlanetNotLoaded);
+            rcr_sprintf(local_100, pText);
 
-        a = FUN_004816b0();
-        b = float(a) * DAT_004ac86c * DAT_004ac93c;
-        int32_t G = int32_t(b);
+            // The following I decompiled by hand, Ghidra returned just trash
+            int32_t a = FUN_004816b0();
+            float b = float(a) * DAT_004ac86c * DAT_004ac93c;
+            int32_t B = int32_t(b);
 
-        a = FUN_004816b0();
-        b = float(a) * DAT_004ac86c * DAT_004ac93c;
-        int32_t R = int32_t(b);
+            a = FUN_004816b0();
+            b = float(a) * DAT_004ac86c * DAT_004ac93c;
+            int32_t G = int32_t(b);
 
-        UIText(0xa0, 0xcd, R, G, B, 0xff, local_100);
+            a = FUN_004816b0();
+            b = float(a) * DAT_004ac86c * DAT_004ac93c;
+            int32_t R = int32_t(b);
+
+            UIText(0xa0, 0xcd, R, G, B, 0xff, local_100);
+        }
+
+        const char* pTrackName = GetTrackName(pStruct->TrackID);
+        rcr_sprintf(local_100, "~c~s%s", pTrackName);
+        UIText(160, 54, 0, 0xFF, 0, 0xFF, local_100);
+        pcVar2 = local_100;
+        FUN_0042de10(pcVar2, 0);
+        FUN_0042de10(local_100, 0);
+    }
+    else
+    {
+        pStruct->TrackID = -1;
     }
 
-    const char* pTrackName = GetTrackName(pStruct->TrackID);
-    rcr_sprintf(local_100, "~c~s%s", pTrackName);
-    UIText(160, 54, 0, 0xFF, 0, 0xFF, local_100);
-    pcVar2 = local_100;
-    FUN_0042de10(pcVar2, 0);
-    FUN_0042de10(local_100, 0);
-
     // Horizontal selection
-    FUN_00440150(int32_t(pcVar2), 0x37);
+    FUN_00440150(local_100, 0x37);
 
     uint8_t R, G, B;
     const char* pTxtCircuit = nullptr;
@@ -519,48 +624,48 @@ void MenuTrackSelection()
     {
         case 0:
         {
-            pTxtCircuit = FUN_00421360(g_pTxtCircuitAmateur);
-            B = 0xff;
-            G = 0xff;
-            R = 0x32;
+            pTxtCircuit = StrSanitise(g_pTxtCircuitAmateur);
+            B = 255;
+            G = 255;
+            R = 50;
             break;
         }
         case 1:
         {
-            pTxtCircuit = FUN_00421360(g_pTxtCircuitSemiPro);
-            B = 0x3e;
-            G = 0xff;
-            R = 0x44;
+            pTxtCircuit = StrSanitise(g_pTxtCircuitSemiPro);
+            B = 62;
+            G = 255;
+            R = 68;
             break;
         }
         case 2:
         {
-            pTxtCircuit = FUN_00421360(g_pTxtCircuitGalactic);
-            B = 0x11;
-            G = 0xbe;
-            R = 0xa3;
+            pTxtCircuit = StrSanitise(g_pTxtCircuitGalactic);
+            B = 17;
+            G = 190;
+            R = 163;
             break;
         }
         case 3:
         {
-            pTxtCircuit = FUN_00421360(g_pTxtCircuitInvitational);
-            B = 0x20;
-            G = 0x59;
-            R = 0x9d;
+            pTxtCircuit = StrSanitise(g_pTxtCircuitInvitational);
+            B = 32;
+            G = 89;
+            R = 157;
             break;
         }
         default:
         {
             char BufferPage[128];
             rcr_sprintf(BufferPage, "~c~sCustom Tracks - Page %u", pStruct->CircuitIdx - 3);
-            pTxtCircuit = FUN_00421360(BufferPage);
-            B = 0xFF;
-            G = 0x00;
-            R = 0xAA;
+            pTxtCircuit = StrSanitise(BufferPage);
+            B = CustomB;
+            G = CustomG;
+            R = CustomR;
 
             constexpr uint16_t PosX = 20;
             constexpr uint16_t PosY = 180;
-            UIText(PosX, PosY, 0x32, 0xFF, 0xFF, 0xFF, "~f4~sPlace custom Tracks into Folder:");
+            UIText(PosX, PosY, 50, 255, 255, 255, "~f4~sPlace custom Tracks into Folder:");
 
             char BufferPath[1024];
             strcpy_s(BufferPath, sizeof(BufferPath), "~f4~s");
@@ -573,23 +678,23 @@ void MenuTrackSelection()
                 }
             }
             strcat_s(BufferPath, sizeof(BufferPath), "/tracks/");
-            UIText(PosX, PosY + 8, 0x32, 0xFF, 0xFF, 0xFF, BufferPath);
+            UIText(PosX, PosY + 8, 50, 255, 255, 255, BufferPath);
             break;
         }
     }
-    UIText(160, 34, R, G, B, 0xFF, pTxtCircuit);
+    UIText(160, 34, R, G, B, 255, pTxtCircuit);
 
     const char* pTextMode = nullptr;
     if (!pStruct->bIsTournament)
     {
         if (pStruct->Field_0x6D != 0)
         {
-            pTextMode = FUN_00421360(g_pTxtTimeAttack);
+            pTextMode = StrSanitise(g_pTxtTimeAttack);
             goto LAB_0043b5c4;
         }
         if (pStruct->Field_0x70 == 2)
         {
-            pTextMode = FUN_00421360(g_pTxt2Player);
+            pTextMode = StrSanitise(g_pTxt2Player);
             goto LAB_0043b5c4;
         }
         pTextMode = g_pTxtFreePlay;
@@ -598,46 +703,50 @@ void MenuTrackSelection()
     {
         pTextMode = g_pTxtTournament;
     }
-    pTextMode = FUN_00421360(pTextMode);
+    pTextMode = StrSanitise(pTextMode);
 
 LAB_0043b5c4:
     rcr_sprintf(local_100, pTextMode);
-    UIText(0xa0, 0x18, 0x32, 0xff, 0xff, 0xff, local_100);
-    FUN_004360e0(pStruct, DAT_0050c17c);
+    UIText(160, 24, 50, 255, 255, 255, local_100);
 
-    const uint8_t PlanetIdx = g_aUnknStruct1Array[pStruct->TrackID].PlanetIdx;
+    DrawTracks(pStruct, DAT_0050c17c);
+    if (pStruct->TrackID >= 0)
+    {
+        const uint8_t PlanetIdx = g_aUnknStruct1Array[pStruct->TrackID].PlanetIdx;
 
-    //static uint16_t ImgIdx = 99;
-    //static bool bDown[2] = { false, false };
-    //if (GetKeyState(VK_ADD) & 0xF0 && !bDown[0])
-    //{
-    //    bDown[0] = true;
-    //    ImgIdx++;
-    //}
-    //else if (!(GetKeyState(VK_ADD) & 0xF0) && bDown[0])
-    //{
-    //    bDown[0] = false;
-    //}    
-    //if (GetKeyState(VK_SUBTRACT) & 0xF0 && !bDown[1])
-    //{
-    //    bDown[1] = true;
-    //    ImgIdx--;
-    //}
-    //else if (!(GetKeyState(VK_SUBTRACT) & 0xF0) && bDown[1])
-    //{
-    //    bDown[1] = false;
-    //}
+        //static uint16_t ImgIdx = 99;
+        //static bool bDown[2] = { false, false };
+        //if (GetKeyState(VK_ADD) & 0xF0 && !bDown[0])
+        //{
+        //    bDown[0] = true;
+        //    ImgIdx++;
+        //}
+        //else if (!(GetKeyState(VK_ADD) & 0xF0) && bDown[0])
+        //{
+        //    bDown[0] = false;
+        //}    
+        //if (GetKeyState(VK_SUBTRACT) & 0xF0 && !bDown[1])
+        //{
+        //    bDown[1] = true;
+        //    ImgIdx--;
+        //}
+        //else if (!(GetKeyState(VK_SUBTRACT) & 0xF0) && bDown[1])
+        //{
+        //    bDown[1] = false;
+        //}
 
-    // Draw planet preview image
-    // Apparently, each ImgIdx can only be drawn once?
-    const uint16_t ImgIdx = g_aUnknStruct1Array[pStruct->TrackID].PlanetIdx + 0x45;
-    ImgVisible(ImgIdx, true);
-    ImgPosition(ImgIdx, 160, 145);
-    ImgScale(ImgIdx, 1.0f, 1.0f);
-    ImgColor(ImgIdx, 0xFF, 0xFF, 0xFF, 0xFF);
+        // Draw planet preview image
+        // Apparently, each ImgIdx can only be drawn once?
+        const uint16_t ImgIdx = PlanetIdx + 69;
+        ImgVisible(ImgIdx, true);
+        ImgPosition(ImgIdx, 160, 150);
+        ImgScale(ImgIdx, 1.0f, 1.0f);
+        ImgColor(ImgIdx, 255, 255, 255, 255);
 
-    const char* pPlanetName = g_PlanetNames[PlanetIdx].Name;
-    UIText(0xe0, 0x8a, 0, 0xff, 0, 0xff, pPlanetName);
+        const char* pPlanetName = g_PlanetNames[PlanetIdx].Name;
+        UIText(224, 143, 0, 255, 0, 255, pPlanetName);
+    }
+
     FUN_0043fe90(0x2d, 0x54, 0x1e);
     if (DAT_0050c54c == 0)
     {
@@ -657,7 +766,7 @@ LAB_0043b5c4:
                     return;
                 }
                 FUN_00440550(0x54);
-                DrawCircuitTracks(pStruct, false);
+                InitTracks(pStruct, false);
                 FUN_00454d40(pStruct, 0xd);
                 DAT_0050c54c = 1;
                 return;
@@ -674,12 +783,12 @@ LAB_0043b5c4:
                 if ((iVar1 != 0) && (iVar1 = FUN_0041d6c0(), iVar1 != 0)) {
                     return;
                 }
-                DrawCircuitTracks(pStruct, false);
+                InitTracks(pStruct, false);
                 FUN_00454d40(pStruct, 9);
                 return;
             }
         }
-        CircuitIdx = pStruct->CircuitIdx;
+        uint8_t CircuitIdx = pStruct->CircuitIdx;
         if (DAT_0050c17c == CircuitIdx)
         {
             // Move down
@@ -714,12 +823,15 @@ LAB_0043b5c4:
                 }
             }
         }
-        DAT_00ea02b0 = (int)pStruct->TrackID;
-        iVar1 = IsFreePlay();
-        if ((iVar1 == 0) || (iVar1 = FUN_0041d6c0(), iVar1 != 0))
+
+        if (pStruct->TrackID >= 0)
         {
-            DAT_00ea05ac = g_aUnknStruct1Array[pStruct->TrackID].UnknInt0;
-            FUN_0041e5a0();
+            DAT_00ea02b0 = (int)pStruct->TrackID;
+            if (!IsFreePlay() || FUN_0041d6c0() != 0)
+            {
+                DAT_00ea05ac = g_aUnknStruct1Array[pStruct->TrackID].UnknInt0;
+                FUN_0041e5a0();
+            }
         }
     }
 }
