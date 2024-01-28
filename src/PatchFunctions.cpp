@@ -52,7 +52,7 @@ void PatchAllFunctions()
     PatchFunction<0x00440aa0>(&IsTrackPlayable);
     PatchFunction<0x00440620>(&GetTrackName);
     PatchFunction<0x0041d6b0>(&IsFreePlay);
-    //PatchFunction<0x004584a0>(&DrawCircuitTracks);
+    PatchFunction<0x004584a0>(&DrawCircuitTracks);
     PatchFunction<0x0043b240>(&MenuTrackSelection);
 
     PatchFunction<0x0041d6c0>(&FUN_0041d6c0);

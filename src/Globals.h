@@ -14,6 +14,13 @@ static UnknStruct0*&  g_pUnknStruct0                    = *(UnknStruct0**) 0x005
 static TrackInfo*     g_aUnknStruct1Array               =  (TrackInfo*)    0x004bfee8;        // Length: ?
 static PlanetName*    g_PlanetNames                     =  (PlanetName*)   0x00e98f5c;        // Length: 25
 static ImgParam*      g_aImgageParams                   =  (ImgParam*)     0x00e9ba60;        // Length: 251 ?
+
+// Array of 2 bits representing the place of each track
+//  11 - 1st place
+//  10 - 2nd place
+//  01 - 3rd place
+//  00 - not beat
+static uint16_t*      g_aBeatTrackPlace                 =  (uint16_t*)     0x00e35a8a;        // Length: 4
                                                                            
 static const char*    g_pTxtTimeAttack                  =  (const char*)   0x004c0dd0;        // "/SCREENTEXT_543/~c~sTime Attack"
 static const char*    g_pTxt2Player                     =  (const char*)   0x004c0db0;        // "/SCREENTEXT_544/~c~s2 Player"
@@ -70,4 +77,3 @@ static int32_t&       DAT_00e2a698                      = *(int32_t*)      0x00e
 static int32_t&       DAT_004d6b44                      = *(int32_t*)      0x004d6b44;
 static int32_t&       DAT_00ea02b0                      = *(int32_t*)      0x00ea02b0;        // TrackIdx !?
 static int32_t&       DAT_00ea05ac                      = *(int32_t*)      0x00ea05ac;
-static uint16_t*      DAT_00e35a8a                      =  (uint16_t*)     0x00e35a8a;        // Length: 4
