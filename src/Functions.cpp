@@ -61,7 +61,7 @@ static  FUN_00440550_t* FUN_00440550 = (FUN_00440550_t*)0x00440550;
 
 // Something with Hangar Menu
 typedef void(FUN_00454d40_t)(MenuState* pState, int param_2);
-static  FUN_00454d40_t* FUN_00454d40 = (FUN_00454d40_t*)0x00454d40;
+static  FUN_00454d40_t* SetMenuIdx = (FUN_00454d40_t*)0x00454d40;
 
 typedef void(FUN_0041e5a0_t)();
 static  FUN_0041e5a0_t* FUN_0041e5a0 = (FUN_0041e5a0_t*)0x0041e5a0;
@@ -593,7 +593,7 @@ void MenuTrackSelection()
         FUN_0045bee0(pState, 0x25, 0xffffffff, 0);
         DAT_0050c54c = 0;
 
-        if (pState->Field_0x0C == 0xc)
+        if (pState->Field_0x0C == 12)
         {
             DAT_00e295a0 = 1.0f;
         }
@@ -686,12 +686,12 @@ void MenuTrackSelection()
             b = float(a) * DAT_004ac86c * DAT_004ac93c;
             int32_t R = int32_t(b);
 
-            UIText(0xa0, 0xcd, R, G, B, 0xff, local_100);
+            UIText(160, 205, R, G, B, 255, local_100);
         }
 
         const char* pTrackName = GetTrackName(pState->TrackID);
         rcr_sprintf(local_100, "~c~s%s", pTrackName);
-        UIText(160, 54, 0, 0xFF, 0, 0xFF, local_100);
+        UIText(160, 54, 0, 255, 0, 255, local_100);
         pcVar2 = local_100;
         FUN_0042de10(pcVar2, 0);
         FUN_0042de10(local_100, 0);
@@ -702,7 +702,7 @@ void MenuTrackSelection()
     }
 
     // Horizontal selection
-    FUN_00440150(local_100, 0x37);
+    FUN_00440150(local_100, 55);
 
     uint8_t R, G, B;
     const char* pTxtCircuit = nullptr;
@@ -822,7 +822,6 @@ LAB_0043b5c4:
         //}
 
         // Draw planet preview image
-        // Apparently, each ImgIdx can only be drawn once?
         const uint16_t ImgIdx = PlanetIdx + 69;
         ImgVisible(ImgIdx, true);
         ImgPosition(ImgIdx, 160, 150);
@@ -840,7 +839,7 @@ LAB_0043b5c4:
         uint32_t& puVar2 = DAT_0050c918;
         if (DAT_004eb39c == 0)
         {
-            if ((DAT_004d6b48 != 0) && ((iVar1 = IsFreePlay(), iVar1 == 0 || (iVar1 = FUN_0041d6c0(), iVar1 != 0))))
+            if (DAT_004d6b48 != 0 && (IsFreePlay() == 0 || FUN_0041d6c0()!= 0) && pState->TrackID >= 0)
             {
                 if (g_bIsFreePlay != 0)
                 {
@@ -854,7 +853,7 @@ LAB_0043b5c4:
 
                 FUN_00440550(0x54);
                 InitTracks(pState, false);
-                FUN_00454d40(pState, 0xd);
+                SetMenuIdx(pState, 13);
                 DAT_0050c54c = 1;
                 return;
             }
@@ -872,7 +871,7 @@ LAB_0043b5c4:
                     return;
                 }
                 InitTracks(pState, false);
-                FUN_00454d40(pState, 9);
+                SetMenuIdx(pState, 9);
                 return;
             }
         }
@@ -906,7 +905,7 @@ LAB_0043b5c4:
                 {
                     pState->CircuitIdx--;
                     DAT_00e295d4 = -1;
-                    FUN_00440550(0x58);
+                    FUN_00440550(88);
                     HandleCircuit(pState);
                 }
             }
@@ -917,7 +916,7 @@ LAB_0043b5c4:
             DAT_00ea02b0 = (int)pState->TrackID;
             if (!IsFreePlay() || FUN_0041d6c0() != 0)
             {
-                DAT_00ea05ac = g_aTrackInfos[pState->TrackID].LoadModel;
+                g_LoadTrackModel = g_aTrackInfos[16].LoadModel;
                 FUN_0041e5a0();
             }
         }

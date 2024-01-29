@@ -8,7 +8,8 @@ struct UnknStruct2;
 
 struct MenuState
 {
-    uint8_t  Unkn0[0x0C];
+    uint8_t  Unkn0[0x08];
+    int32_t  MenuIdx;
     int32_t  Field_0x0C;
     uint8_t  Unkn1[0x4D];
     int8_t   TrackID;
@@ -48,6 +49,7 @@ struct TrackInfo
     int32_t  LoadSpline;
     uint8_t  Unkn0;
     uint8_t  PlanetIdx;
+    int8_t   Unkn1;
 };
 
 struct PlanetName
