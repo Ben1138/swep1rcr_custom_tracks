@@ -1,6 +1,6 @@
 #include <windows.h>
 #include <stdio.h>
-#include "PatchFunctions.h"
+#include "ReverseEngineering/Patching.h"
 #include "CustomTracks.h"
 
 typedef void* LPDIRECTINPUT; // I don't want to include old DirectInput headers.
@@ -27,12 +27,10 @@ extern "C"
                 return E_POINTER;
             }
 
-            //char MsgBuffer[128];
-            //snprintf(MsgBuffer, sizeof(MsgBuffer), "Hooked 'DirectInputCreateA' at: %p", s_pDirectInputCreateA);
-            //MessageBoxA(nullptr, MsgBuffer, "SWEP1RCR_ADVANCED", MB_ICONINFORMATION | MB_OK);
+            // TODO: Check MD5 of EXE
 
             CustomTracks::ScanFolder();
-            PatchAllFunctions();
+            Patching::PatchAllFunctions();
         }
 
         return s_pDirectInputCreateA(hinst, dwVersion, lplpDirectInput, punkOuter);
