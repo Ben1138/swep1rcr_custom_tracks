@@ -15,6 +15,7 @@ static TrackInfo*     g_aTrackInfos                     =  (TrackInfo*)    0x004
 static PlanetName*    g_PlanetNames                     =  (PlanetName*)   0x00e98f5c;        // Length: 25
 static ImgParam*      g_aImageParams                    =  (ImgParam*)     0x00e9ba60;        // Length: 400
 static int32_t&       g_ImgCount                        = *(int32_t*)      0x004b91b8;
+static int32_t&       g_LoadTrackModel                  = *(int32_t*)      0x00ea05ac;        // Apparently only used when g_bIsFreePlay == true ?
 
 // Array of 2 bits representing the place of each track
 //  11 - 1st place
@@ -80,5 +81,4 @@ static int32_t&       DAT_004eb1c8                      = *(int32_t*)      0x004
 static int32_t&       DAT_00e2a698                      = *(int32_t*)      0x00e2a698;
 static int32_t&       DAT_004d6b44                      = *(int32_t*)      0x004d6b44;
 static int32_t&       DAT_00ea02b0                      = *(int32_t*)      0x00ea02b0;        // TrackIdx !?
-static int32_t&       DAT_00ea05ac                      = *(int32_t*)      0x00ea05ac;
 static float&         DAT_004ac7a4                      = *(float*)        0x004ac7a4;
