@@ -34,4 +34,5 @@ target_sources(dinput PRIVATE
     "${DIR_SRC}/DLLWrap.cpp"                        # Contains DirectInputCreateA
     "${DIR_SRC}/Functions.cpp"
     "${DIR_SRC}/PatchFunctions.cpp"
+    "${DIR_SRC}/CustomTracks.cpp"
 )

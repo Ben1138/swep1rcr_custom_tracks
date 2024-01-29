@@ -1,6 +1,7 @@
 #include <windows.h>
 #include <stdio.h>
 #include "PatchFunctions.h"
+#include "CustomTracks.h"
 
 typedef void* LPDIRECTINPUT; // I don't want to include old DirectInput headers.
 typedef HRESULT(WINAPI DirectInputCreateA_t)(HINSTANCE, DWORD, LPDIRECTINPUT*, LPUNKNOWN);
@@ -30,6 +31,7 @@ extern "C"
             //snprintf(MsgBuffer, sizeof(MsgBuffer), "Hooked 'DirectInputCreateA' at: %p", s_pDirectInputCreateA);
             //MessageBoxA(nullptr, MsgBuffer, "SWEP1RCR_ADVANCED", MB_ICONINFORMATION | MB_OK);
 
+            CustomTracks::ScanFolder();
             PatchAllFunctions();
         }
 
