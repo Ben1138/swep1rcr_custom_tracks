@@ -86,7 +86,7 @@ struct ImgParam
     uint8_t   G;
     uint8_t   B;
     uint8_t   A;
-    ImgDat*   pUnknStruct1;
+    ImgDat*   pImage;
 };
 static_assert(sizeof(ImgParam) == 0x20);
 static_assert(sizeof(ImgFlags) == sizeof(int32_t));

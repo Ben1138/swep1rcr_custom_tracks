@@ -57,5 +57,8 @@ void PatchAllFunctions()
     PatchFunction<0x0043b240>(&MenuTrackSelection);
     PatchFunction<0x00440af0>(&VerifySelectedTrack);
 
+    PatchFunction<0x004282f0>(&ImgReset);
+    PatchFunction<0x00428370>(&ImgResetAll);
+
     PatchFunction<0x0041d6c0>(&FUN_0041d6c0);
 }

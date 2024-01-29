@@ -13,7 +13,8 @@ static int32_t&       g_bCircuitIdxInRange              = *(int32_t*)      0x00e
 static MenuState*&    g_pMenuState                      = *(MenuState**)   0x0050c454;
 static TrackInfo*     g_aTrackInfos                     =  (TrackInfo*)    0x004bfee8;        // Length: 25 ?
 static PlanetName*    g_PlanetNames                     =  (PlanetName*)   0x00e98f5c;        // Length: 25
-static ImgParam*      g_aImgageParams                   =  (ImgParam*)     0x00e9ba60;        // Length: 251 ?
+static ImgParam*      g_aImageParams                    =  (ImgParam*)     0x00e9ba60;        // Length: 400
+static int32_t&       g_ImgCount                        = *(int32_t*)      0x004b91b8;
 
 // Array of 2 bits representing the place of each track
 //  11 - 1st place

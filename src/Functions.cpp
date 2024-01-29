@@ -1,4 +1,5 @@
 #include <windows.h>
+#include <assert.h>
 #include "Functions.h"
 
 
@@ -13,9 +14,6 @@ static  FUN_0043b1d0_t* FUN_0043b1d0 = (FUN_0043b1d0_t*)0x0043b1d0;
 
 typedef float10(FUN_00469b90_t)(float param_1);
 static  FUN_00469b90_t* FUN_00469b90 = (FUN_00469b90_t*)0x00469b90;
-
-//typedef int(FUN_00440af0_t)(UnknStruct0* pStruct, int param_2);
-//static  FUN_00440af0_t* FUN_00440af0 = (FUN_00440af0_t*)0x00440af0;
 
 typedef void(FUN_00456800_t)(MenuState* pStruct, int param_2, float param_3);
 static  FUN_00456800_t* FUN_00456800 = (FUN_00456800_t*)0x00456800;
@@ -48,9 +46,6 @@ static  FUN_00440620_t* FUN_00440620 = (FUN_00440620_t*)0x00440620;
 
 typedef void(FUN_0042de10_t)(char* param_1, int param_2);
 static  FUN_0042de10_t* FUN_0042de10 = (FUN_0042de10_t*)0x0042de10;
-
-//typedef void(FUN_004360e0_t)(UnknStruct0* param_1, char param_2);
-//static  FUN_004360e0_t* FUN_004360e0 = (FUN_004360e0_t*)0x004360e0;
 
 typedef void(FUN_0043fe90_t)(int param_1, int param_2, int param_3);
 static  FUN_0043fe90_t* FUN_0043fe90 = (FUN_0043fe90_t*)0x0043fe90;
@@ -90,14 +85,14 @@ static  FUN_004286f0_t* ImgScale = (FUN_004286f0_t*)0x004286f0;
 typedef void(FUN_00428740_t)(uint16_t ImgIdx, uint8_t R, uint8_t G, uint8_t B, uint8_t A);
 static  FUN_00428740_t* ImgColor = (FUN_00428740_t*)0x00428740;
 
-typedef void(FUN_004282f0_t)(uint16_t ImgIdx, ImgDat* pUnknStruct1);
-static  FUN_004282f0_t* ImgReset = (FUN_004282f0_t*)0x004282f0;
-
 typedef void(FUN_004287e0_t)(uint16_t ImgIdx, uint32_t Flag);
 static  FUN_004287e0_t* ImgSetFlag = (FUN_004287e0_t*)0x004287e0;
 
 typedef void(FUN_00428800_t)(uint16_t ImgIdx, uint32_t Flag);
 static  FUN_00428800_t* ImgResetFlag = (FUN_00428800_t*)0x00428800;
+
+typedef void(FUN_00412e20_t)();
+static  FUN_00412e20_t* FUN_00412e20 = (FUN_00412e20_t*)0x00412e20;
 
 
 constexpr uint8_t CustomR = 150;
@@ -105,7 +100,43 @@ constexpr uint8_t CustomG = 80;
 constexpr uint8_t CustomB = 220;
 
 constexpr uint8_t NumCustomTracks = 3;
+constexpr uint8_t NumCustomTracksMax = 72;
 
+
+// FUN_004282f0
+void ImgReset(uint16_t ImgIdx, ImgDat* pImgDat)
+{
+    if (ImgIdx < 400)
+    {
+        if (ImgIdx >= g_ImgCount)
+        {
+            g_ImgCount = ImgIdx + 1;
+        }
+        g_aImageParams[ImgIdx].PosX    = 0;
+        g_aImageParams[ImgIdx].PosY    = 0;
+        g_aImageParams[ImgIdx].ScaleX  = 1.0f;
+        g_aImageParams[ImgIdx].ScaleY  = 1.0f;
+        g_aImageParams[ImgIdx].Unkn2   = 0.0f;
+        g_aImageParams[ImgIdx].Flags   = ImgFlags::IMG_UNKN_0;
+        g_aImageParams[ImgIdx].R       = 255;
+        g_aImageParams[ImgIdx].G       = 255;
+        g_aImageParams[ImgIdx].B       = 255;
+        g_aImageParams[ImgIdx].A       = 255;
+        g_aImageParams[ImgIdx].pImage  = pImgDat;
+    }
+}
+
+// FUN_00428370
+void ImgResetAll()
+{
+    FUN_00412e20();
+    for (uint16_t ImgIdx = 0; ImgIdx < g_ImgCount; ImgIdx++)
+    {
+        ImgReset(ImgIdx, nullptr);
+    }
+    g_ImgCount = 0;
+    return;
+}
 
 // FUN_0043b0b0
 void __cdecl HandleCircuit(MenuState* pState)
@@ -265,32 +296,78 @@ bool IsFreePlay()
     return g_bIsFreePlay;
 }
 
+// FUN_0041d6c0
 int32_t FUN_0041d6c0()
 {
     return DAT_004eb1c8;
 }
 
+// Custom
+uint16_t GetImgStartBackground(uint16_t TrackIdx)
+{
+    if (TrackIdx < 28)
+    {
+        return 99 + TrackIdx;
+    }
+    TrackIdx -= 28;
+    
+    // Slots 256 - 399 seem to be free...
+    // 144 slots / 2 = 72 custom tracks
+    assert(TrackIdx < 72);
+    return 256 + TrackIdx;
+}
+
+// Custom
+uint16_t GetImgStartBorder(uint16_t TrackIdx)
+{
+    if (TrackIdx < 28)
+    {
+        return 99 + 28 + TrackIdx;
+    }
+    TrackIdx -= 28;
+
+    // Slots 256 - 399 seem to be free...
+    // 144 slots / 2 = 72 custom tracks
+    assert(TrackIdx < 72);
+    return 256 + 72 + TrackIdx;
+}
+
 // FUN_004584a0
 void __cdecl InitTracks(MenuState* pState, bool bInitTracks)
 {
-    for (uint16_t local_8 = 0x82; local_8 < 0xa2; local_8++)
+    for (uint16_t ImgIdx = 130; ImgIdx < 162; ImgIdx++)
     {
-        ImgReset(local_8, pState->aImages[5]);
+        ImgReset(ImgIdx, pState->aImages[5]);
     }
+
+    // Reset custom track images
+    for (uint16_t ImgIdx = 256; ImgIdx < 400; ImgIdx++)
+    {
+        ImgReset(ImgIdx, nullptr);
+    }
+
     if (bInitTracks)
     {
-        for (int32_t CircuitIdx = 0; CircuitIdx < 5; CircuitIdx++)
+        constexpr uint8_t NumCustomCircuits = NumCustomTracks > 0 ? (NumCustomTracks / 7) + 1 : 0;
+        const int32_t NumCircuits = 4 + (!pState->bIsTournament ? NumCustomCircuits : 0);
+
+        for (int32_t CircuitIdx = 0; CircuitIdx < NumCircuits; CircuitIdx++)
         {
             for (int32_t TrackIdx = 0; TrackIdx < 7; TrackIdx++)
             {
                 const uint8_t Bits = TrackIdx * 2;
                 const uint16_t Beat = (g_aBeatTrackPlace[CircuitIdx] >> Bits) & 3;
-                const uint16_t ImgIdx = CircuitIdx * 7 + 99 + TrackIdx;
+                const uint16_t TotalTrackIdx = CircuitIdx * 7 + TrackIdx;
+
+                // Init track background
+                uint16_t ImgIdx = GetImgStartBackground(TotalTrackIdx);
                 ImgReset(ImgIdx, pState->aImages[3]);
                 ImgSetFlag(ImgIdx, IMG_UNKN_15);
 
-                ImgReset(ImgIdx + 0x1c, pState->aImages[4]);
-                ImgSetFlag(ImgIdx + 0x1c, IMG_UNKN_15);
+                // Init track border
+                ImgIdx = GetImgStartBorder(TotalTrackIdx);
+                ImgReset(ImgIdx, pState->aImages[4]);
+                ImgSetFlag(ImgIdx, IMG_UNKN_15);
 
                 if (pState->bIsTournament)
                 {
@@ -327,13 +404,20 @@ void __cdecl InitTracks(MenuState* pState, bool bInitTracks)
 // Get's called just at once place: MenuTrackSelection()
 void DrawTracks(MenuState* pState, uint8_t CircuitIdx)
 {
-    int iVar1;
-    int32_t uVar8;
-
     const uint8_t NumTracks = CircuitIdx < 4 ? g_aTracksInCircuits[CircuitIdx] : NumCustomTracks;
     if (NumTracks == 0)
     {
         return;
+    }
+
+    if (CircuitIdx < 4)
+    {
+        // Manually resetting visibility of custom tracks.
+        // For the stock tracks, this happens somewhere else...
+        for (uint16_t ImgIdx = 256; ImgIdx < 400; ImgIdx++)
+        {
+            ImgVisible(ImgIdx, false);
+        }
     }
 
     uint8_t R, G, B, A;
@@ -347,10 +431,11 @@ void DrawTracks(MenuState* pState, uint8_t CircuitIdx)
         }
 
         // Draw Background
-        uint16_t ImgIdx = CircuitIdx * 7 + 99 + TrackIdx;
-        iVar1 = TrackIdx * 35;
+        const uint16_t TotalTrackIdx = CircuitIdx * 7 + TrackIdx;
+        uint16_t ImgIdx = GetImgStartBackground(TotalTrackIdx);
+        const uint16_t TrackPosX = TrackIdx * 35;
         ImgVisible(ImgIdx, true);
-        ImgPosition(ImgIdx, iVar1 + 55, 94);
+        ImgPosition(ImgIdx, TrackPosX + 55, 94);
         ImgScale(ImgIdx, 0.6667f, 0.6667f);
 
         A = 255;
@@ -425,27 +510,27 @@ void DrawTracks(MenuState* pState, uint8_t CircuitIdx)
 
         char TxtTrackNum[16];
         rcr_sprintf(TxtTrackNum, "~f2~s%d", TrackIdx + 1);
-        if (!pState->bIsTournament || (ImgIdx = FUN_00440a20(CircuitIdx, TrackIdx), ImgIdx != 0))
+        if (!pState->bIsTournament || FUN_00440a20(CircuitIdx, TrackIdx != 0))
         {
             // Draw Track Number
-            UIText(iVar1 + 60, 109, R, G, B, A, TxtTrackNum);
+            UIText(TrackPosX + 60, 109, R, G, B, A, TxtTrackNum);
 
             // Draw "Race" string
             const char* pTxtRace = StrSanitise(g_pTxtRace);
-            UIText(iVar1 + 67, 111, R, G, B, A, pTxtRace);
+            UIText(TrackPosX + 67, 111, R, G, B, A, pTxtRace);
         }
 
-        if ((pState->bIsTournament && (Beat == 0)) && (ImgIdx = FUN_00440a20(CircuitIdx, TrackIdx), ImgIdx == 0))
+        if ((pState->bIsTournament && Beat == 0) && FUN_00440a20(CircuitIdx, TrackIdx == 0))
         {
             // Draw 4th place Text
             const char* pTxt4th = StrSanitise(g_pTxt4th);
-            UIText(iVar1 + 58, 111, R, G, B, A, pTxt4th);
+            UIText(TrackPosX + 58, 111, R, G, B, A, pTxt4th);
         }
 
         // Draw Border
-        ImgIdx = CircuitIdx * 7 + 127 + TrackIdx;
+        ImgIdx = GetImgStartBorder(TotalTrackIdx);
         ImgVisible(ImgIdx, true);
-        ImgPosition(ImgIdx, iVar1 + 53, 92);
+        ImgPosition(ImgIdx, TrackPosX + 53, 92);
         ImgScale(ImgIdx, 0.6667f, 0.6667f);
         ImgColor(ImgIdx, 163, 190, 17, A);
         if (!bIsPlayable)
@@ -454,11 +539,11 @@ void DrawTracks(MenuState* pState, uint8_t CircuitIdx)
         }
 
         // Draw current selection
-        if ((CircuitIdx == pState->CircuitIdx) && (uVar8 = VerifySelectedTrack(pState, g_SelectedTrackIdx), TrackIdx == uVar8))
+        if (CircuitIdx == pState->CircuitIdx && VerifySelectedTrack(pState, g_SelectedTrackIdx) == TrackIdx)
         {
             ImgVisible(ImgIdx, false);
             ImgVisible(98, true);
-            ImgPosition(98, iVar1 + 50, 89);
+            ImgPosition(98, TrackPosX + 50, 89);
             ImgScale(98, 0.6667f, 0.6667f);
             ImgColor(98, 50, 255, 255, 255);
         }
@@ -658,7 +743,7 @@ void MenuTrackSelection()
         default:
         {
             char BufferPage[128];
-            rcr_sprintf(BufferPage, "~c~sCustom Tracks - Page %u", pState->CircuitIdx - 3);
+            rcr_sprintf(BufferPage, "~c~sCustom Tracks - Page %u/%u", pState->CircuitIdx - 3, 1);
             pTxtCircuit = StrSanitise(BufferPage);
             B = CustomB;
             G = CustomG;
