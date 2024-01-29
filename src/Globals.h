@@ -5,14 +5,14 @@ static int32_t&       g_TournamentMaxCircuitIdx         = *(int32_t*)      0x00e
 static uint8_t*       g_aTracksSelectableTournament     =  (uint8_t*)      0x00e35a85;        // Length: 4
 static int32_t&       g_TracksInCurrentCircuit          = *(int32_t*)      0x00e295cc;
 static uint8_t*       g_aTracksInCircuits               =  (uint8_t*)      0x004bfee0;        // Length: 4
-static uint32_t*      g_aTrackLoadIndices               =  (uint32_t*)     0x004c0018;        // Length: 25 + 3 padding
+static uint32_t*      g_TrackIDs                        =  (uint32_t*)     0x004c0018;        // Length: 25 + 3 padding
 static uint8_t*       g_aBeatTracksGlobal               =  (uint8_t*)      0x00e364ac;        // Length: 4
 static uint8_t&       g_bIsFreePlay                     = *(uint8_t*)      0x004d5e00;        // Might actually be Time Attack?
 static int32_t&       g_SelectedTrackIdx                = *(int32_t*)      0x00e295d0;
 static int32_t&       g_bCircuitIdxInRange              = *(int32_t*)      0x00e295c4;
 static MenuState*&    g_pMenuState                      = *(MenuState**)   0x0050c454;
 static TrackInfo*     g_aTrackInfos                     =  (TrackInfo*)    0x004bfee8;        // Length: 25 ?
-static PlanetName*    g_PlanetNames                     =  (PlanetName*)   0x00e98f5c;        // Length: 25
+static PlanetName*    g_PlanetNames                     =  (PlanetName*)   0x00e98f5c;        // Length: 8
 static ImgParam*      g_aImageParams                    =  (ImgParam*)     0x00e9ba60;        // Length: 400
 static int32_t&       g_ImgCount                        = *(int32_t*)      0x004b91b8;
 static int32_t&       g_LoadTrackModel                  = *(int32_t*)      0x00ea05ac;        // Apparently only used when g_bIsFreePlay == true ?

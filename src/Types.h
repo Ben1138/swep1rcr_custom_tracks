@@ -48,13 +48,13 @@ struct TrackInfo
     int32_t  LoadModel;
     int32_t  LoadSpline;
     uint8_t  Unkn0;
-    uint8_t  PlanetIdx;
-    int8_t   Unkn1;
+    uint8_t  PlanetIdx;             // Determines preview image + planet name and intro movie
+    int8_t   FavoritePilot;
 };
 
 struct PlanetName
 {
-    char  Name[92];
+    char Name[92];
 };
 
 enum ImgFlags

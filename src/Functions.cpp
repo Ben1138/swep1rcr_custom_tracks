@@ -15,8 +15,8 @@ static  FUN_0043b1d0_t* FUN_0043b1d0 = (FUN_0043b1d0_t*)0x0043b1d0;
 typedef float10(FUN_00469b90_t)(float param_1);
 static  FUN_00469b90_t* FUN_00469b90 = (FUN_00469b90_t*)0x00469b90;
 
-typedef void(FUN_00456800_t)(MenuState* pStruct, int param_2, float param_3);
-static  FUN_00456800_t* FUN_00456800 = (FUN_00456800_t*)0x00456800;
+typedef void(FUN_00456800_t)(MenuState* pState, int PlanetIdx, float Scale);
+static  FUN_00456800_t* DrawHoloPlanet = (FUN_00456800_t*)0x00456800;
 
 // Something with strings
 // "/SCREENTEXT_508/~~Abyss" -> "Abyss"
@@ -625,7 +625,7 @@ void MenuTrackSelection()
         }
 
         InitTracks(pState, true);
-        DAT_0050c134 = *(char*)((int)&g_aTrackInfos[pState->TrackID].Unkn0 + 1);
+        DAT_0050c134 = 07; g_aTrackInfos[pState->TrackID].PlanetIdx;
         DAT_0050c17c = pState->CircuitIdx;
     }
 
@@ -634,7 +634,7 @@ void MenuTrackSelection()
         if (DAT_00e295d4 == g_SelectedTrackIdx)
         {
             uVar6 = 0x40533333;
-            DAT_0050c134 = *(char*)((int)&g_aTrackInfos[pState->TrackID].Unkn0 + 1);
+            DAT_0050c134 = g_aTrackInfos[pState->TrackID].PlanetIdx;
             DAT_0050c17c = pState->CircuitIdx;
             goto LAB_0043b357;
         }
@@ -646,9 +646,9 @@ void MenuTrackSelection()
         FUN_00469b90(float(uVar6));
     }
 
-    if (DAT_00e295a0 > 0.0f)
+    if (DAT_00e295a0 > 0.0f && pState->TrackID >= 0)
     {
-        FUN_00456800(pState, (int)DAT_0050c134, DAT_00e295a0 * 0.5f);
+        DrawHoloPlanet(pState, (int)DAT_0050c134, DAT_00e295a0 * 0.5f);
     }
     if (DAT_0050c54c != 0)
     {
@@ -660,7 +660,7 @@ void MenuTrackSelection()
     {
         if (pState->CircuitIdx < 4)
         {
-            pState->TrackID = *(int8_t*)(g_aTrackLoadIndices + SelectedTrackIdx + pState->CircuitIdx * 7);
+            pState->TrackID = *(int8_t*)(g_TrackIDs + SelectedTrackIdx + pState->CircuitIdx * 7);
         }
         else
         {
@@ -821,15 +821,19 @@ LAB_0043b5c4:
         //    bDown[1] = false;
         //}
 
-        // Draw planet preview image
-        const uint16_t ImgIdx = PlanetIdx + 69;
-        ImgVisible(ImgIdx, true);
-        ImgPosition(ImgIdx, 160, 150);
-        ImgScale(ImgIdx, 1.0f, 1.0f);
-        ImgColor(ImgIdx, 255, 255, 255, 255);
+        // TODO: Custom Planets?
+        if (PlanetIdx < 8)
+        {
+            // Draw planet preview image
+            const uint16_t ImgIdx = PlanetIdx + 69;
+            ImgVisible(ImgIdx, true);
+            ImgPosition(ImgIdx, 160, 150);
+            ImgScale(ImgIdx, 1.0f, 1.0f);
+            ImgColor(ImgIdx, 255, 255, 255, 255);
 
-        const char* pPlanetName = g_PlanetNames[PlanetIdx].Name;
-        UIText(224, 143, 0, 255, 0, 255, pPlanetName);
+            const char* pPlanetName = g_PlanetNames[PlanetIdx].Name;
+            UIText(224, 143, 0, 255, 0, 255, pPlanetName);
+        }
     }
 
     FUN_0043fe90(0x2d, 0x54, 0x1e);
@@ -916,7 +920,7 @@ LAB_0043b5c4:
             DAT_00ea02b0 = (int)pState->TrackID;
             if (!IsFreePlay() || FUN_0041d6c0() != 0)
             {
-                g_LoadTrackModel = g_aTrackInfos[16].LoadModel;
+                g_LoadTrackModel = g_aTrackInfos[pState->TrackID].LoadModel;
                 FUN_0041e5a0();
             }
         }
