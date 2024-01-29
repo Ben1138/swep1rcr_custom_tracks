@@ -320,7 +320,7 @@ namespace FUN
     }
 
     // FUN_004360e0
-    // Get's called just at once place: MenuTrackSelection()
+    // Get's called at just once place: MenuTrackSelection()
     void DrawTracks(MenuState* pState, uint8_t CircuitIdx)
     {
         const uint8_t NumTracks = CircuitIdx < 4 ? g_aTracksInCircuits[CircuitIdx] : CustomTracks::GetTrackCount(CircuitIdx - 4);
@@ -339,8 +339,8 @@ namespace FUN
             }
         }
 
-        uint8_t R, G, B, A;
         uint16_t Beat = 0;
+        uint8_t R, G, B, A;
         for (uint8_t TrackIdx = 0; TrackIdx < NumTracks; TrackIdx++)
         {
             if (pState->bIsTournament)
@@ -581,7 +581,7 @@ namespace FUN
         {
             if (pState->CircuitIdx < 4)
             {
-                pState->TrackID = g_TrackIDs[pState->CircuitIdx * 7 + SelectedTrackIdx];
+                pState->TrackID = g_aTrackIDs[pState->CircuitIdx * 7 + SelectedTrackIdx];
             }
             else
             {
@@ -751,7 +751,7 @@ namespace FUN
                 ImgScale(ImgIdx, 1.0f, 1.0f);
                 ImgColor(ImgIdx, 255, 255, 255, 255);
 
-                const char* pPlanetName = g_PlanetNames[Track.PlanetIdx].Name;
+                const char* pPlanetName = g_aPlanetNames[Track.PlanetIdx].Name;
                 UIText(224, 143, 0, 255, 0, 255, pPlanetName);
             }
         }
