@@ -18,7 +18,7 @@ add_compile_definitions(NOMINMAX)                           # No std::min() and 
 set(DIR_PRJ ${PROJECT_SOURCE_DIR})
 set(DIR_SRC "${DIR_PRJ}/src")
 
-target_include_directories(dinput PRIVATE DIR_SRC)
+target_include_directories(dinput PRIVATE ${DIR_SRC})
 
 # Binary output
 set_target_properties(dinput
@@ -28,11 +28,12 @@ set_target_properties(dinput
 
 # Input source files
 target_sources(dinput PRIVATE 
-    "${DIR_PRJ}/dinput.def"                         # Exports DirectInputCreateA
+    "${DIR_PRJ}/dinput.def"                             # Exports DirectInputCreateA
 
-    "${DIR_SRC}/dllmain.cpp"
-    "${DIR_SRC}/DLLWrap.cpp"                        # Contains DirectInputCreateA
-    "${DIR_SRC}/Functions.cpp"
-    "${DIR_SRC}/PatchFunctions.cpp"
+    "${DIR_SRC}/DLL/dllmain.cpp"
+    "${DIR_SRC}/DLL/DLLWrap.cpp"                        # Contains DirectInputCreateA
+    "${DIR_SRC}/ReverseEngineering/FUN.cpp"
+    "${DIR_SRC}/ReverseEngineering/Patching.cpp"
     "${DIR_SRC}/CustomTracks.cpp"
+    "${DIR_SRC}/EXT.cpp"
 )

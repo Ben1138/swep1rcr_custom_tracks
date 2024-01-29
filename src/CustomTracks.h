@@ -1,16 +1,19 @@
 #pragma once
 #include <stdint.h>
-#include "Types.h"
+#include "ReverseEngineering/Types.h"
 
 
 namespace CustomTracks
 {
     // This is mainly limited by the amount of available image slots. See Functions.cpp
     // Actually, 72 would be available
-    constexpr uint8_t MAX = 70;
+    constexpr uint8_t MAX      = 70;
+    constexpr uint8_t COLOR_R  = 150;
+    constexpr uint8_t COLOR_G  = 80;
+    constexpr uint8_t COLOR_B  = 220;
+
 
     void ScanFolder();
-
     uint8_t GetTotalTrackCount();
     uint8_t GetCircuitCount();
     uint8_t GetTrackCount(uint8_t CircuitIdx);
