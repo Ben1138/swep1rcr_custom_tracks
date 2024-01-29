@@ -1,6 +1,8 @@
 #include <windows.h>
 #include <assert.h>
+#include <stdio.h>
 #include "Functions.h"
+#include "CustomTracks.h"
 
 
 typedef void(FUN_0045bee0_t)(MenuState* pStruct, int param_2, int param_3, int32_t param_4);
@@ -99,9 +101,17 @@ constexpr uint8_t CustomR = 150;
 constexpr uint8_t CustomG = 80;
 constexpr uint8_t CustomB = 220;
 
-constexpr uint8_t NumCustomTracks = 3;
-constexpr uint8_t NumCustomTracksMax = 72;
 
+// Custom
+TrackInfo GetTrackInfo(int8_t TrackID)
+{
+    if (TrackID < 28)
+    {
+        return g_aTrackInfos[TrackID];
+    }
+    assert((TrackID - 28) < CustomTracks::MAX);
+    return CustomTracks::GetTrackInfo(TrackID - 28);
+}
 
 // FUN_004282f0
 void ImgReset(uint16_t ImgIdx, ImgDat* pImgDat)
@@ -141,16 +151,16 @@ void ImgResetAll()
 // FUN_0043b0b0
 void __cdecl HandleCircuit(MenuState* pState)
 {
-    g_TournamentMaxCircuitIdx = 3;
+    g_CircuitIdxMax = 3;
     g_TracksInCurrentCircuit = 0;
 
     if (!pState->bIsTournament)
     {
         //if (g_aBeatTracksGlobal[3] == 0)
         //{
-        //    g_TournamentMaxCircuitIdx = 2;
+        //    g_CircuitIdxMax = 2;
         //}
-        g_TournamentMaxCircuitIdx = 4;
+        g_CircuitIdxMax = 3 + CustomTracks::GetCircuitCount();
 
         if (pState->CircuitIdx < 4)
         {
@@ -164,14 +174,14 @@ void __cdecl HandleCircuit(MenuState* pState)
         }
         else
         {
-            g_TracksInCurrentCircuit = NumCustomTracks;
+            g_TracksInCurrentCircuit = CustomTracks::GetTrackCount(pState->CircuitIdx - 4);
         }
     }
     else
     {
         if (g_aTracksSelectableTournament[3] == 0)
         {
-            g_TournamentMaxCircuitIdx = 2;
+            g_CircuitIdxMax = 2;
         }
         for (uint8_t i = 0; i < g_aTracksInCircuits[pState->CircuitIdx]; i++)
         {
@@ -196,7 +206,7 @@ void __cdecl HandleCircuit(MenuState* pState)
     }
 
     DAT_00e295c0 = (uint32_t)(pState->CircuitIdx > 0);
-    g_bCircuitIdxInRange = (int32_t)(pState->CircuitIdx < g_TournamentMaxCircuitIdx);
+    g_bCircuitIdxInRange = (int32_t)(pState->CircuitIdx < g_CircuitIdxMax);
 }
 
 // FUN_00440aa0
@@ -225,11 +235,9 @@ bool IsTrackPlayable(MenuState* pState, uint8_t CircuitIdx, uint8_t TrackIdx)
 // FUN_00440620
 const char* GetTrackName(int32_t TrackID)
 {
-    static char CustomTrackName[128];
-    if (TrackID < 0)
+    if (TrackID < 0 || (TrackID > 24 && TrackID < 28))
     {
-        strcpy_s(CustomTrackName, sizeof(CustomTrackName), "Invalid Track!");
-        return CustomTrackName;
+        return "Invalid Track!";
     }
 
     switch (TrackID)
@@ -286,8 +294,7 @@ const char* GetTrackName(int32_t TrackID)
             return StrSanitise(g_pTxtTrackID_24);
     }
 
-    rcr_sprintf(CustomTrackName, "Custom Track %d", TrackID - 24);
-    return CustomTrackName;
+    return CustomTracks::GetTrackName(TrackID - 28);
 }
 
 // FUN_0041d6b0
@@ -313,7 +320,7 @@ uint16_t GetImgStartBackground(uint16_t TrackIdx)
     
     // Slots 256 - 399 seem to be free...
     // 144 slots / 2 = 72 custom tracks
-    assert(TrackIdx < 72);
+    assert(TrackIdx < CustomTracks::MAX);
     return 256 + TrackIdx;
 }
 
@@ -328,8 +335,8 @@ uint16_t GetImgStartBorder(uint16_t TrackIdx)
 
     // Slots 256 - 399 seem to be free...
     // 144 slots / 2 = 72 custom tracks
-    assert(TrackIdx < 72);
-    return 256 + 72 + TrackIdx;
+    assert(TrackIdx < CustomTracks::MAX);
+    return 256 + CustomTracks::MAX + TrackIdx;
 }
 
 // FUN_004584a0
@@ -348,15 +355,12 @@ void __cdecl InitTracks(MenuState* pState, bool bInitTracks)
 
     if (bInitTracks)
     {
-        constexpr uint8_t NumCustomCircuits = NumCustomTracks > 0 ? (NumCustomTracks / 7) + 1 : 0;
-        const int32_t NumCircuits = 4 + (!pState->bIsTournament ? NumCustomCircuits : 0);
+        const int32_t NumCircuits = 4 + (!pState->bIsTournament ? CustomTracks::GetCircuitCount() : 0);
 
         for (int32_t CircuitIdx = 0; CircuitIdx < NumCircuits; CircuitIdx++)
         {
             for (int32_t TrackIdx = 0; TrackIdx < 7; TrackIdx++)
             {
-                const uint8_t Bits = TrackIdx * 2;
-                const uint16_t Beat = (g_aBeatTrackPlace[CircuitIdx] >> Bits) & 3;
                 const uint16_t TotalTrackIdx = CircuitIdx * 7 + TrackIdx;
 
                 // Init track background
@@ -371,6 +375,10 @@ void __cdecl InitTracks(MenuState* pState, bool bInitTracks)
 
                 if (pState->bIsTournament)
                 {
+                    assert(CircuitIdx < 4);
+                    const uint8_t Bits = TrackIdx * 2;
+                    const uint16_t Beat = (g_aBeatTrackPlace[CircuitIdx] >> Bits) & 3;
+
                     switch (Beat)
                     {
                         // 3rd place
@@ -404,7 +412,7 @@ void __cdecl InitTracks(MenuState* pState, bool bInitTracks)
 // Get's called just at once place: MenuTrackSelection()
 void DrawTracks(MenuState* pState, uint8_t CircuitIdx)
 {
-    const uint8_t NumTracks = CircuitIdx < 4 ? g_aTracksInCircuits[CircuitIdx] : NumCustomTracks;
+    const uint8_t NumTracks = CircuitIdx < 4 ? g_aTracksInCircuits[CircuitIdx] : CustomTracks::GetTrackCount(CircuitIdx - 4);
     if (NumTracks == 0)
     {
         return;
@@ -560,8 +568,8 @@ int32_t VerifySelectedTrack(MenuState* pState, int32_t SelectedTrackIdx)
     iVar2 = -1;
     TrackCount = 0;
 
-    const uint8_t NumTracksAvail = pState->CircuitIdx < 4 ? g_aTracksInCircuits[pState->CircuitIdx] : NumCustomTracks;
-    if (NumTracksAvail == 0)
+    const uint8_t NumTracks = pState->CircuitIdx < 4 ? g_aTracksInCircuits[pState->CircuitIdx] : CustomTracks::GetTrackCount(pState->CircuitIdx - 4);
+    if (NumTracks == 0)
     {
         return -1;
     }
@@ -569,7 +577,7 @@ int32_t VerifySelectedTrack(MenuState* pState, int32_t SelectedTrackIdx)
     while ((bIsPlayable = IsTrackPlayable(pState, pState->CircuitIdx, TrackCount), !bIsPlayable || (TrackCount != SelectedTrackIdx)))
     {
         TrackCount++;
-        if (TrackCount >= NumTracksAvail)
+        if (TrackCount >= NumTracks)
         {
             return -1;
         }
@@ -587,6 +595,9 @@ void MenuTrackSelection()
     char local_100[256];
 
     MenuState* pState = g_pMenuState;
+
+    const TrackInfo Track = GetTrackInfo(pState->TrackID);
+
     if (DAT_004c4000 != 0)
     {
         DAT_004c4000 = 0;
@@ -625,7 +636,7 @@ void MenuTrackSelection()
         }
 
         InitTracks(pState, true);
-        DAT_0050c134 = 07; g_aTrackInfos[pState->TrackID].PlanetIdx;
+        DAT_0050c134 = Track.PlanetIdx;
         DAT_0050c17c = pState->CircuitIdx;
     }
 
@@ -634,7 +645,7 @@ void MenuTrackSelection()
         if (DAT_00e295d4 == g_SelectedTrackIdx)
         {
             uVar6 = 0x40533333;
-            DAT_0050c134 = g_aTrackInfos[pState->TrackID].PlanetIdx;
+            DAT_0050c134 = Track.PlanetIdx;
             DAT_0050c17c = pState->CircuitIdx;
             goto LAB_0043b357;
         }
@@ -660,15 +671,15 @@ void MenuTrackSelection()
     {
         if (pState->CircuitIdx < 4)
         {
-            pState->TrackID = *(int8_t*)(g_TrackIDs + SelectedTrackIdx + pState->CircuitIdx * 7);
+            pState->TrackID = g_TrackIDs[pState->CircuitIdx * 7 + SelectedTrackIdx];
         }
         else
         {
-            pState->TrackID = 16; // Mon Gaza Speedway
+            pState->TrackID = pState->CircuitIdx * 7 + SelectedTrackIdx;
         }
 
-        // Print "Planet not loaded!!!" warning
-        if ((g_aTrackInfos[pState->TrackID].LoadModel == -1) || (g_aTrackInfos[pState->TrackID].LoadSpline == -1))
+        // Draw "Planet not loaded!!!" warning
+        if ((Track.LoadModel == -1) || (Track.LoadSpline == -1))
         {
             const char* pText = StrSanitise(g_pTxtPlanetNotLoaded);
             rcr_sprintf(local_100, pText);
@@ -743,7 +754,7 @@ void MenuTrackSelection()
         default:
         {
             char BufferPage[128];
-            rcr_sprintf(BufferPage, "~c~sCustom Tracks - Page %u/%u", pState->CircuitIdx - 3, 1);
+            rcr_sprintf(BufferPage, "~c~sCustom Tracks - Page %u/%u", pState->CircuitIdx - 3, CustomTracks::GetCircuitCount());
             pTxtCircuit = StrSanitise(BufferPage);
             B = CustomB;
             G = CustomG;
@@ -798,8 +809,6 @@ LAB_0043b5c4:
     DrawTracks(pState, DAT_0050c17c);
     if (pState->TrackID >= 0)
     {
-        const uint8_t PlanetIdx = g_aTrackInfos[pState->TrackID].PlanetIdx;
-
         //static uint16_t ImgIdx = 99;
         //static bool bDown[2] = { false, false };
         //if (GetKeyState(VK_ADD) & 0xF0 && !bDown[0])
@@ -822,16 +831,16 @@ LAB_0043b5c4:
         //}
 
         // TODO: Custom Planets?
-        if (PlanetIdx < 8)
+        if (Track.PlanetIdx < 8)
         {
             // Draw planet preview image
-            const uint16_t ImgIdx = PlanetIdx + 69;
+            const uint16_t ImgIdx = Track.PlanetIdx + 69;
             ImgVisible(ImgIdx, true);
             ImgPosition(ImgIdx, 160, 150);
             ImgScale(ImgIdx, 1.0f, 1.0f);
             ImgColor(ImgIdx, 255, 255, 255, 255);
 
-            const char* pPlanetName = g_PlanetNames[PlanetIdx].Name;
+            const char* pPlanetName = g_PlanetNames[Track.PlanetIdx].Name;
             UIText(224, 143, 0, 255, 0, 255, pPlanetName);
         }
     }
@@ -885,7 +894,7 @@ LAB_0043b5c4:
             // Move down
             if ((puVar2 & 0x8000) != 0)
             {
-                if (CircuitIdx < g_TournamentMaxCircuitIdx)
+                if (CircuitIdx < g_CircuitIdxMax)
                 {
                     pState->CircuitIdx++;
                     DAT_00e295d4 = -1;
@@ -920,7 +929,7 @@ LAB_0043b5c4:
             DAT_00ea02b0 = (int)pState->TrackID;
             if (!IsFreePlay() || FUN_0041d6c0() != 0)
             {
-                g_LoadTrackModel = g_aTrackInfos[pState->TrackID].LoadModel;
+                g_LoadTrackModel = Track.LoadModel;
                 FUN_0041e5a0();
             }
         }

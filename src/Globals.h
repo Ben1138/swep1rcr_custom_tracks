@@ -1,7 +1,7 @@
 #pragma once
 #include "Types.h"
 
-static int32_t&       g_TournamentMaxCircuitIdx         = *(int32_t*)      0x00e295c8;        // Max: 255
+static int32_t&       g_CircuitIdxMax                   = *(int32_t*)      0x00e295c8;        // Max: 255
 static uint8_t*       g_aTracksSelectableTournament     =  (uint8_t*)      0x00e35a85;        // Length: 4
 static int32_t&       g_TracksInCurrentCircuit          = *(int32_t*)      0x00e295cc;
 static uint8_t*       g_aTracksInCircuits               =  (uint8_t*)      0x004bfee0;        // Length: 4
