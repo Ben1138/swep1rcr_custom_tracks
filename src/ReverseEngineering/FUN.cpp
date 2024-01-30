@@ -10,9 +10,6 @@ namespace FUN
     typedef void(FUN_0045bee0_t)(MenuState* pStruct, int param_2, int param_3, int32_t param_4);
     static FUN_0045bee0_t* FUN_0045bee0 = (FUN_0045bee0_t*)0x0045bee0;
 
-    typedef int32_t(FUN_00440a20_t)(int32_t param_1, int32_t param_2);
-    static  FUN_00440a20_t* FUN_00440a20 = (FUN_00440a20_t*)0x00440a20;
-
     typedef void(__cdecl FUN_0043b1d0_t)(MenuState* pStruct);
     static  FUN_0043b1d0_t* FUN_0043b1d0 = (FUN_0043b1d0_t*)0x0043b1d0;
 
@@ -275,14 +272,14 @@ namespace FUN
                     const uint16_t TotalTrackIdx = CircuitIdx * 7 + TrackIdx;
 
                     // Init track background
-                    uint16_t ImgIdx = EXT::GetImgStartBackground(TotalTrackIdx);
-                    ImgReset(ImgIdx, pState->aImages[3]);
-                    ImgSetFlag(ImgIdx, IMG_UNKN_15);
+                    const uint16_t ImgIdxBack = EXT::GetImgStartBackground(TotalTrackIdx);
+                    ImgReset(ImgIdxBack, pState->aImages[3]);
+                    ImgSetFlag(ImgIdxBack, IMG_UNKN_15);
 
                     // Init track border
-                    ImgIdx = EXT::GetImgStartBorder(TotalTrackIdx);
-                    ImgReset(ImgIdx, pState->aImages[4]);
-                    ImgSetFlag(ImgIdx, IMG_UNKN_15);
+                    const uint16_t ImgIdxBorder = EXT::GetImgStartBorder(TotalTrackIdx);
+                    ImgReset(ImgIdxBorder, pState->aImages[4]);
+                    ImgSetFlag(ImgIdxBorder, IMG_UNKN_15);
 
                     if (pState->bIsTournament)
                     {
@@ -295,21 +292,21 @@ namespace FUN
                             // 3rd place
                             case 1:
                             {
-                                ImgReset(ImgIdx, pState->aImages[2]);
+                                ImgReset(ImgIdxBack, pState->aImages[2]);
                                 break;
                             }
 
                             // 2nd place
                             case 2:
                             {
-                                ImgReset(ImgIdx, pState->aImages[1]);
+                                ImgReset(ImgIdxBack, pState->aImages[1]);
                                 break;
                             }
 
                             // 1st place
                             case 3:
                             {
-                                ImgReset(ImgIdx, pState->aImages[0]);
+                                ImgReset(ImgIdxBack, pState->aImages[0]);
                                 break;
                             }
                         }
@@ -429,7 +426,7 @@ namespace FUN
 
             char TxtTrackNum[16];
             rcr_sprintf(TxtTrackNum, "~f2~s%d", TrackIdx + 1);
-            if (!pState->bIsTournament || FUN_00440a20(CircuitIdx, TrackIdx != 0))
+            if (!pState->bIsTournament || FUN_00440a20(CircuitIdx, TrackIdx))
             {
                 // Draw Track Number
                 UIText(TrackPosX + 60, 109, R, G, B, A, TxtTrackNum);
@@ -439,7 +436,7 @@ namespace FUN
                 UIText(TrackPosX + 67, 111, R, G, B, A, pTxtRace);
             }
 
-            if ((pState->bIsTournament && Beat == 0) && FUN_00440a20(CircuitIdx, TrackIdx == 0))
+            if (pState->bIsTournament && Beat == 0 && bIsPlayable)//!FUN_00440a20(CircuitIdx, TrackIdx))
             {
                 // Draw 4th place Text
                 const char* pTxt4th = StrSanitise(g_pTxt4th);
@@ -473,18 +470,12 @@ namespace FUN
     int32_t VerifySelectedTrack(MenuState* pState, int32_t SelectedTrackIdx)
     {
         bool bIsPlayable;
-        int iVar2;
-        uint8_t TrackCount;
-
-        iVar2 = -1;
-        TrackCount = 0;
-
+        uint8_t TrackCount = 0;
         const uint8_t NumTracks = pState->CircuitIdx < 4 ? g_aTracksInCircuits[pState->CircuitIdx] : CustomTracks::GetTrackCount(pState->CircuitIdx - 4);
         if (NumTracks == 0)
         {
             return -1;
         }
-
         while ((bIsPlayable = IsTrackPlayable(pState, pState->CircuitIdx, TrackCount), !bIsPlayable || (TrackCount != SelectedTrackIdx)))
         {
             TrackCount++;
@@ -495,7 +486,30 @@ namespace FUN
         }
         return TrackCount;
     }
+    
+    // FUN_00440a00
+    uint8_t GetRequiredPlaceToProceed(uint8_t CircuitIdx, uint8_t TrackIdx)
+    {
+        if (CircuitIdx > 2 || TrackIdx > 5)
+        {
+            return 3;
+        }
+        return 4;
+    }
 
+    bool FUN_00440a20(int32_t CircuitIdx, int32_t TrackIdx)
+    {
+        const uint8_t Bits = TrackIdx * 2;
+        uint8_t Beat = (g_aBeatTrackPlace[CircuitIdx] >> Bits) & 3;
+        const uint8_t ReqPlace = GetRequiredPlaceToProceed(CircuitIdx, TrackIdx);
+        const bool bNextTrackSelectable = g_aTracksSelectableTournament[CircuitIdx] & (1 << (TrackIdx + 1));
+
+        if ((ReqPlace > 3 || Beat != 0) && (CircuitIdx > 2 || bNextTrackSelectable))
+        {
+            return false;
+        }
+        return true;
+    }
 
     // FUN_0043b240
     void MenuTrackSelection()
@@ -530,11 +544,7 @@ namespace FUN
                 g_SelectedTrackIdx = 0;
                 if (pState->bIsTournament)
                 {
-                    // TODO: Verify whether this is correct
-                    const int32_t param_2 = (iVar1 & 0xFFFFFF00) | (uint8_t(g_TracksInCurrentCircuit) - 1);
-
-                    iVar1 = FUN_00440a20(pState->CircuitIdx, param_2);
-                    if (iVar1 != 0)
+                    if (!FUN_00440a20(pState->CircuitIdx, g_TracksInCurrentCircuit - 1))
                     {
                         g_SelectedTrackIdx = g_TracksInCurrentCircuit - 1;
                     }
