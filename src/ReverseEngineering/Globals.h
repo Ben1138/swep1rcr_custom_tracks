@@ -1,7 +1,8 @@
 #pragma once
 #include "Types.h"
+#include <stdio.h>    // Required for FILE*
 
-constexpr uint8_t     STOCK_TRACK_SLOTS_COUNT           = (7 * 4);                            // Of which 25 are actually used
+constexpr uint8_t     STOCK_TRACK_SLOTS_COUNT           = (7 * 4);                            // 28, of which 25 are actually used
 
 static int32_t&       g_CircuitIdxMax                   = *(int32_t*)      0x00e295c8;        // Max: 255
 static uint8_t*       g_aTracksSelectableTournament     =  (uint8_t*)      0x00e35a85;        // Length: 4
@@ -25,7 +26,16 @@ static int32_t&       g_LoadTrackModel                  = *(int32_t*)      0x00e
 //  01 - 3rd place
 //  00 - not beat
 static uint16_t*      g_aBeatTrackPlace                 =  (uint16_t*)     0x00e35a8a;        // Length: 4
+static FILE*          g_pModelblock                     =  (FILE*)         0x0050c098;        // Unused, using custom s_pModelblock instead
+static FILE*          g_pSpriteblock                    =  (FILE*)         0x0050c08c;        // Unused, using custom s_pSpriteblock instead
+static FILE*          g_pSplineblock                    =  (FILE*)         0x0050c090;        // Unused, using custom s_pSplineblock instead
+static FILE*          g_pTextureblock                   =  (FILE*)         0x0050c094;        // Unused, using custom s_pTextureblock instead
                                                                            
+static const char*    g_pPathModelblock                 =  (const char*)   0x004b959c;        // "data/lev01/out_modelblock.bin"
+static const char*    g_pPathSpriteblock                =  (const char*)   0x004b95fc;        // "data/lev01/out_spriteblock.bin"
+static const char*    g_pPathSplineblock                =  (const char*)   0x004b95dc;        // "data/lev01/out_splineblock.bin"
+static const char*    g_pPathTextureblock               =  (const char*)   0x004b95bc;        // "data/lev01/out_textureblock.bin"
+
 static const char*    g_pTxtTimeAttack                  =  (const char*)   0x004c0dd0;        // "/SCREENTEXT_543/~c~sTime Attack"
 static const char*    g_pTxt2Player                     =  (const char*)   0x004c0db0;        // "/SCREENTEXT_544/~c~s2 Player"
 static const char*    g_pTxtFreePlay                    =  (const char*)   0x004c0d90;        // "/SCREENTEXT_542/~c~sFree Play"

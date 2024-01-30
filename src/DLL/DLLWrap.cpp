@@ -1,9 +1,13 @@
 #include <windows.h>
 #include <stdio.h>
+#include "ReverseEngineering/Globals.h"
 #include "ReverseEngineering/Patching.h"
 #include "CustomTracks.h"
 
-typedef void* LPDIRECTINPUT; // I don't want to include old DirectInput headers.
+// I don't want to include old DirectInput headers.
+typedef void* LPDIRECTINPUT;
+typedef void* LPUNKNOWN;
+
 typedef HRESULT(WINAPI DirectInputCreateA_t)(HINSTANCE, DWORD, LPDIRECTINPUT*, LPUNKNOWN);
 
 extern "C"
