@@ -1,7 +1,7 @@
 #pragma once
 #include "Types.h"
 
-constexpr uint8_t     STOCK_TRACK_SLOTS_COUNT           = (7 * 4);
+constexpr uint8_t     STOCK_TRACK_SLOTS_COUNT           = (7 * 4);                            // Of which 25 are actually used
 
 static int32_t&       g_CircuitIdxMax                   = *(int32_t*)      0x00e295c8;        // Max: 255
 static uint8_t*       g_aTracksSelectableTournament     =  (uint8_t*)      0x00e35a85;        // Length: 4

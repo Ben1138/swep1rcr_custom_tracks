@@ -59,10 +59,12 @@ namespace Patching
         //PatchFunction<0x004360e0>(&FUN::DrawTracks);               // Patching unnecessary, get's called just once in MenuTrackSelection()
         PatchFunction<0x0043b240>(&FUN::MenuTrackSelection);
         PatchFunction<0x00440af0>(&FUN::VerifySelectedTrack);
+        PatchFunction<0x00440a00>(&FUN::GetRequiredPlaceToProceed);
 
         PatchFunction<0x004282f0>(&FUN::ImgReset);
         PatchFunction<0x00428370>(&FUN::ImgResetAll);
 
+        PatchFunction<0x00440a20>(&FUN::FUN_00440a20);
         PatchFunction<0x0041d6c0>(&FUN::FUN_0041d6c0);
     }
 }

@@ -11,10 +11,12 @@ namespace FUN
     void __cdecl InitTracks(MenuState* pStruct, bool bDrawTracks);                      // FUN_004584a0
     void DrawTracks(MenuState* param_1, char param_2);                                  // FUN_004360e0
     int32_t VerifySelectedTrack(MenuState* pStruct, int32_t SelectedTrackIdx);          // FUN_00440af0
+    uint8_t GetRequiredPlaceToProceed(uint8_t CircuitIdx, uint8_t TrackIdx);            // FUN_00440a00
 
     void ImgReset(uint16_t ImgIdx, ImgDat* pImgDat);                                    // FUN_004282f0
     void ImgResetAll();                                                                 // FUN_00428370
 
+    bool FUN_00440a20(int32_t CircuitIdx, int32_t TrackIdx);
     int32_t FUN_0041d6c0();
 
 
