@@ -8,9 +8,10 @@ namespace CustomTracks
     // This is mainly limited by the amount of available image slots. See Functions.cpp
     // Actually, 72 would be available
     constexpr uint8_t MAX      = 70;
+
     constexpr uint8_t COLOR_R  = 150;
     constexpr uint8_t COLOR_G  = 80;
-    constexpr uint8_t COLOR_B  = 220;
+    constexpr uint8_t COLOR_B  = 240;
 
 
     void ScanFolder();

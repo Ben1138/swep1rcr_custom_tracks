@@ -83,18 +83,16 @@ namespace FUN
         char Message[256];
 
         const char* pFilename = EXT::GetFilePath(FileID);
-        if (!pFilename)
+        if (!pFilename) // This check didn't exist before
         {
-            // This check didn't exist before
             snprintf(Message, sizeof(Message), "Failed to grab path for FileID: %d!", FileID);
             MessageBoxA(nullptr, Message, "File Error", MB_ICONERROR | MB_OK);
             exit(1);
         }
 
         FILE** ppFile = FileGet(FileID);
-        if (!ppFile)
+        if (!ppFile) // This check didn't exist before
         {
-            // This check didn't exist before
             snprintf(Message, sizeof(Message), "Failed to grab FILE* for FileID: %d!", FileID);
             MessageBoxA(nullptr, Message, "File Error", MB_ICONERROR | MB_OK);
             exit(1);
@@ -124,9 +122,8 @@ namespace FUN
         char Message[256];
 
         FILE** ppFile = FileGet(FileID);
-        if (!ppFile)
+        if (!ppFile) // This check didn't exist before
         {
-            // This check didn't exist before
             snprintf(Message, sizeof(Message), "Failed to grab FILE* for FileID: %d!", FileID);
             MessageBoxA(nullptr, Message, "File Error", MB_ICONERROR | MB_OK);
             exit(1);
@@ -150,20 +147,18 @@ namespace FUN
         char Message[128];
 
         FILE** ppFile = FileGet(FileID);
-        if (!ppFile)
+        if (!ppFile) // This check didn't exist before
         {
-            // This check didn't exist before
             snprintf(Message, sizeof(Message), "Failed to grab FILE* for FileID: %d!", FileID);
             MessageBoxA(nullptr, Message, "File Error", MB_ICONERROR | MB_OK);
             exit(1);
         }
 
         FILE* pFile = *ppFile;
-        if (!pFile)
+        if (!pFile) // This check didn't exist before
         {
             char Message[128];
 
-            // This check didn't exist before
             snprintf(Message, sizeof(Message), "Cannot read from closed File with FileID: %d!", FileID);
             MessageBoxA(nullptr, Message, "File Error", MB_ICONERROR | MB_OK);
             exit(1);
@@ -171,7 +166,7 @@ namespace FUN
 
         fseek(pFile, OffsetAddr, 0);
         const size_t BytesRead = fread(pDstBuffer, 1, NumRead, pFile);
-        if (BytesRead < NumRead)
+        if (BytesRead < NumRead) // This check didn't exist before
         {
             snprintf(Message, sizeof(Message), "Wanted to read %d bytes, but %d are read from file with FileID: %d!", NumRead, BytesRead, FileID);
             MessageBoxA(nullptr, Message, "File Error", MB_ICONERROR | MB_OK);
@@ -564,7 +559,7 @@ namespace FUN
                 UIText(TrackPosX + 67, 111, R, G, B, A, pTxtRace);
             }
 
-            if (pState->bIsTournament && Beat == 0 && bIsPlayable)//!FUN_00440a20(CircuitIdx, TrackIdx))
+            if (pState->bIsTournament && Beat == 0 && !FUN_00440a20(CircuitIdx, TrackIdx))
             {
                 // Draw 4th place Text
                 const char* pTxt4th = StrSanitise(g_pTxt4th);
