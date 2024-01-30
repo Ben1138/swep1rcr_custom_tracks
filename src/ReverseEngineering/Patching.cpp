@@ -2,19 +2,19 @@
 #include "Patching.h"
 #include "Globals.h"
 #include <windows.h>
+#include <assert.h>
 
 
 namespace Patching
 {
-    constexpr uint32_t s_pSegmTextStart = 0x0401000;
-    constexpr uint32_t s_pSegmTextEnd = 0x004ab7ff;
+    constexpr uint32_t s_pSegmTextStart  = 0x0401000;
+    constexpr uint32_t s_pSegmTextEnd    = 0x004ab7ff;
 
 
-    template<uint32_t pStart>
-    inline void PatchFunction(void* pFunction)
+    inline void PatchFunction(uint32_t pStart, void* pFunction)
     {
-        static_assert(pStart >= s_pSegmTextStart);
-        static_assert(pStart < s_pSegmTextEnd);
+        assert(pStart >= s_pSegmTextStart);
+        assert(pStart <  s_pSegmTextEnd);
 
         uint16_t Segment;
 #if _MSVC_LANG
@@ -51,20 +51,25 @@ namespace Patching
             return;
         }
 
-        PatchFunction<0x0043b0b0>(&FUN::HandleCircuit);
-        PatchFunction<0x00440aa0>(&FUN::IsTrackPlayable);
-        PatchFunction<0x00440620>(&FUN::GetTrackName);
-        PatchFunction<0x0041d6b0>(&FUN::IsFreePlay);
-        PatchFunction<0x004584a0>(&FUN::InitTracks);
-        //PatchFunction<0x004360e0>(&FUN::DrawTracks);               // Patching unnecessary, get's called just once in MenuTrackSelection()
-        PatchFunction<0x0043b240>(&FUN::MenuTrackSelection);
-        PatchFunction<0x00440af0>(&FUN::VerifySelectedTrack);
-        PatchFunction<0x00440a00>(&FUN::GetRequiredPlaceToProceed);
+        //PatchFunction(0x0042d600, &FUN::FileGet);                         // All 3 calls covered, using EXT::FileGet instead
+        PatchFunction(0x0042d680, &FUN::FileOpen);
+        PatchFunction(0x0042d640, &FUN::FileRead);
+        PatchFunction(0x0042d6f0, &FUN::FileClose);
 
-        PatchFunction<0x004282f0>(&FUN::ImgReset);
-        PatchFunction<0x00428370>(&FUN::ImgResetAll);
+        PatchFunction(0x0043b0b0, &FUN::HandleCircuit);
+        PatchFunction(0x00440aa0, &FUN::IsTrackPlayable);
+        PatchFunction(0x00440620, &FUN::GetTrackName);
+        PatchFunction(0x0041d6b0, &FUN::IsFreePlay);
+        PatchFunction(0x004584a0, &FUN::InitTracks);
+        //PatchFunction(0x004360e0, &FUN::DrawTracks);                      // Get's called just once in MenuTrackSelection()
+        PatchFunction(0x0043b240, &FUN::MenuTrackSelection);
+        PatchFunction(0x00440af0, &FUN::VerifySelectedTrack);
+        PatchFunction(0x00440a00, &FUN::GetRequiredPlaceToProceed);
 
-        PatchFunction<0x00440a20>(&FUN::FUN_00440a20);
-        PatchFunction<0x0041d6c0>(&FUN::FUN_0041d6c0);
+        PatchFunction(0x004282f0, &FUN::ImgReset);
+        PatchFunction(0x00428370, &FUN::ImgResetAll);
+
+        PatchFunction(0x00440a20, &FUN::FUN_00440a20);
+        PatchFunction(0x0041d6c0, &FUN::FUN_0041d6c0);
     }
 }

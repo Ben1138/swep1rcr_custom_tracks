@@ -4,6 +4,7 @@
 #include <windows.h>
 #include <assert.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 namespace FUN
 {
@@ -50,6 +51,133 @@ namespace FUN
     typedef void(FUN_00412e20_t)();
     static  FUN_00412e20_t* FUN_00412e20 = (FUN_00412e20_t*)0x00412e20;
 
+
+    // FUN_0042d600
+    FILE** FileGet(int32_t FileID)
+    {
+        // using custom memory instead of stock memory,
+        // because apparently they're not initialized to zero
+        static FILE* s_pModelblock    = nullptr;
+        static FILE* s_pSpriteblock   = nullptr;
+        static FILE* s_pSplineblock   = nullptr;
+        static FILE* s_pTextureblock  = nullptr;
+
+        switch (FileID)
+        {
+            case 0:
+                return &s_pModelblock;
+            case 1:
+                return &s_pSpriteblock;
+            case 2:
+                return &s_pSplineblock;
+            case 3:
+                return &s_pTextureblock;
+            default:
+                return nullptr;
+        }
+    }
+
+    // FUN_0042d680
+    void FileOpen(int32_t FileID)
+    {
+        char Message[256];
+
+        const char* pFilename = EXT::GetFilePath(FileID);
+        if (!pFilename)
+        {
+            // This check didn't exist before
+            snprintf(Message, sizeof(Message), "Failed to grab path for FileID: %d!", FileID);
+            MessageBoxA(nullptr, Message, "File Error", MB_ICONERROR | MB_OK);
+            exit(1);
+        }
+
+        FILE** ppFile = FileGet(FileID);
+        if (!ppFile)
+        {
+            // This check didn't exist before
+            snprintf(Message, sizeof(Message), "Failed to grab FILE* for FileID: %d!", FileID);
+            MessageBoxA(nullptr, Message, "File Error", MB_ICONERROR | MB_OK);
+            exit(1);
+        }
+
+        FILE* pFile = *ppFile;
+        if (pFile)
+        {
+            // File already opened
+            return;
+        }
+
+        pFile = fopen(pFilename, "rb");
+        if (!pFile)
+        {
+            // LucasArts used to have an infinite loop here...
+            snprintf(Message, sizeof(Message), "Failed to open file '%s' of FileID: %d!", pFilename, FileID);
+            MessageBoxA(nullptr, Message, "File Error", MB_ICONERROR | MB_OK);
+            exit(1);
+        }
+        *ppFile = pFile;
+    }
+
+    // FUN_0042d6f0
+    void FileClose(int32_t FileID)
+    {
+        char Message[256];
+
+        FILE** ppFile = FileGet(FileID);
+        if (!ppFile)
+        {
+            // This check didn't exist before
+            snprintf(Message, sizeof(Message), "Failed to grab FILE* for FileID: %d!", FileID);
+            MessageBoxA(nullptr, Message, "File Error", MB_ICONERROR | MB_OK);
+            exit(1);
+        }
+
+        FILE* pFile = *ppFile;
+        if (pFile)
+        {
+            fclose(pFile);
+            *ppFile = nullptr;
+        }
+    }
+
+    // FUN_0042d640
+    void FileRead(int32_t FileID, int32_t OffsetAddr, char* pDstBuffer, int32_t NumRead)
+    {
+        assert(FileID >= 0);
+        assert(OffsetAddr >= 0);
+        assert(pDstBuffer);
+        assert(NumRead > 0);
+        char Message[128];
+
+        FILE** ppFile = FileGet(FileID);
+        if (!ppFile)
+        {
+            // This check didn't exist before
+            snprintf(Message, sizeof(Message), "Failed to grab FILE* for FileID: %d!", FileID);
+            MessageBoxA(nullptr, Message, "File Error", MB_ICONERROR | MB_OK);
+            exit(1);
+        }
+
+        FILE* pFile = *ppFile;
+        if (!pFile)
+        {
+            char Message[128];
+
+            // This check didn't exist before
+            snprintf(Message, sizeof(Message), "Cannot read from closed File with FileID: %d!", FileID);
+            MessageBoxA(nullptr, Message, "File Error", MB_ICONERROR | MB_OK);
+            exit(1);
+        }
+
+        fseek(pFile, OffsetAddr, 0);
+        const size_t BytesRead = fread(pDstBuffer, 1, NumRead, pFile);
+        if (BytesRead < NumRead)
+        {
+            snprintf(Message, sizeof(Message), "Wanted to read %d bytes, but %d are read from file with FileID: %d!", NumRead, BytesRead, FileID);
+            MessageBoxA(nullptr, Message, "File Error", MB_ICONERROR | MB_OK);
+            exit(1);
+        }
+    }
 
     // FUN_004282f0
     void ImgReset(uint16_t ImgIdx, ImgDat* pImgDat)
@@ -409,7 +537,7 @@ namespace FUN
                 }
             }
 
-            const bool bIsPlayable = IsTrackPlayable(pState, CircuitIdx, (byte)TrackIdx);
+            const bool bIsPlayable = IsTrackPlayable(pState, CircuitIdx, TrackIdx);
             if (!bIsPlayable)
             {
                 B = 128;

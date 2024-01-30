@@ -12,6 +12,7 @@ else()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions -fno-rtti")
 endif()
 
+add_compile_definitions(WIN32_LEAN_AND_MEAN)                # Lightweight windows.h include
 add_compile_definitions(_HAS_EXCEPTIONS=0)                  # STL without Exceptions
 add_compile_definitions(NOMINMAX)                           # No std::min() and std::max()
 

@@ -3,18 +3,23 @@
 
 namespace FUN
 {
-    void __cdecl HandleCircuit(MenuState* pStruct);                                     // FUN_0043b0b0
-    void MenuTrackSelection();                                                          // FUN_0043b240
-    bool IsFreePlay();                                                                  // FUN_0041d6b0
-    const char* GetTrackName(int32_t TrackID);                                          // FUN_00440620
-    bool IsTrackPlayable(MenuState* pStruct, uint8_t CircuitIdx, uint8_t TrackIdx);     // FUN_00440aa0
-    void __cdecl InitTracks(MenuState* pStruct, bool bDrawTracks);                      // FUN_004584a0
-    void DrawTracks(MenuState* param_1, char param_2);                                  // FUN_004360e0
-    int32_t VerifySelectedTrack(MenuState* pStruct, int32_t SelectedTrackIdx);          // FUN_00440af0
-    uint8_t GetRequiredPlaceToProceed(uint8_t CircuitIdx, uint8_t TrackIdx);            // FUN_00440a00
+    FILE** FileGet(int32_t FileID);                                                         // FUN_0042d600
+    void FileOpen(int32_t FileID);                                                          // FUN_0042d680
+    void FileRead(int32_t FileID, int32_t OffsetAddr, char* pDstBuffer, int32_t NumRead);   // FUN_0042d640
+    void FileClose(int32_t FileID);                                                         // FUN_0042d6f0
 
-    void ImgReset(uint16_t ImgIdx, ImgDat* pImgDat);                                    // FUN_004282f0
-    void ImgResetAll();                                                                 // FUN_00428370
+    void __cdecl HandleCircuit(MenuState* pStruct);                                         // FUN_0043b0b0
+    void MenuTrackSelection();                                                              // FUN_0043b240
+    bool IsFreePlay();                                                                      // FUN_0041d6b0
+    const char* GetTrackName(int32_t TrackID);                                              // FUN_00440620
+    bool IsTrackPlayable(MenuState* pStruct, uint8_t CircuitIdx, uint8_t TrackIdx);         // FUN_00440aa0
+    void __cdecl InitTracks(MenuState* pStruct, bool bDrawTracks);                          // FUN_004584a0
+    void DrawTracks(MenuState* param_1, char param_2);                                      // FUN_004360e0
+    int32_t VerifySelectedTrack(MenuState* pStruct, int32_t SelectedTrackIdx);              // FUN_00440af0
+    uint8_t GetRequiredPlaceToProceed(uint8_t CircuitIdx, uint8_t TrackIdx);                // FUN_00440a00
+
+    void ImgReset(uint16_t ImgIdx, ImgDat* pImgDat);                                        // FUN_004282f0
+    void ImgResetAll();                                                                     // FUN_00428370
 
     bool FUN_00440a20(int32_t CircuitIdx, int32_t TrackIdx);
     int32_t FUN_0041d6c0();

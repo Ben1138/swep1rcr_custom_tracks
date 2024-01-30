@@ -6,6 +6,23 @@
 
 namespace EXT
 {
+    // Used to be part of FileOpen (FUN_0042d680)
+    const char* GetFilePath(int32_t FileID)
+    {
+        switch (FileID)
+        {
+            case 0:
+                return g_pPathModelblock;
+            case 1:
+                return g_pPathSpriteblock;
+            case 2:
+                return g_pPathSplineblock;
+            case 3:
+                return g_pPathTextureblock;
+        }
+        return nullptr;
+    }
+
     TrackInfo GetTrackInfo(int8_t TrackID)
     {
         if (TrackID < STOCK_TRACK_SLOTS_COUNT)
