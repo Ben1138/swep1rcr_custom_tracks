@@ -1,6 +1,6 @@
 #include "FUN.h"
 #include "EXT.h"
-#include "CustomTracks.h"
+#include "DBTracks.h"
 #include <windows.h>
 #include <assert.h>
 #include <stdio.h>
@@ -174,6 +174,180 @@ namespace FUN
         }
     }
 
+    // FUN_00448780
+    /*uint32_t* ReadModel(int param_1)
+    {
+        uint32_t uVar1;
+        int iVar2;
+        uint32_t uVar3;
+        int iVar4;
+        uint32_t uVar5;
+        uint32_t uVar6;
+        char* pDstBuffer;
+        uint32_t* puVar7;
+        uint32_t* puVar8;
+        uint32_t local_14;
+        int local_10;
+        uint32_t local_c[3];
+
+        FileOpen(3);
+        FileOpen(0);
+        DAT_0050c600 = 1;
+        DAT_0050c628 = 0;
+        DAT_0050c62c = 0;
+        DAT_0050c630 = 0;
+        DAT_00e981e0 = 0;
+        DAT_00e98240 = 0;
+        DAT_00e98248 = 0;
+
+        FileRead(0, 0, (char*)&local_14, 4);
+        local_14 = (local_14 & 0xff00 | local_14 << 0x10) << 8 | (local_14 & 0xff0000 | local_14 >> 0x10) >> 8;
+        if ((-1 < param_1) && (param_1 < (int)local_14))
+        {
+            FileRead(0, param_1 * 8 + 4, (char*)local_c, 0xc);
+            puVar8 = local_c;
+            for (int8_t i = 3; i > 0; i--)
+            {
+                uVar6 = *puVar8;
+                *puVar8 = (uVar6 & 0xff00 | uVar6 << 0x10) << 8 | (uVar6 >> 0x10 | uVar6 & 0xff0000) >> 8;
+                puVar8 = puVar8 + 1;
+            }
+
+            iVar4 = local_c[1] - local_c[0];
+            uVar6 = local_c[2] - local_c[1];
+
+            if (iVar4 < 0x25801)
+            {
+                FileRead(0, local_c[0], (char*)&DAT_00e6b180, iVar4);
+
+                iVar4 = (int)(iVar4 + (iVar4 >> 0x1f & 3U)) >> 2;
+                if (iVar4 > 0)
+                {
+                    puVar8 = &DAT_00e6b180;
+                }
+                for (int32_t i = iVar4; i > 0; i--)
+                {
+                    uVar1 = *puVar8;
+                    *puVar8 = (uVar1 & 0xff00 | uVar1 << 0x10) << 8 | (uVar1 & 0xff0000 | uVar1 >> 0x10) >> 8;
+                    puVar8 = puVar8 + 1;
+                }
+
+                local_10 = FUN_00445b40();
+                puVar8 = (uint32_t*)(local_10 + 7U & 0xfffffff8);
+                FileRead(0, local_c[1], (char*)puVar8, 0xc);
+                uVar1 = *puVar8;
+
+                if (((uVar1 & 0xff00 | uVar1 << 0x10) << 8 | (uVar1 >> 0x10 | uVar1 & 0xff0000) >> 8) == 0x436f6d70)
+                {
+                    uVar1 = puVar8[2];
+                    iVar4 = uVar6 - 0xc;
+                    uVar6 = (uVar1 & 0xff00 | uVar1 << 0x10) << 8 | (uVar1 & 0xff0000 | uVar1 >> 0x10) >> 8;
+                    iVar2 = FUN_00445bf0();
+                    if (iVar2 < (int)(uVar6 + 8))
+                    {
+                        DAT_0050c610 = 1;
+                        FileClose(3);
+                        FileClose(0);
+                        return (uint32_t*)0x0;
+                    }
+                    pDstBuffer = (char*)(DAT_00e981e4 - iVar4 & 0xfffffff8);
+                    if ((char*)(uVar6 + (int)puVar8) <= pDstBuffer)
+                    {
+                        FileRead(0, local_c[1] + 0xc, pDstBuffer, iVar4);
+                        FUN_0042d520(pDstBuffer, puVar8);
+                        FUN_00445b20((char*)(uVar6 + (int)puVar8));
+
+                    LAB_00448a31:
+                        iVar4 = 0;
+                        DAT_00e9822c = local_10;
+                        DAT_00e6b164 = FUN_00445b40();
+                        local_10 = FUN_00445b40();
+
+                        if (DAT_0050c604 != 0)
+                        {
+                            FUN_00445b40();
+                            FUN_00445b40();
+                            FUN_00445b40();
+                            FUN_00445b40();
+                        }
+
+                        puVar7 = puVar8;
+                        if (0 < (int)uVar6 >> 2)
+                        {
+                            do
+                            {
+                                if (((&DAT_00e6b180)[iVar4 >> 5] & 1 << (0x1f - ((uint8_t)iVar4 & 0x1f) & 0x1f)) != 0)
+                                {
+                                    uVar1 = *puVar7;
+                                    uVar5 = (uVar1 & 0xff0000 | uVar1 >> 0x10) >> 8;
+                                    uVar3 = (uVar1 & 0xff00 | uVar1 << 0x10) << 8 | uVar5;
+                                    *puVar7 = uVar3;
+                                    if ((uVar1 << 0x10 & 0xff0000) == 0xa0000)
+                                    {
+                                        FUN_00447490((uVar1 & 0xff00) << 8 | uVar5, puVar7, puVar7 + 1);
+                                    }
+                                    else if (uVar3 != 0)
+                                    {
+                                        *puVar7 = uVar3 + (int)puVar8;
+                                    }
+                                }
+
+                                puVar7 = puVar7 + 1;
+                                iVar4 = iVar4 + 1;
+                            } while (iVar4 < (int)uVar6 >> 2);
+                        }
+
+                        FUN_004485d0(puVar8);
+                        uVar6 = *puVar8;
+                        if ((((uVar6 == 0x4d6f646c) || (uVar6 == 0x5472616b)) || (uVar6 == 0x506f6464)) ||
+                            (((uVar6 == 0x50617274 || (uVar6 == 0x5363656e)) ||
+                                ((uVar6 == 0x4d416c74 || (uVar6 == 0x50757070))))))
+                        {
+                            puVar8 = puVar8 + 1;
+                        }
+                        else
+                        {
+                            FUN_00426910(uVar6);
+                        }
+
+                        if (DAT_0050c604 != 0)
+                        {
+                            FUN_00445b40();
+                            FUN_00445b40();
+                            FUN_00445b40();
+                            FUN_00445b40();
+                        }
+                        iVar4 = FUN_00445b40();
+                        DAT_00e98240 = iVar4 - local_10;
+                        DAT_00e981e0 = DAT_00e6b164 - DAT_00e9822c;
+                        FileClose(3);
+                        FileClose(0);
+                        return puVar8;
+                    }
+                    FileClose(3);
+                }
+                else
+                {
+                    iVar4 = FUN_00445bf0();
+                    if ((int)(uVar6 + 8) <= iVar4)
+                    {
+                        FileRead(0, local_c[1], (char*)puVar8, uVar6);
+                        FUN_00445b20(uVar6 + (int)puVar8);
+                        goto LAB_00448a31;
+                    }
+                    FileClose(3);
+                }
+                FileClose(0);
+                DAT_0050c610 = 1;
+                return (uint32_t*)0x0;
+            }
+        }
+
+        FileClose(3);
+        FileClose(0);
+        return (uint32_t*)0x0;
+    }*/
+
     // FUN_004282f0
     void ImgReset(uint16_t ImgIdx, ImgDat* pImgDat)
     {
@@ -221,7 +395,7 @@ namespace FUN
             //{
             //    g_CircuitIdxMax = 2;
             //}
-            g_CircuitIdxMax = 3 + CustomTracks::GetCircuitCount();
+            g_CircuitIdxMax = DBTracks::GetCircuitCount(true) - 1;
 
             if (pState->CircuitIdx < 4)
             {
@@ -235,7 +409,7 @@ namespace FUN
             }
             else
             {
-                g_TracksInCurrentCircuit = CustomTracks::GetTrackCount(pState->CircuitIdx - 4);
+                g_TracksInCurrentCircuit = DBTracks::GetTrackCount(pState->CircuitIdx);
             }
         }
         else
@@ -296,66 +470,7 @@ namespace FUN
     // FUN_00440620
     const char* GetTrackName(int32_t TrackID)
     {
-        if (TrackID < 0 || (TrackID > 24 && TrackID < STOCK_TRACK_SLOTS_COUNT))
-        {
-            return "Invalid Track!";
-        }
-
-        switch (TrackID)
-        {
-            case 0:
-                return StrSanitise(g_pTxtTrackID_00);
-            case 1:
-                return StrSanitise(g_pTxtTrackID_01);
-            case 2:
-                return StrSanitise(g_pTxtTrackID_02);
-            case 3:
-                return StrSanitise(g_pTxtTrackID_03);
-            case 4:
-                return StrSanitise(g_pTxtTrackID_04);
-            case 5:
-                return StrSanitise(g_pTxtTrackID_05);
-            case 6:
-                return StrSanitise(g_pTxtTrackID_06);
-            case 7:
-                return StrSanitise(g_pTxtTrackID_07);
-            case 8:
-                return StrSanitise(g_pTxtTrackID_08);
-            case 9:
-                return StrSanitise(g_pTxtTrackID_09);
-            case 10:
-                return StrSanitise(g_pTxtTrackID_10);
-            case 11:
-                return StrSanitise(g_pTxtTrackID_11);
-            case 12:
-                return StrSanitise(g_pTxtTrackID_12);
-            case 13:
-                return StrSanitise(g_pTxtTrackID_13);
-            case 14:
-                return StrSanitise(g_pTxtTrackID_14);
-            case 15:
-                return StrSanitise(g_pTxtTrackID_15);
-            case 16:
-                return StrSanitise(g_pTxtTrackID_16);
-            case 17:
-                return StrSanitise(g_pTxtTrackID_17);
-            case 18:
-                return StrSanitise(g_pTxtTrackID_18);
-            case 19:
-                return StrSanitise(g_pTxtTrackID_19);
-            case 20:
-                return StrSanitise(g_pTxtTrackID_20);
-            case 21:
-                return StrSanitise(g_pTxtTrackID_21);
-            case 22:
-                return StrSanitise(g_pTxtTrackID_22);
-            case 23:
-                return StrSanitise(g_pTxtTrackID_23);
-            case 24:
-                return StrSanitise(g_pTxtTrackID_24);
-        }
-
-        return CustomTracks::GetTrackName(TrackID - STOCK_TRACK_SLOTS_COUNT);
+        return DBTracks::GetTrackName(TrackID);
     }
 
     // FUN_0041d6b0
@@ -386,7 +501,7 @@ namespace FUN
 
         if (bInitTracks)
         {
-            const int32_t NumCircuits = 4 + (!pState->bIsTournament ? CustomTracks::GetCircuitCount() : 0);
+            const int32_t NumCircuits = DBTracks::GetCircuitCount(!pState->bIsTournament);
 
             for (int32_t CircuitIdx = 0; CircuitIdx < NumCircuits; CircuitIdx++)
             {
@@ -443,7 +558,7 @@ namespace FUN
     // Get's called at just once place: MenuTrackSelection()
     void DrawTracks(MenuState* pState, uint8_t CircuitIdx)
     {
-        const uint8_t NumTracks = CircuitIdx < 4 ? g_aTracksInCircuits[CircuitIdx] : CustomTracks::GetTrackCount(CircuitIdx - 4);
+        const uint8_t NumTracks = DBTracks::GetTrackCount(CircuitIdx);
         if (NumTracks == 0)
         {
             return;
@@ -525,9 +640,9 @@ namespace FUN
                 // Custom Tracks
                 default:
                 {
-                    B = CustomTracks::COLOR_B;
-                    G = CustomTracks::COLOR_G;
-                    R = CustomTracks::COLOR_R;
+                    B = DBTracks::COLOR_B;
+                    G = DBTracks::COLOR_G;
+                    R = DBTracks::COLOR_R;
                     break;
                 }
             }
@@ -594,7 +709,7 @@ namespace FUN
     {
         bool bIsPlayable;
         uint8_t TrackCount = 0;
-        const uint8_t NumTracks = pState->CircuitIdx < 4 ? g_aTracksInCircuits[pState->CircuitIdx] : CustomTracks::GetTrackCount(pState->CircuitIdx - 4);
+        const uint8_t NumTracks = DBTracks::GetTrackCount(pState->CircuitIdx);
         if (NumTracks == 0)
         {
             return -1;
@@ -643,7 +758,7 @@ namespace FUN
         char local_100[256];
 
         MenuState* pState = g_pMenuState;
-        const TrackInfo Track = EXT::GetTrackInfo(pState->TrackID);
+        const TrackInfo Track = DBTracks::GetTrackInfo(pState->TrackID);
 
         if (DAT_004c4000 != 0)
         {
@@ -743,7 +858,7 @@ namespace FUN
                 UIText(160, 205, R, G, B, 255, local_100);
             }
 
-            const char* pTrackName = GetTrackName(pState->TrackID);
+            const char* pTrackName = DBTracks::GetTrackName(pState->TrackID);
             rcr_sprintf(local_100, "~c~s%s", pTrackName);
             UIText(160, 54, 0, 255, 0, 255, local_100);
             pcVar2 = local_100;
@@ -797,13 +912,13 @@ namespace FUN
             default:
             {
                 char BufferPage[128];
-                rcr_sprintf(BufferPage, "~c~sCustom Tracks - Page %u/%u", pState->CircuitIdx - 3, CustomTracks::GetCircuitCount());
+                rcr_sprintf(BufferPage, "~c~sCustom Tracks - Page %u/%u", pState->CircuitIdx - 3, DBTracks::GetCircuitCount(true) - 4);
                 pTxtCircuit = StrSanitise(BufferPage);
-                B = CustomTracks::COLOR_B;
-                G = CustomTracks::COLOR_G;
-                R = CustomTracks::COLOR_R;
+                B = DBTracks::COLOR_B;
+                G = DBTracks::COLOR_G;
+                R = DBTracks::COLOR_R;
 
-                UIText(55, 80, 50, 255, 255, 255, "~f4~sFile Version: 1");
+                //UIText(55, 80, 50, 255, 255, 255, "~f4~sFile Version: 1");
 
                 const char* pDescription = "Brief description of the track";
                 EXT::DrawTextBox(55, 150, 50, 255, 255, 255, "~f4~s", pDescription, 17, 7, 8);

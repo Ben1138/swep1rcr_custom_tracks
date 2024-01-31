@@ -2,8 +2,6 @@
 #include "Types.h"
 #include <stdio.h>    // Required for FILE*
 
-constexpr uint8_t     STOCK_TRACK_SLOTS_COUNT           = (7 * 4);                            // 28, of which 25 are actually used
-
 static int32_t&       g_CircuitIdxMax                   = *(int32_t*)      0x00e295c8;        // Max: 255
 static uint8_t*       g_aTracksSelectableTournament     =  (uint8_t*)      0x00e35a85;        // Length: 4
 static int32_t&       g_TracksInCurrentCircuit          = *(int32_t*)      0x00e295cc;
