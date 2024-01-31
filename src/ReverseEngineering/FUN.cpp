@@ -803,23 +803,10 @@ namespace FUN
                 G = CustomTracks::COLOR_G;
                 R = CustomTracks::COLOR_R;
 
-                // TODO: Move below code to CustomTracks
-                constexpr uint16_t PosX = 20;
-                constexpr uint16_t PosY = 180;
-                UIText(PosX, PosY, 50, 255, 255, 255, "~f4~sPlace custom Tracks into Folder:");
+                UIText(55, 80, 50, 255, 255, 255, "~f4~sFile Version: 1");
 
-                char BufferPath[1024];
-                strcpy_s(BufferPath, sizeof(BufferPath), "~f4~s");
-                GetCurrentDirectory(sizeof(BufferPath) - 5, BufferPath + 5);
-                for (uint16_t i = 0; i < strnlen_s(BufferPath, sizeof(BufferPath)) && i < sizeof(BufferPath); i++)
-                {
-                    if (BufferPath[i] == '\\')
-                    {
-                        BufferPath[i] = '/';
-                    }
-                }
-                strcat_s(BufferPath, sizeof(BufferPath), "/tracks/");
-                UIText(PosX, PosY + 8, 50, 255, 255, 255, BufferPath);
+                const char* pDescription = "Brief description of the track";
+                EXT::DrawTextBox(55, 150, 50, 255, 255, 255, "~f4~s", pDescription, 17, 7, 8);
                 break;
             }
         }
