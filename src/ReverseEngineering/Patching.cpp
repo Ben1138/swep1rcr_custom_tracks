@@ -1,6 +1,7 @@
 #include "FUN.h"
 #include "Patching.h"
 #include "Globals.h"
+#include "DBTracks.h"
 #include <windows.h>
 #include <assert.h>
 
@@ -29,7 +30,7 @@ namespace Patching
         // TODO: Check whether the function to patch is at least 7 bytes in size
         uint8_t Instructions[7] =
         {
-            0xEA, 0xDD, 0xCC, 0xBB, 0xAA, 0xFF, 0xEE    // jmp 0xEEFF:0xAABBCCDD 
+            0xEA, 0xDD, 0xCC, 0xBB, 0xAA, 0xFF, 0xEE    // JMP 0xEEFF:0xAABBCCDD 
         };
 
         // Patch Address
@@ -43,7 +44,7 @@ namespace Patching
 
     inline void PatchMemoryAccess(uint32_t pAccessOld, void* pAccessNew)
     {
-
+        *((uint32_t*)pAccessOld) = uint32_t(pAccessNew);
     }
 
     void PatchAllFunctions()
@@ -56,7 +57,7 @@ namespace Patching
             return;
         }
 
-        //PatchFunction(0x0042d600, &FUN::FileGet);                         // All 3 calls covered, using EXT::FileGet instead
+        //PatchFunction(0x0042d600, &FUN::FileGet);                                 // All 3 calls covered, using EXT::FileGet instead
         PatchFunction(0x0042d680, &FUN::FileOpen);
         PatchFunction(0x0042d640, &FUN::FileRead);
         PatchFunction(0x0042d6f0, &FUN::FileClose);
@@ -66,7 +67,7 @@ namespace Patching
         PatchFunction(0x00440620, &FUN::GetTrackName);
         PatchFunction(0x0041d6b0, &FUN::IsFreePlay);
         PatchFunction(0x004584a0, &FUN::InitTracks);
-        //PatchFunction(0x004360e0, &FUN::DrawTracks);                      // Get's called just once in MenuTrackSelection()
+        //PatchFunction(0x004360e0, &FUN::DrawTracks);                              // Get's called just once in MenuTrackSelection()
         PatchFunction(0x0043b240, &FUN::MenuTrackSelection);
         PatchFunction(0x00440af0, &FUN::VerifySelectedTrack);
         PatchFunction(0x00440a00, &FUN::GetRequiredPlaceToProceed);
@@ -77,6 +78,9 @@ namespace Patching
         PatchFunction(0x00440a20, &FUN::FUN_00440a20);
         PatchFunction(0x0041d6c0, &FUN::FUN_0041d6c0);
 
-        //PatchMemoryAccess(0x00436db9, 
+        // TODO: Write a python script for ghidra that automates this
+        //PatchMemoryAccess(0x00436db9 + 3, DBTracks::g_aNewTrackInfos + 0x00);       // READ MOVSX
+        //PatchMemoryAccess(0x00436dc0 + 3, DBTracks::g_aNewTrackInfos + 0x00);       // READ MOVSX
+        //PatchMemoryAccess(0x00436edc + 3, DBTracks::g_aNewTrackInfos + 0x00);       // READ CMP
     }
 }

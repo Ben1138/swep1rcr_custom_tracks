@@ -7,9 +7,9 @@
 
 namespace DBTracks
 {
-    TrackInfo g_aNewTrackInfos[TRACKS_COUNT_MAX];
     static uint16_t TrackCount = 0;
-    static char CustomTrackNames[TRACKS_COUNT_MAX][32];
+    TrackInfo g_aNewTrackInfos[TRACKS_COUNT_MAX]{};
+    static char CustomTrackNames[TRACKS_COUNT_MAX][32]{};
 
     void Init()
     {
