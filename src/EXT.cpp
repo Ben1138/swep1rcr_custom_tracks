@@ -1,7 +1,7 @@
 #include "EXT.h"
 #include "ReverseEngineering/Globals.h"
 #include "ReverseEngineering/FUN.h"
-#include "CustomTracks.h"
+#include "DBTracks.h"
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
@@ -25,42 +25,32 @@ namespace EXT
         return nullptr;
     }
 
-    TrackInfo GetTrackInfo(int8_t TrackID)
+    uint16_t GetImgStartBackground(uint16_t TrackID)
     {
-        if (TrackID < STOCK_TRACK_SLOTS_COUNT)
+        if (TrackID < 25)
         {
-            return g_aTrackInfos[TrackID];
+            return 99 + TrackID;
         }
-        assert((TrackID - STOCK_TRACK_SLOTS_COUNT) < CustomTracks::MAX);
-        return CustomTracks::GetTrackInfo(TrackID - STOCK_TRACK_SLOTS_COUNT);
-    }
-
-    uint16_t GetImgStartBackground(uint16_t TrackIdx)
-    {
-        if (TrackIdx < STOCK_TRACK_SLOTS_COUNT)
-        {
-            return 99 + TrackIdx;
-        }
-        TrackIdx -= STOCK_TRACK_SLOTS_COUNT;
+        TrackID -= 25;
 
         // Slots 256 - 399 seem to be free...
-        // 144 slots / 2 = 72 custom tracks
-        assert(TrackIdx < CustomTracks::MAX);
-        return 256 + TrackIdx;
+        // 144 slots / 2 = 72 possible custom tracks
+        assert(TrackID < DBTracks::CUSTOM_TRACKS_MAX);
+        return 256 + TrackID;
     }
 
-    uint16_t GetImgStartBorder(uint16_t TrackIdx)
+    uint16_t GetImgStartBorder(uint16_t TrackID)
     {
-        if (TrackIdx < STOCK_TRACK_SLOTS_COUNT)
+        if (TrackID < 25)
         {
-            return 99 + STOCK_TRACK_SLOTS_COUNT + TrackIdx;
+            return 99 + 25 + TrackID;
         }
-        TrackIdx -= STOCK_TRACK_SLOTS_COUNT;
+        TrackID -= 25;
 
         // Slots 256 - 399 seem to be free...
-        // 144 slots / 2 = 72 custom tracks
-        assert(TrackIdx < CustomTracks::MAX);
-        return 256 + CustomTracks::MAX + TrackIdx;
+        // 144 slots / 2 = 72 possible custom tracks
+        assert(TrackID < DBTracks::CUSTOM_TRACKS_MAX);
+        return 256 + DBTracks::CUSTOM_TRACKS_MAX + TrackID;
     }
 
     void DrawTextBox(
@@ -78,10 +68,10 @@ namespace EXT
     {
         // Since 'UIText' expects a null terminated string
         // I have to make a copy for each line, unfortunately...
-        constexpr uint16_t LINES_MAX = 128;
-        constexpr uint16_t LINE_LENGTH_MAX = 512;
+        constexpr uint16_t LINES_MAX = 64;
+        constexpr uint16_t LINE_LENGTH_MAX = 128;
 
-        const uint16_t FormattingLen = strnlen(pFormatting, LINE_LENGTH_MAX);
+        const uint16_t FormattingLen = (uint16_t)strnlen(pFormatting, LINE_LENGTH_MAX);
         
         if (LinesMax > LINES_MAX)
         {
@@ -112,16 +102,16 @@ namespace EXT
 
             if (*pText == 0)
             {
-                strncpy(Lines[LineCount], pFormatting, FormattingLen);
-                strncpy(Lines[LineCount] + FormattingLen, pLastNewLine, LineLen);
+                strncpy_s(Lines[LineCount], sizeof(Lines[LineCount]), pFormatting, FormattingLen);
+                strncpy_s(Lines[LineCount] + FormattingLen, sizeof(Lines[LineCount]) - FormattingLen, pLastNewLine, LineLen);
                 Lines[LineCount++][FormattingLen + LineLen] = 0;
                 break;
             }
 
             if (*pText == '\n' || (LineLen >= LineLengthMax && pLastSpace != pLastNewLine))
             {
-                strncpy(Lines[LineCount], pFormatting, FormattingLen);
-                strncpy(Lines[LineCount] + FormattingLen, pLastNewLine, LineLen);
+                strncpy_s(Lines[LineCount], sizeof(Lines[LineCount]), pFormatting, FormattingLen);
+                strncpy_s(Lines[LineCount] + FormattingLen, sizeof(Lines[LineCount]) - FormattingLen, pLastNewLine, LineLen);
                 Lines[LineCount++][FormattingLen + LineLen] = 0;
 
                 for (; *pText == ' '; pText++);

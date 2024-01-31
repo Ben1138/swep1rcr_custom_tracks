@@ -41,6 +41,11 @@ namespace Patching
         memcpy((void*)pStart, Instructions, sizeof(Instructions));
     }
 
+    inline void PatchMemoryAccess(uint32_t pAccessOld, void* pAccessNew)
+    {
+
+    }
+
     void PatchAllFunctions()
     {
         DWORD OldProtect;
@@ -71,5 +76,7 @@ namespace Patching
 
         PatchFunction(0x00440a20, &FUN::FUN_00440a20);
         PatchFunction(0x0041d6c0, &FUN::FUN_0041d6c0);
+
+        //PatchMemoryAccess(0x00436db9, 
     }
 }

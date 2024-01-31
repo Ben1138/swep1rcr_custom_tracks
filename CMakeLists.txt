@@ -35,6 +35,6 @@ target_sources(dinput PRIVATE
     "${DIR_SRC}/DLL/DLLWrap.cpp"                        # Contains DirectInputCreateA
     "${DIR_SRC}/ReverseEngineering/FUN.cpp"
     "${DIR_SRC}/ReverseEngineering/Patching.cpp"
-    "${DIR_SRC}/CustomTracks.cpp"
+    "${DIR_SRC}/DBTracks.cpp"
     "${DIR_SRC}/EXT.cpp"
 )

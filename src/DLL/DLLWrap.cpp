@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "ReverseEngineering/Globals.h"
 #include "ReverseEngineering/Patching.h"
-#include "CustomTracks.h"
+#include "DBTracks.h"
 
 // I don't want to include old DirectInput headers.
 typedef void* LPDIRECTINPUT;
@@ -33,7 +33,7 @@ extern "C"
 
             // TODO: Check MD5 of EXE
 
-            CustomTracks::ScanFolder();
+            DBTracks::Init();
             Patching::PatchAllFunctions();
         }
 

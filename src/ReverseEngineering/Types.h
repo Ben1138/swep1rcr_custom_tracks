@@ -44,12 +44,24 @@ struct UnknStruct2
     int32_t  Unkn1;
 };
 
+// Get's referenced in:
+// - MenuBeforeRace
+// - HandleProgress
+// - MenuTrackSelection
+// - MenuTrackInfo
+// - FUN_0043ca30
+// - FUN_0044e320
+// - FUN_00457410
+// - FUN_004586e0
+// - FUN_0045b290
+// - FUN_0045b7d0
+// - FUN_0045bab0
 struct TrackInfo
 {
-    int32_t  LoadModel;
+    int32_t  LoadModel;             // Get's referenced in: MenuTrackSelection, MenuTrackInfo, FUN_0045b290
     int32_t  LoadSpline;
     uint8_t  Unkn0;
-    uint8_t  PlanetIdx;             // Determines preview image + planet name and intro movie
+    uint8_t  PlanetIdx;             // Determines preview image, planet holo, planet name and intro movie
     int8_t   FavoritePilot;
 };
 
