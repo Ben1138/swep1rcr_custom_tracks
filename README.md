@@ -19,7 +19,7 @@ The output will be a 32-Bit Windows DLL: `./bin/<BUILD-TYPE>/dinput.dll`.
 - `cmake -S . -B .\build -G "Visual Studio 17 2022" -A Win32`
 - `cmake --build .\build --config Release`
 
-### Compile on Fedora using MinGW64
+### Compile on Fedora using MinGW
 - Install MinGW32 `sudo dnf install mingw32-gcc-c++`
 - Install CMake `sudo dnf install cmake`
 - `cmake -DCMAKE_CXX_COMPILER=i686-w64-mingw32-g++ -DCMAKE_BUILD_TYPE=Release -S . -B ./build`
