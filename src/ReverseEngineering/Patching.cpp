@@ -58,25 +58,25 @@ namespace Patching
         }
 
         //PatchFunction(0x0042d600, &FUN::FileGet);                                 // All 3 calls covered, using EXT::FileGet instead
-        PatchFunction(0x0042d680, &FUN::FileOpen);
-        PatchFunction(0x0042d640, &FUN::FileRead);
-        PatchFunction(0x0042d6f0, &FUN::FileClose);
+        PatchFunction(0x0042d680, (void*)&FUN::FileOpen);
+        PatchFunction(0x0042d640, (void*)&FUN::FileRead);
+        PatchFunction(0x0042d6f0, (void*)&FUN::FileClose);
 
-        PatchFunction(0x0043b0b0, &FUN::HandleCircuit);
-        PatchFunction(0x00440aa0, &FUN::IsTrackPlayable);
-        PatchFunction(0x00440620, &FUN::GetTrackName);
-        PatchFunction(0x0041d6b0, &FUN::IsFreePlay);
-        PatchFunction(0x004584a0, &FUN::InitTracks);
-        //PatchFunction(0x004360e0, &FUN::DrawTracks);                              // Get's called just once in MenuTrackSelection()
-        PatchFunction(0x0043b240, &FUN::MenuTrackSelection);
-        PatchFunction(0x00440af0, &FUN::VerifySelectedTrack);
-        PatchFunction(0x00440a00, &FUN::GetRequiredPlaceToProceed);
+        PatchFunction(0x0043b0b0, (void*)&FUN::HandleCircuit);
+        PatchFunction(0x00440aa0, (void*)&FUN::IsTrackPlayable);
+        PatchFunction(0x00440620, (void*)&FUN::GetTrackName);
+        PatchFunction(0x0041d6b0, (void*)&FUN::IsFreePlay);
+        PatchFunction(0x004584a0, (void*)&FUN::InitTracks);
+        //PatchFunction(0x004360e0(void*), &FUN::DrawTracks);                              // Get's called just once in MenuTrackSelection()
+        PatchFunction(0x0043b240, (void*)&FUN::MenuTrackSelection);
+        PatchFunction(0x00440af0, (void*)&FUN::VerifySelectedTrack);
+        PatchFunction(0x00440a00, (void*)&FUN::GetRequiredPlaceToProceed);
 
-        PatchFunction(0x004282f0, &FUN::ImgReset);
-        PatchFunction(0x00428370, &FUN::ImgResetAll);
+        PatchFunction(0x004282f0, (void*)&FUN::ImgReset);
+        PatchFunction(0x00428370, (void*)&FUN::ImgResetAll);
 
-        PatchFunction(0x00440a20, &FUN::FUN_00440a20);
-        PatchFunction(0x0041d6c0, &FUN::FUN_0041d6c0);
+        PatchFunction(0x00440a20, (void*)&FUN::FUN_00440a20);
+        PatchFunction(0x0041d6c0, (void*)&FUN::FUN_0041d6c0);
 
         // TODO: Write a python script for ghidra that automates this
         //PatchMemoryAccess(0x00436db9 + 3, DBTracks::g_aNewTrackInfos + 0x00);       // READ MOVSX
