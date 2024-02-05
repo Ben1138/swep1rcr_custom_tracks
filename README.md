@@ -16,8 +16,8 @@ The output will be a 32-Bit Windows DLL: `./bin/<BUILD-TYPE>/dinput.dll`.
 ### Compile on Windows using MSVC (Visual Studio)
 - Install [Visual Studio 2022](https://visualstudio.microsoft.com/vs/community/)
 - Install [CMake](https://cmake.org/download/)
-- `cmake -DCMAKE_BUILD_TYPE=Release -S . -B .\build -G "Visual Studio 17 2022" -A Win32`
-- `cmake --build .\build`
+- `cmake -S . -B .\build -G "Visual Studio 17 2022" -A Win32`
+- `cmake --build .\build --config Release`
 
 ### Compile on Fedora using MinGW64
 - Install MinGW32 `sudo dnf install mingw32-gcc-c++`
