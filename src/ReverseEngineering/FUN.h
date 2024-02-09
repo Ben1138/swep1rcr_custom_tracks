@@ -28,6 +28,12 @@ namespace FUN
     typedef void(FUN_00456800_t)(MenuState* pState, int PlanetIdx, float Scale);
     static  FUN_00456800_t* DrawHoloPlanet = (FUN_00456800_t*)0x00456800;
 
+    typedef void(__cdecl FUN_0043b0b0_t)(MenuState* pState);
+    static  FUN_0043b0b0_t* HandleCircuits = (FUN_0043b0b0_t*)0x0043b0b0;
+
+    typedef bool(__cdecl FUN_00440bc0_t)(MenuState* pState);
+    static  FUN_00440bc0_t* BeatEverything1stPlace = (FUN_00440bc0_t*)0x00440bc0;
+
     // "/SCREENTEXT_508/~~Abyss" -> "Abyss"
     typedef const char* (FUN_00421360_t)(const char* param_1);
     static  FUN_00421360_t* StrSanitise = (FUN_00421360_t*)0x00421360;

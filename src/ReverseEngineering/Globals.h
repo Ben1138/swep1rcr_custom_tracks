@@ -38,15 +38,24 @@ static const char*    g_pTxtTimeAttack                  =  (const char*)   0x004
 static const char*    g_pTxt2Player                     =  (const char*)   0x004c0db0;        // "/SCREENTEXT_544/~c~s2 Player"
 static const char*    g_pTxtFreePlay                    =  (const char*)   0x004c0d90;        // "/SCREENTEXT_542/~c~sFree Play"
 static const char*    g_pTxtTournament                  =  (const char*)   0x004c0df0;        // "/SCREENTEXT_541/~c~sTournament"
-
-static const char*    g_pTxtRace                        =  (const char*)   0x004c0924;        // "/SCREENTEXT_585/~f4~c~sRace"
-static const char*    g_pTxt4th                         =  (const char*)   0x004c0908;        // "/SCREENTEXT_229/~f4~s4th"
                                                                            
 static const char*    g_pTxtPlanetNotLoaded             =  (const char*)   0x004c0ee4;        // "~c~s---Planet not loaded!!!---"
 static const char*    g_pTxtCircuitAmateur              =  (const char*)   0x004c0eb0;        // "/SCREENTEXT_530/~f0~c~sAmateur Podracing Circuit"
 static const char*    g_pTxtCircuitSemiPro              =  (const char*)   0x004c0e7c;        // "/SCREENTEXT_531/~f0~c~sSemi-Pro Podracing Circuit"
 static const char*    g_pTxtCircuitGalactic             =  (const char*)   0x004c0e48;        // "/SCREENTEXT_532/~f0~c~sGalactic Podracing Circuit"
 static const char*    g_pTxtCircuitInvitational         =  (const char*)   0x004c0e10;        // "/SCREENTEXT_533/~f0~c~sInvitational Podracing Circuit"
+static const char*    g_pTxtWinnings                    =  (const char*)   0x004c111c;        // "/SCREENTEXT_222/~f4~sWinnings:"
+static const char*    g_pTxtWinnerTakesAll              =  (const char*)   0x004c113c;        // "/SCREENTEXT_225/~f4~sWinner Takes All"
+static const char*    g_pTxtSkilled                     =  (const char*)   0x004c1164;        // "/SCREENTEXT_224/~f4~sSkilled"
+static const char*    g_pTxtFair                        =  (const char*)   0x004c1184;        // "/SCREENTEXT_223/~f4~sFair"
+static const char*    g_pTxtOff                         =  (const char*)   0x004c11a0;        // "/SCREENTEXT_233/~f4~sOFF"
+static const char*    g_pTxtOn                          =  (const char*)   0x004c11bc;        // "/SCREENTEXT_232/~f4~sON"
+static const char*    g_pTxtMirror                      =  (const char*)   0x004c11d4;        // "/SCREENTEXT_655/~f4~sMirror:"
+static const char*    g_pTxtRace                        =  (const char*)   0x004c0924;        // "/SCREENTEXT_585/~f4~c~sRace"
+static const char*    g_pTxt1st                         =  (const char*)   0x004c1100;        // "/SCREENTEXT_226/~f4~s1st"
+static const char*    g_pTxt2nd                         =  (const char*)   0x004c10e4;        // "/SCREENTEXT_227/~f4~s2nd"
+static const char*    g_pTxt3rd                         =  (const char*)   0x004c10c8;        // "/SCREENTEXT_228/~f4~s3rd"
+static const char*    g_pTxt4th                         =  (const char*)   0x004c0908;        // "/SCREENTEXT_229/~f4~s4th"
                                                                            
 static const char*    g_pTxtTrackID_00                  =  (const char*)   0x004c1728;        // "/SCREENTEXT_497/~~The Boonta Training Course"
 static const char*    g_pTxtTrackID_01                  =  (const char*)   0x004c1700;        // "/SCREENTEXT_498/~~The Boonta Classic"
@@ -92,3 +101,16 @@ static int32_t&       DAT_00e2a698                      = *(int32_t*)      0x00e
 static int32_t&       DAT_004d6b44                      = *(int32_t*)      0x004d6b44;
 static int32_t&       DAT_00ea02b0                      = *(int32_t*)      0x00ea02b0;        // TrackIdx !?
 static float&         DAT_004ac7a4                      = *(float*)        0x004ac7a4;
+static int8_t&        DAT_0050c558                      = *(int8_t*)       0x0050c558;
+static int8_t&        DAT_0050c55c                      = *(int8_t*)       0x0050c55c;
+static int8_t&        DAT_0050c560                      = *(int8_t*)       0x0050c560;
+static int32_t&       DAT_0050c550                      = *(int32_t*)      0x0050c550;
+static int32_t&       DAT_0050c554                      = *(int32_t*)      0x0050c554;
+static uint8_t*       DAT_0050c430                      =  (uint8_t*)      0x0050c430;        // Length: 4
+
+static int32_t*       DAT_00e29160                      =  (int32_t*)      0x00e29160;        // Length: 151 ?
+static int32_t*       DAT_00e29600                      =  (int32_t*)      0x00e29600;        // Length: 151 ?
+static int32_t*       DAT_00e29900                      =  (int32_t*)      0x00e29900;        // Length: 151 ?
+static int32_t*       DAT_00e2afa0                      =  (int32_t*)      0x00e2afa0;        // Length: 151 ?
+
+static int32_t*       DAT_00e29a88                      =  (int32_t*)      0x00e29a88;        // a.k.a. &DAT_00e29900[98]
