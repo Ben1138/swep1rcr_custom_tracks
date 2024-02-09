@@ -51,6 +51,9 @@ namespace FUN
     typedef void(FUN_00412e20_t)();
     static  FUN_00412e20_t* FUN_00412e20 = (FUN_00412e20_t*)0x00412e20;
 
+    typedef void(FUN_0043fce0_t)(MenuState* pState, uint16_t PosX, int param_3, int param_4, float param_5, float param_6, const char* pText);
+    static  FUN_0043fce0_t* FUN_0043fce0 = (FUN_0043fce0_t*)0x0043fce0;
+
 
     // FUN_0042d600
     FILE** FileGet(int32_t FileID)
@@ -1076,6 +1079,564 @@ namespace FUN
                 if (!IsFreePlay() || FUN_0041d6c0() != 0)
                 {
                     g_LoadTrackModel = Track.LoadModel;
+                    FUN_0041e5a0();
+                }
+            }
+        }
+    }
+
+    // FUN_0043b880
+    void MenuTrackInfo(MenuState* pState)
+    {
+        char cVar1;
+        uint16_t uVar2;
+        int8_t iVar3;
+        char cVar4;
+        int8_t uVar5;
+        int iVar6;
+        char* pcVar7;
+        int32_t iVar8;
+        int iVar9;
+        int32_t unaff_ESI;
+        int32_t unaff_EDI;
+        uint32_t* puVar11;
+        int64_t lVar12;
+        int8_t uVar13;
+        int16_t uVar14;
+        int8_t uVar15;
+        int8_t uVar16;
+        int16_t uVar17;
+        int32_t uVar18;
+        int local_50;
+        char local_40[64];
+
+        if (DAT_0050c558 == 0)
+        {
+            DAT_0050c558 = 12;
+        }
+        if (DAT_0050c55c == 0)
+        {
+            DAT_0050c55c = 2;
+        }
+
+        iVar3 = DAT_0050c560;
+        if (DAT_004c4000 != 0)
+        {
+            DAT_004c4000 = 0;
+            FUN_0045bee0(pState, 0x25, -1, 0);
+            DAT_0050c550 = 0;
+            DAT_0050c554 = 0;
+
+            if (pState->Field_0x0C == 12)
+            {
+                DAT_00e295a0 = 1.0;
+            }
+
+            HandleCircuits(pState);
+            if (pState->Field_0x0C != 12)
+            {
+                FUN_0043b1d0(pState);
+            }
+
+            DAT_0050c430[0] = 0xff;
+            DAT_0050c430[1] = 0xff;
+            DAT_0050c430[2] = 0xff;
+            DAT_0050c430[3] = 0xff;
+            DAT_0050c430[4] = 0xff;
+            DAT_0050c430[5] = 0xff;
+            DAT_0050c430[6] = 0xff;
+            DAT_0050c430[7] = 0xff;
+            DAT_0050c430[8] = 0xff;
+            DAT_0050c430[9] = 0xff;
+            DAT_0050c430[10] = 0xff;
+            DAT_0050c430[11] = 0xff;
+            DAT_0050c560 = 0;
+
+            if (BeatEverything1stPlace(pState))
+            {
+                iVar6 = (int)DAT_0050c560;
+                DAT_0050c560 = DAT_0050c560 + 1;
+                DAT_0050c430[iVar6] = 0;
+            }
+            if (!pState->bIsTournament)
+            {
+                iVar3 = DAT_0050c560 + 1;
+                DAT_0050c430[DAT_0050c560] = 2;
+                if (pState->Field_0x6D != 0)
+                {
+                    goto LAB_0043b9b4;
+                }
+                DAT_0050c560 = DAT_0050c560 + 2;
+                DAT_0050c430[iVar3] = 3;
+                DAT_0050c430[DAT_0050c560] = 4;
+            }
+            else
+            {
+                iVar6 = VerifySelectedTrack(pState, g_SelectedTrackIdx);
+                iVar6 = FUN_00440a20(pState->CircuitIdx, iVar6);
+                iVar3 = DAT_0050c560;
+                if (iVar6 == 0)
+                {
+                    goto LAB_0043b9b4;
+                }
+                DAT_0050c430[DAT_0050c560] = 1;
+            }
+            iVar3 = DAT_0050c560 + 1;
+        }
+
+    LAB_0043b9b4:
+        DAT_0050c560 = iVar3;
+        iVar6 = VerifySelectedTrack(pState, g_SelectedTrackIdx);
+        cVar4 = GetRequiredPlaceToProceed(pState->CircuitIdx, iVar6);
+        iVar6 = 160;
+
+        if ((DAT_0050c554 == 0) && DAT_0050c560 > 0)
+        {
+            for (uint8_t i = 0; i < DAT_0050c560; i++)
+            {
+                if (DAT_0050c430[i] > 6)
+                {
+                    continue;
+                }
+
+                const char* pText = nullptr;
+                switch (DAT_0050c430[i])
+                {
+                    case 0:
+                    {
+                        pText = StrSanitise(g_pTxtMirror);
+                        FUN_0043fce0(pState, 30, iVar6, 10, DAT_0050c550, i, pText);
+                        if (pState->Field_0x6E != 0)
+                        {
+                            pText = StrSanitise(g_pTxtOn);
+                            uVar13 = (int8_t)DAT_0050c550;
+                            goto LAB_0043be29;
+                        }
+                        pText = StrSanitise(g_pTxtOff);
+                        goto LAB_0043be20;
+                    }
+                    case 1:
+                    {
+                        if (pState->Field_0x91 == 1)
+                        {
+                            pText = StrSanitise(g_pTxtFair);
+                            uVar13 = SUB41(local_40, 0);
+                            uVar15 = (undefined)((uint)local_40 >> 8);
+                            uVar14 = (undefined2)((uint)local_40 >> 16);
+                        }
+                        else if (pState->Field_0x91 == 2)
+                        {
+                            pText = StrSanitise(g_pTxtSkilled);
+                            uVar13 = SUB41(local_40, 0);
+                            uVar15 = (undefined)((uint)local_40 >> 8);
+                            uVar14 = (undefined2)((uint)local_40 >> 16);
+                        }
+                        else
+                        {
+                            pText = StrSanitise(g_pTxtWinnerTakesAll);
+                            uVar13 = SUB41(local_40, 0);
+                            uVar15 = (undefined)((uint)local_40 >> 8);
+                            uVar14 = (undefined2)((uint)local_40 >> 16);
+                        }
+                        rcr_sprintf(local_40, pText);
+                        FUN_0043fce0(pState, 0x1e, iVar6, 10, (char)DAT_0050c550, i, StrSanitise(g_pTxtWinnings));
+                        FUN_0043fce0(pState, 0x55, iVar6, 10, (char)DAT_0050c550, i, local_40);
+                        local_50 = iVar6 + 10;
+                        FUN_0043fce0(pState, 0x2d, local_50, 10, (char)DAT_0050c550, i, StrSanitise(g_pTxt1st));
+                        FUN_0043fce0(pState, 0x2d, iVar6 + 0x14, 10, (char)DAT_0050c550, i, StrSanitise(g_pTxt2nd));
+                        FUN_0043fce0(pState, 0x2d, iVar6 + 0x1e, 10, (char)DAT_0050c550, i, StrSanitise(g_pTxt3rd));
+                        if (cVar4 == 4)
+                        {
+                            FUN_0043fce0(pState, 0x2d, iVar6 + 0x28, 10, (char)DAT_0050c550, i, StrSanitise(g_pTxt4th));
+                        }
+                        iVar9 = 0;
+                        if (0 < cVar4) {
+                            do {
+                                lVar12 = __ftol((double)CONCAT44(unaff_ESI, unaff_EDI));
+                                pText = StrSanitise(0xbc, (int)lVar12);
+                                rcr_sprintf(local_40, pText);
+                                FUN_0043fce0(pState, 0x69, local_50, 10, (char)DAT_0050c550, i, local_40);
+                                iVar9 = iVar9 + 1;
+                                local_50 = local_50 + 10;
+                            } while (iVar9 < cVar4);
+                        }
+                        continue;
+                    }
+                    case 2:
+                    {
+                        pText = StrSanitise(0xb4, (int)pState->field131_0x8f);
+                        rcr_sprintf(local_40, pText);
+                        pText = s_ / SCREENTEXT_214 / ~f4~sLaps:_004c1098;
+                        break;
+                    }
+                    case 3:
+                    {
+                        pText = StrSanitise(0xb4, _DAT_0050c558 & 0xff);
+                        rcr_sprintf(local_40, pText);
+                        if ('\x01' < (char)pState->field_0x70) {
+                            pText = StrSanitise(0xb4, _DAT_0050c55c & 0xff);
+                            rcr_sprintf(local_40, pText);
+                        }
+                        pText = s_ / SCREENTEXT_216 / ~f4~sRacers:_004c1078;
+                        goto LAB_0043bd30;
+                    }
+                    case 4:
+                    {
+                        if (pState->Field_0x90 == '\x01') {
+                            pText = StrSanitise(s_ / SCREENTEXT_219 / ~f4~sSlow_004c105c);
+                            uVar13 = SUB41(local_40, 0);
+                            uVar15 = (undefined)((uint)local_40 >> 8);
+                            uVar14 = (undefined2)((uint)local_40 >> 0x10);
+                        }
+                        else if (pState->Field_0x90 == '\x02') {
+                            pText = StrSanitise(s_ / SCREENTEXT_220 / ~f4~sAverage_004c103c);
+                            uVar13 = SUB41(local_40, 0);
+                            uVar15 = (undefined)((uint)local_40 >> 8);
+                            uVar14 = (undefined2)((uint)local_40 >> 0x10);
+                        }
+                        else {
+                            pText = StrSanitise(s_ / SCREENTEXT_221 / ~f4~sFast_004c1020);
+                            uVar13 = SUB41(local_40, 0);
+                            uVar15 = (undefined)((uint)local_40 >> 8);
+                            uVar14 = (undefined2)((uint)local_40 >> 0x10);
+                        }
+                        rcr_sprintf((char*)CONCAT22(uVar14, CONCAT11(uVar15, uVar13)), pText);
+                        pText = s_ / SCREENTEXT_218 / ~f4~sAI_Speed:_004c1000;
+                    LAB_0043bd30:
+                        uVar18 = StrSanitise(pText);
+                        FUN_0043fce0(pState, 0x1e, iVar6, 10, (char)DAT_0050c550, i, uVar18);
+                        pText = local_40;
+                        uVar13 = (undefined)DAT_0050c550;
+                        goto LAB_0043be29;
+                    }
+                    case 5:
+                    {
+                        iVar6 = iVar6 + 10;
+                        uVar18 = StrSanitise(s_ / SCREENTEXT_231 / ~f4~sDemo_mode:_004c0fe0);
+                        FUN_0043fce0(pState, 0x1e, iVar6, 10, (char)DAT_0050c550, i, uVar18);
+                        if (pState->field91_0x64 != 0) {
+                            pText = StrSanitise(s_ / SCREENTEXT_232 / ~f4~sON_004c11bc);
+                            goto LAB_0043be20;
+                        }
+                        pText = StrSanitise(s_ / SCREENTEXT_233 / ~f4~sOFF_004c11a0);
+                        uVar13 = (undefined)DAT_0050c550;
+                        goto LAB_0043be29;
+                    }
+                    case 6:
+                    {
+                        if (*(int*)&pState->field_0x68 < 0) {
+                            pText = StrSanitise(s_ / SCREENTEXT_234 / ~f4~sOFF_004c0fc4);
+                            rcr_sprintf(local_40, pText);
+                        }
+                        else {
+                            pText = StrSanitise(0x84, *(int*)&pState->field_0x68 + 1);
+                            rcr_sprintf(local_40, pText);
+                        }
+                        pText = s_~f4~sCutscene:_004c0fb4;
+                    }
+                }
+                uVar18 = StrSanitise(pText);
+                FUN_0043fce0(pState, 0x1e, iVar6, 10, (char)DAT_0050c550, i, uVar18);
+                pcVar7 = local_40;
+            LAB_0043be20:
+                uVar13 = (undefined)DAT_0050c550;
+            LAB_0043be29:
+                FUN_0043fce0(pState, 0x55, iVar6, 10, uVar13, i, pcVar7);
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        }
+        if (DAT_0050c554 == 0) {
+            uVar18 = 0x40533333;
+        }
+        else {
+            uVar18 = 0xc0533333;
+        }
+        FUN_00469b90(uVar18);
+        if (0.0 < DAT_00e295a0) {
+            DrawHoloPlanet(pState, CONCAT22((char)g_aTrackInfos[pState->TrackID].PlanetIdx >> 7,
+                (short)(char)g_aTrackInfos[pState->TrackID].PlanetIdx),
+                DAT_00e295a0 * 0.5);
+        }
+        if ((DAT_0050c554 == 0) &&
+            (FUN_00456c70(pState, CONCAT22(pState->TrackID >> 7, (short)pState->TrackID), 0.5),
+                DAT_0050c554 == 0)) {
+            if ((g_aTrackInfos[pState->TrackID].LoadModel == -1) ||
+                (g_aTrackInfos[pState->TrackID].LoadSpline == -1)) {
+                pcVar7 = StrSanitise(g_TxtPlanetNotLoaded);
+                rcr_sprintf(local_40, pcVar7);
+                pcVar7 = local_40;
+                uVar15 = 0xff;
+                uVar16 = 0xff;
+                uVar17 = 0xffff;
+                FUN_004816b0();
+                lVar12 = __ftol((double)CONCAT44(pcVar7, CONCAT22(uVar17, CONCAT11(uVar16, uVar15))));
+                uVar5 = (undefined)lVar12;
+                uVar13 = (undefined)((ulonglong)lVar12 >> 8);
+                uVar14 = (undefined2)((ulonglong)lVar12 >> 0x10);
+                FUN_004816b0();
+                lVar12 = __ftol((double)CONCAT26(uVar17, CONCAT15(uVar16, CONCAT14(uVar15, CONCAT22(uVar14,
+                    CONCAT11(uVar13, uVar5))))));
+                uVar18 = (undefined4)lVar12;
+                FUN_004816b0();
+                lVar12 = __ftol((double)CONCAT26(uVar14, CONCAT15(uVar13, CONCAT14(uVar5, uVar18))));
+                UIText(0xa0, 0xcd, (int)lVar12, uVar18, CONCAT22(uVar14, CONCAT11(uVar13, uVar5)),
+                    CONCAT22(uVar17, CONCAT11(uVar16, uVar15)), pcVar7);
+            }
+            pcVar7 = GetTrackName((int)pState->TrackID);
+            pcVar7 = StrSanitise(0xc0, pcVar7);
+            iVar8 = rcr_sprintf(local_40, pcVar7);
+            UIText(0xa0, 0x25, 0, 0xffffffff, 0, 0xffffffff, local_40);
+            FUN_0042de10(local_40, 0);
+            uVar5 = 0x26;
+            uVar13 = 0;
+            uVar14 = 0;
+            FUN_0042de10(local_40, 0);
+            lVar12 = __ftol((double)CONCAT44(iVar8, CONCAT22(uVar14, CONCAT11(uVar13, uVar5))));
+            FUN_00440150((char)lVar12);
+            FUN_004403e0(pState, 100, 0x37, 0, 0);
+            FUN_004403e0(pState, 0xdc, 0x37, 0, 3);
+            iVar6 = (int)(char)pState->Field_0x6E + pState->TrackID * 2;
+            if (*(float*)(&DAT_00e365f4 + iVar6 * 4) < 3599.99) {
+                iVar6 = (int)(char)(&DAT_00e37404)[iVar6];
+                uVar18 = StrSanitise((&PTR_s_ / SCREENTEXT_323 / ~~Skywalker_004c2718)[iVar6 * 0xd]);
+                uVar5 = StrSanitise((char)(&PTR_s_ / SCREENTEXT_322 / ~~Anakin_004c2714)[iVar6 * 0xd], uVar18);
+                pcVar7 = StrSanitise(0xa4, uVar5);
+                rcr_sprintf(local_40, pcVar7);
+                UIText(100, 0x4e, 0xffffffa3, 0xffffffbe, 0x11, 0xffffffff, local_40);
+                uVar2 = (uint16_t)(iVar6 + 0x17);
+                ImgVisible(uVar2, true);
+                ImgPosition((char)(iVar6 + 0x17), 0x54, 0x55);
+                ImgScale(uVar2, 0.5, 0.5);
+                ImgColor(uVar2, 0xff, 0xff, 0xff, 0xff);
+            }
+            iVar6 = (int)(char)pState->Field_0x6E + pState->TrackID * 2;
+            if (*(float*)(&DAT_00e366bc + iVar6 * 4) < 3599.99) {
+                iVar6 = (int)(char)(&DAT_00e37436)[iVar6];
+                uVar18 = StrSanitise((&PTR_s_ / SCREENTEXT_323 / ~~Skywalker_004c2718)[iVar6 * 0xd]);
+                uVar5 = StrSanitise((char)(&PTR_s_ / SCREENTEXT_322 / ~~Anakin_004c2714)[iVar6 * 0xd], uVar18);
+                pcVar7 = StrSanitise(0xa4, uVar5);
+                rcr_sprintf(local_40, pcVar7);
+                UIText(0xdc, 0x4e, 0xffffffa3, 0xffffffbe, 0x11, 0xffffffff, local_40);
+                uVar2 = (uint16_t)(iVar6 + 0x2e);
+                ImgVisible(uVar2, true);
+                ImgPosition((char)(iVar6 + 0x2e), 0xcc, 0x55);
+                ImgScale(uVar2, 0.5, 0.5);
+                ImgColor(uVar2, 0xff, 0xff, 0xff, 0xff);
+            }
+            cVar1 = g_aTrackInfos[pState->TrackID].FavoritePilot;
+            pcVar7 = StrSanitise(s_ / SCREENTEXT_529 / ~f4~c~sTrack_Fav_004c0f7c);
+            UIText(0xf0, 0x82, 0x32, 0xffffffff, 0xffffffff, 0xffffffff, pcVar7);
+            uVar18 = StrSanitise((&PTR_s_ / SCREENTEXT_323 / ~~Skywalker_004c2718)[cVar1 * 0xd]);
+            uVar5 = StrSanitise((char)(&PTR_s_ / SCREENTEXT_322 / ~~Anakin_004c2714)[cVar1 * 0xd], uVar18);
+            pcVar7 = StrSanitise(0xa4, uVar5);
+            rcr_sprintf(local_40, pcVar7);
+            UIText(0xf0, 0x89, 0xffffffa3, 0xffffffbe, 0x11, 0xffffffff, local_40);
+            ImgVisible((short)cVar1, true);
+            ImgPosition(cVar1, 0xd0, 0x91);
+            ImgScale((short)cVar1, 1.0, 1.0);
+            ImgColor((short)cVar1, 0xff, 0xff, 0xff, 0xff);
+            if (pState->bIsTournament != false) {
+                iVar6 = VerifySelectedTrack(pState, g_SelectedTrackIdx);
+                iVar6 = FUN_00440a20(pState->CircuitIdx, iVar6);
+                if (iVar6 != 0) {
+                    if (cVar4 == '\x03') {
+                        pcVar7 = s_ / SCREENTEXT_527 / ~f4~c~sMust_plac_004c0f40;
+                    }
+                    else {
+                        pcVar7 = s_ / SCREENTEXT_528 / ~f4~c~sMust_plac_004c0f04;
+                    }
+                    pcVar7 = StrSanitise(pcVar7);
+                    UIText(0xa0, 0x73, 0xffffffa3, 0xffffffbe, 0x11, 0xffffffff, pcVar7);
+                }
+            }
+            if ((DAT_0050c554 == 0) && (1.0 <= DAT_00e295a0)) {
+                puVar11 = &DAT_0050c918;
+                do {
+                    if (DAT_004eb39c == 0) {
+                        if ((DAT_004d6b48 != 0) &&
+                            (((iVar6 = FUN_0041d6b0(), iVar6 == 0 || (iVar6 = FUN_0041d6c0(), iVar6 != 0)) &&
+                                (DAT_00e2a698 == 0)))) {
+                            FUN_00440550(0x54);
+                            if (pState->bIsTournament == false) {
+                                if (pState->Field_0x6D == '\0') {
+                                    if ((char)pState->field_0x70 < '\x02') {
+                                        if ((pState->field91_0x64 == 0) || (DAT_0050c558 != '\x02')) {
+                                            pState->field_0x72 = DAT_0050c558;
+                                        }
+                                        else {
+                                            pState->field_0x72 = 1;
+                                        }
+                                    }
+                                    else {
+                                        pState->field_0x72 = DAT_0050c55c;
+                                    }
+                                }
+                                else {
+                                    pState->field_0x72 = 1;
+                                }
+                            }
+                            else {
+                                pState->field_0x72 = 0xc;
+                            }
+                            InitTracks(pState, false);
+                            FUN_0045bee0(pState, 0x24, 3, 0);
+                            DAT_0050c554 = 1;
+                            return;
+                        }
+                        if ((DAT_004d6b44 != 0) && (DAT_00e2a698 == 0)) {
+                            FUN_00440550(0x4d);
+                            InitTracks(pState, false);
+                            SetMenuIdx(pState, 0xc);
+                            return;
+                        }
+                    }
+                    if ('\x01' < DAT_0050c560) {
+                        if ((*puVar11 & 0x4000) != 0) {
+                            DAT_0050c550 = DAT_0050c550 + -1;
+                            FUN_00440550(0x58);
+                        }
+                        if ((*puVar11 & 0x8000) != 0) {
+                            DAT_0050c550 = DAT_0050c550 + 1;
+                            FUN_00440550(0x58);
+                        }
+                        if (DAT_0050c550 < 0) {
+                            DAT_0050c550 = DAT_0050c560 + -1;
+                        }
+                        if (DAT_0050c560 + -1 < DAT_0050c550) {
+                            DAT_0050c550 = 0;
+                        }
+                    }
+                    if ('\0' < DAT_0050c560) {
+                        if ((*puVar11 & 0x20000) != 0) {
+                            switch (DAT_0050c430[DAT_0050c550]) {
+                                case 0:
+                                    pState->Field_0x6E = pState->Field_0x6E == '\0';
+                                    break;
+                                case 1:
+                                    pState->Field_0x91 = pState->Field_0x91 + '\x01';
+                                    break;
+                                case 2:
+                                    pState->field131_0x8f = pState->field131_0x8f + '\x01';
+                                    break;
+                                case 3:
+                                    if ((char)pState->field_0x70 < '\x02') {
+                                        if (DAT_0050c558 == '\b') {
+                                            _DAT_0050c558 = CONCAT31(DAT_0050c558_1, 0xc);
+                                        }
+                                        else if (DAT_0050c558 == '\f') {
+                                            _DAT_0050c558 = CONCAT31(DAT_0050c558_1, 1);
+                                        }
+                                        else {
+                                            _DAT_0050c558 = CONCAT31(DAT_0050c558_1, DAT_0050c558 << 1);
+                                        }
+                                    }
+                                    else {
+                                        cVar4 = DAT_0050c55c + '\x02';
+                                        _DAT_0050c55c = CONCAT31(DAT_0050c55c_1, cVar4);
+                                        if (cVar4 == '\b') {
+                                            _DAT_0050c55c = CONCAT31(DAT_0050c55c_1, 2);
+                                        }
+                                    }
+                                    break;
+                                case 4:
+                                    pState->Field_0x90 = pState->Field_0x90 + '\x01';
+                                    break;
+                                case 5:
+                                    pState->field91_0x64 = (uint)(pState->field91_0x64 == 0);
+                                    break;
+                                case 6:
+                                    *(int*)&pState->field_0x68 = *(int*)&pState->field_0x68 + 1;
+                            }
+                            FUN_00440550(0x58);
+                        }
+                        if ((*puVar11 & 0x10000) != 0) {
+                            switch (DAT_0050c430[DAT_0050c550]) {
+                                case 0:
+                                    pState->Field_0x6E = pState->Field_0x6E == '\0';
+                                    break;
+                                case 1:
+                                    pState->Field_0x91 = pState->Field_0x91 + -1;
+                                    break;
+                                case 2:
+                                    pState->field131_0x8f = pState->field131_0x8f + -1;
+                                    break;
+                                case 3:
+                                    if ((char)pState->field_0x70 < '\x02') {
+                                        if (DAT_0050c558 == '\f') {
+                                            _DAT_0050c558 = CONCAT31(DAT_0050c558_1, 8);
+                                        }
+                                        else if (DAT_0050c558 == '\x01') {
+                                            _DAT_0050c558 = CONCAT31(DAT_0050c558_1, 0xc);
+                                        }
+                                        else {
+                                            _DAT_0050c558 = CONCAT31(DAT_0050c558_1, (byte)DAT_0050c558 >> 1);
+                                        }
+                                    }
+                                    else {
+                                        cVar4 = DAT_0050c55c + -2;
+                                        _DAT_0050c55c = CONCAT31(DAT_0050c55c_1, cVar4);
+                                        if (cVar4 == '\0') {
+                                            _DAT_0050c55c = CONCAT31(DAT_0050c55c_1, 6);
+                                        }
+                                    }
+                                    break;
+                                case 4:
+                                    pState->Field_0x90 = pState->Field_0x90 + -1;
+                                    break;
+                                case 5:
+                                    pState->field91_0x64 = (uint)(pState->field91_0x64 == 0);
+                                    break;
+                                case 6:
+                                    *(int*)&pState->field_0x68 = *(int*)&pState->field_0x68 + -1;
+                            }
+                            FUN_00440550(0x58);
+                        }
+                    }
+                    if (pState->field131_0x8f < '\x01') {
+                        pState->field131_0x8f = '\x05';
+                    }
+                    if ('\x05' < pState->field131_0x8f) {
+                        pState->field131_0x8f = '\x01';
+                    }
+                    if ((char)pState->Field_0x90 < '\x01') {
+                        pState->Field_0x90 = 3;
+                    }
+                    if ('\x03' < (char)pState->Field_0x90) {
+                        pState->Field_0x90 = 1;
+                    }
+                    if ((char)pState->Field_0x91 < '\x01') {
+                        pState->Field_0x91 = 3;
+                    }
+                    if ('\x03' < (char)pState->Field_0x91) {
+                        pState->Field_0x91 = 1;
+                    }
+                    if (*(int*)&pState->field_0x68 < -1) {
+                        *(undefined4*)&pState->field_0x68 = 0x14;
+                    }
+                    if (0x14 < *(int*)&pState->field_0x68) {
+                        *(undefined4*)&pState->field_0x68 = 0xffffffff;
+                    }
+                    puVar11 = puVar11 + 1;
+                } while ((int)puVar11 < 0x50c91c);
+                iVar6 = FUN_0041d6b0();
+                if ((iVar6 == 0) || (iVar6 = FUN_0041d6c0(), iVar6 != 0)) {
+                    g_LoadTrackModel = g_aTrackInfos[pState->TrackID].LoadModel;
                     FUN_0041e5a0();
                 }
             }

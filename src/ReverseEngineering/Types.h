@@ -15,12 +15,17 @@ struct MenuState
     uint8_t  Unkn1[0x4D];
     int8_t   TrackID;
     uint8_t  CircuitIdx;
-    uint8_t  Unkn3[0xD];
+    uint8_t  Unkn2[0xD];
     uint8_t  bIsTournament;
     uint8_t  Field_0x6D;
-    uint8_t  Unkn4[0x02];
+    uint8_t  Field_0x6E;
+    uint8_t  Field_0x6F;
     uint8_t  Field_0x70;
-    uint8_t  Unkn5[0x40];
+    uint8_t  Unkn3[0x1E];
+    uint8_t  Field_0x8F;
+    uint8_t  Field_0x90;
+    uint8_t  Field_0x91;
+    uint8_t  Unkn4[0x22];
     ImgDat*  aImages[6];
 };
 static_assert(offsetof(MenuState, Field_0x0C)     == 0x0C);
@@ -28,7 +33,12 @@ static_assert(offsetof(MenuState, TrackID)        == 0x5D);
 static_assert(offsetof(MenuState, CircuitIdx)     == 0x5E);
 static_assert(offsetof(MenuState, bIsTournament)  == 0x6C);
 static_assert(offsetof(MenuState, Field_0x6D)     == 0x6D);
+static_assert(offsetof(MenuState, Field_0x6E)     == 0x6E);
+static_assert(offsetof(MenuState, Field_0x6F)     == 0x6F);
 static_assert(offsetof(MenuState, Field_0x70)     == 0x70);
+static_assert(offsetof(MenuState, Field_0x8F)     == 0x8F);
+static_assert(offsetof(MenuState, Field_0x90)     == 0x90);
+static_assert(offsetof(MenuState, Field_0x91)     == 0x91);
 static_assert(offsetof(MenuState, aImages)        == 0xB4);
 
 
