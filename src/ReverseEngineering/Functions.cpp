@@ -725,7 +725,7 @@ namespace FUN
                 UIText(PosX, PosY, 50, 255, 255, 255, "~f4~sPlace custom Tracks into Folder:");
 
                 char BufferPath[1024];
-                strcpy_s(BufferPath, sizeof(BufferPath), "~f4~s");
+                strcpy(BufferPath, "~f4~s");
                 GetCurrentDirectory(sizeof(BufferPath) - 5, BufferPath + 5);
                 for (uint16_t i = 0; i < strnlen_s(BufferPath, sizeof(BufferPath)) && i < sizeof(BufferPath); i++)
                 {
@@ -734,7 +734,7 @@ namespace FUN
                         BufferPath[i] = '/';
                     }
                 }
-                strcat_s(BufferPath, sizeof(BufferPath), "/tracks/");
+                strcat(BufferPath, "/tracks/");
                 UIText(PosX, PosY + 8, 50, 255, 255, 255, BufferPath);
                 break;
             }

@@ -69,6 +69,7 @@ namespace Patching
         PatchFunction(0x0042d640, (void*)&FUN::FileRead);
         PatchFunction(0x0042d6f0, (void*)&FUN::FileClose);
 
+        PatchFunction(0x00425500, (void*)&FUN::CheckCD);
         PatchFunction(0x0043b0b0, (void*)&FUN::HandleCircuit);
         PatchFunction(0x00440aa0, (void*)&FUN::IsTrackPlayable);
         PatchFunction(0x00440620, (void*)&FUN::GetTrackName);
