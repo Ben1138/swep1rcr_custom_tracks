@@ -102,16 +102,16 @@ namespace EXT
 
             if (*pText == 0)
             {
-                strncpy_s(Lines[LineCount], sizeof(Lines[LineCount]), pFormatting, FormattingLen);
-                strncpy_s(Lines[LineCount] + FormattingLen, sizeof(Lines[LineCount]) - FormattingLen, pLastNewLine, LineLen);
+                strncpy(Lines[LineCount], pFormatting, FormattingLen);
+                strncpy(Lines[LineCount] + FormattingLen, pLastNewLine, LineLen);
                 Lines[LineCount++][FormattingLen + LineLen] = 0;
                 break;
             }
 
             if (*pText == '\n' || (LineLen >= LineLengthMax && pLastSpace != pLastNewLine))
             {
-                strncpy_s(Lines[LineCount], sizeof(Lines[LineCount]), pFormatting, FormattingLen);
-                strncpy_s(Lines[LineCount] + FormattingLen, sizeof(Lines[LineCount]) - FormattingLen, pLastNewLine, LineLen);
+                strncpy(Lines[LineCount], pFormatting, FormattingLen);
+                strncpy(Lines[LineCount] + FormattingLen, pLastNewLine, LineLen);
                 Lines[LineCount++][FormattingLen + LineLen] = 0;
 
                 for (; *pText == ' '; pText++);

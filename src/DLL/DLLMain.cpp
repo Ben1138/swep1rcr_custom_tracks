@@ -1,4 +1,6 @@
 #include <windows.h>
+#include "ReverseEngineering/Patching.h"
+#include "DBTracks.h"
 
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved)
 {
@@ -6,8 +8,12 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved)
     { 
         case DLL_PROCESS_ATTACH:
         {
+            // TODO: Check hash of EXE
+
+            DBTracks::Init();
+            Patching::PatchAllFunctions();
 #if _DEBUG
-            MessageBoxA(nullptr, "DLL loaded!", "DLL loaded", MB_ICONINFORMATION | MB_OK);
+            MessageBoxA(nullptr, "DLL loaded, all patched!", "DLL loaded", MB_ICONINFORMATION | MB_OK);
 #endif
             break;
         }
