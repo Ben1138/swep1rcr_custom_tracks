@@ -12,7 +12,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved)
 
             DBTracks::Init();
             Patching::PatchAllFunctions();
-#if _DEBUG
+#if DEBUG
             MessageBoxA(nullptr, "DLL loaded, all patched!", "DLL loaded", MB_ICONINFORMATION | MB_OK);
 #endif
             break;

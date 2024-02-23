@@ -15,11 +15,13 @@ add_compile_definitions(WIN32_LEAN_AND_MEAN)                # Lightweight window
 add_compile_definitions(_HAS_EXCEPTIONS=0)                  # STL without Exceptions
 add_compile_definitions(NOMINMAX)                           # No std::min() and std::max()
 
+
 set(DIR_PRJ ${PROJECT_SOURCE_DIR})
 set(DIR_SRC "${DIR_PRJ}/src")
 
 add_library(dinput SHARED)
 target_include_directories(dinput PRIVATE ${DIR_SRC})
+target_compile_definitions(dinput PUBLIC "$<$<CONFIG:DEBUG>:DEBUG>")
 
 # Binary output
 set_target_properties(dinput
