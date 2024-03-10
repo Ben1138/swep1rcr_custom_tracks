@@ -11,7 +11,7 @@ namespace DBTracks
 
     constexpr uint8_t COLOR_R  = 150;
     constexpr uint8_t COLOR_G  = 80;
-    constexpr uint8_t COLOR_B  = 240;
+    constexpr uint8_t COLOR_B  = 140;
 
     constexpr uint16_t TRACKS_COUNT_MAX = 28 + DBTracks::CUSTOM_TRACKS_MAX;
     extern TrackInfo g_aNewTrackInfos[TRACKS_COUNT_MAX];
