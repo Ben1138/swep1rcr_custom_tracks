@@ -1,6 +1,6 @@
 #include "EXT.h"
-#include "ReverseEngineering/Globals.h"
-#include "ReverseEngineering/FUN.h"
+#include "Globals.h"
+#include "FUN.h"
 #include "DBTracks.h"
 #include <assert.h>
 #include <stdio.h>

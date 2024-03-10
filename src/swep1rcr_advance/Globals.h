@@ -2,6 +2,7 @@
 #include "Types.h"
 #include <stdio.h>    // Required for FILE*
 
+
 static int32_t&       g_CircuitIdxMax                   = *(int32_t*)      0x00e295c8;        // Max: 255
 static uint8_t*       g_aTracksSelectableTournament     =  (uint8_t*)      0x00e35a85;        // Length: 4
 static int32_t&       g_TracksInCurrentCircuit          = *(int32_t*)      0x00e295cc;
