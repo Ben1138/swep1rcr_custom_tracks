@@ -117,14 +117,6 @@ namespace DynamicLoading
                 return 1;
             }
 
-            HINSTANCE hDllNext = LoadLibrary(cNextName);
-            if (!hDllNext)
-            {
-                snprintf(cMsg, sizeof(cMsg), "Failed to load '%s'!", cNextName);
-                MessageBoxA(nullptr, cMsg, "DLL fail", MB_ICONERROR | MB_OK);
-                return 1;
-            }
-
             if (g_hDllCurrent)
             {
                 if (!FreeLibrary(g_hDllCurrent))
@@ -139,6 +131,14 @@ namespace DynamicLoading
                     MessageBoxA(nullptr, cMsg, "Delete failed", MB_ICONERROR | MB_OK);
                     return 1;
                 }
+            }
+
+            HINSTANCE hDllNext = LoadLibrary(cNextName);
+            if (!hDllNext)
+            {
+                snprintf(cMsg, sizeof(cMsg), "Failed to load '%s'!", cNextName);
+                MessageBoxA(nullptr, cMsg, "DLL fail", MB_ICONERROR | MB_OK);
+                return 1;
             }
 
             g_hDllCurrent = hDllNext;
