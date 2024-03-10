@@ -2,5 +2,6 @@
 
 namespace Patching
 {
-    void PatchAllFunctions();
+    void PatchAll();
+    void UnPatchAll();
 }

@@ -11,6 +11,14 @@ namespace Patching
     constexpr uint32_t s_pSegmTextStart  = 0x0401000;
     constexpr uint32_t s_pSegmTextEnd    = 0x004ab7ff;
 
+    struct OldInstructions
+    {
+        void* pStart = nullptr;
+        uint8_t Inst[7]{};
+    };
+
+    static OldInstructions g_aOlds[1024];
+    static uint16_t g_uOldCount = 0;
 
     inline void PatchFunction(uint32_t pStart, void* pFunction)
     {
@@ -28,18 +36,19 @@ namespace Patching
 #endif
 
         // TODO: Check whether the function to patch is at least 7 bytes in size
-        uint8_t Instructions[7] =
-        {
-            0xEA, 0xDD, 0xCC, 0xBB, 0xAA, 0xFF, 0xEE    // JMP 0xEEFF:0xAABBCCDD 
-        };
+        OldInstructions& rOld = g_aOlds[g_uOldCount++];
+        memcpy(rOld.Inst, (void*)pStart, sizeof(rOld.Inst));
+        rOld.pStart = (void*)pStart;
+
+        uint8_t New[7] = { 0xEA, 0xDD, 0xCC, 0xBB, 0xAA, 0xFF, 0xEE };  // JMP 0xEEFF:0xAABBCCDD 
 
         // Patch Address
-        *((uint32_t*)&Instructions[1]) = uint32_t(pFunction);
+        *((uint32_t*)&New[1]) = uint32_t(pFunction);
 
         // Patch Segment
-        *((uint16_t*)&Instructions[5]) = Segment;
+        *((uint16_t*)&New[5]) = Segment;
 
-        memcpy((void*)pStart, Instructions, sizeof(Instructions));
+        memcpy((void*)pStart, New, sizeof(New));
     }
 
     inline void PatchMemoryAccess(uint32_t pAccessOld, void* pAccessNew)
@@ -49,7 +58,7 @@ namespace Patching
         *((uint32_t*)pAccessOld) = uint32_t(pAccessNew);
     }
 
-    void PatchAllFunctions()
+    void PatchAll()
     {
         DWORD OldProtect;
         constexpr SIZE_T uTextSize = s_pSegmTextEnd - s_pSegmTextStart;
@@ -58,6 +67,8 @@ namespace Patching
             MessageBoxA(nullptr, "Failed to change protection of .text segment!", "Hook failed", MB_ICONERROR | MB_OK);
             return;
         }
+
+        assert(g_uOldCount == 0);
 
         //PatchFunction(0x0042d600, &FUN::FileGet);                                   // All 3 calls covered, using EXT::FileGet instead
         PatchFunction(0x0042d680, (void*)&FUN::FileOpen);
@@ -98,7 +109,7 @@ namespace Patching
         //PatchMemoryAccess(0x0045B2F5 + 0x02, DBTracks::g_aNewTrackInfos + 0x0000);       // READ   CMP      FUN_0045b290
         //PatchMemoryAccess(0x0045B437 + 0x02, DBTracks::g_aNewTrackInfos + 0x0000);       // READ   MOV      FUN_0045b290
         //PatchMemoryAccess(0x0043BEE4 + 0x02, DBTracks::g_aNewTrackInfos + 0x0004);       // READ   CMP      MenuTrackInfo
-        //PatchMemoryAccess(0x0043B3DC + 0x02, DBTracks::g_aNewTrackInfos + 0x0004);       // READ   CMP      MenuTrackSelection
+        //PatchMemoryAccess(0x0043B3DC + 0x02,Old DBTracks::g_aNewTrackInfos + 0x0004);       // READ   CMP      MenuTrackSelection
         //PatchMemoryAccess(0x0045B42D + 0x02, DBTracks::g_aNewTrackInfos + 0x0004);       // READ   MOV      FUN_0045b290
         //PatchMemoryAccess(0x00436DB9 + 0x03, DBTracks::g_aNewTrackInfos + 0x0008);       // READ   MOVSX    MenuBeforeRace
         //PatchMemoryAccess(0x0045B2FE + 0x02, DBTracks::g_aNewTrackInfos + 0x0008);       // READ   MOV      FUN_0045b290
@@ -135,5 +146,18 @@ namespace Patching
         //0043BEC2	MenuTrackInfo
         //0045790F	MenuSwitch
         //004508F5	FUN_004508b0
+    }
+
+    void UnPatchAll()
+    {
+        assert(g_uOldCount > 0);
+
+        for (uint16_t i = 0; i < g_uOldCount; i++)
+        {
+            OldInstructions& rOld = g_aOlds[i];
+            memcpy(rOld.pStart, rOld.Inst, sizeof(rOld.Inst));
+        }
+
+        g_uOldCount = 0;   
     }
 }

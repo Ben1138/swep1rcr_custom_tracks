@@ -13,7 +13,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved)
 //             MessageBoxA(nullptr, "swep1rcr_advance.dll loaded!", "DLL loaded", MB_ICONINFORMATION | MB_OK);
 // #endif
             DBTracks::Init();
-            Patching::PatchAllFunctions();
+            Patching::PatchAll();
             break;
         }
 
@@ -29,6 +29,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved)
 
         case DLL_PROCESS_DETACH:
         {
+            Patching::UnPatchAll();
             break;
         }
     }
