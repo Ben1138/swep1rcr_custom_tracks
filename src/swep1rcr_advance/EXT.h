@@ -1,7 +1,7 @@
 #pragma once
 #include <stdint.h>
 #include <stdio.h>
-#include "ReverseEngineering/Types.h"
+#include "Types.h"
 
 namespace EXT
 {

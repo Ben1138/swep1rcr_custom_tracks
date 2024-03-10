@@ -1,6 +1,6 @@
 #include "DBTracks.h"
-#include "ReverseEngineering/Globals.h"
-#include "ReverseEngineering/FUN.h"
+#include "Globals.h"
+#include "FUN.h"
 #include <stdio.h>
 #include <assert.h>
 

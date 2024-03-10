@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.6)
-project(SWEP1RCR_ADVANCE CXX)
+project(swep1rcr_advance_project CXX)
 
 set(CMAKE_CXX_STANDARD           17)
 set(CMAKE_CXX_STANDARD_REQUIRED  ON)
@@ -20,7 +20,7 @@ set(DIR_PRJ ${PROJECT_SOURCE_DIR})
 set(DIR_SRC "${DIR_PRJ}/src")
 
 add_library(dinput SHARED)
-target_include_directories(dinput PRIVATE ${DIR_SRC})
+target_include_directories(dinput PRIVATE "${DIR_SRC}/dinput")
 target_compile_definitions(dinput PUBLIC "$<$<CONFIG:DEBUG>:DEBUG>")
 
 # Binary output
@@ -32,15 +32,35 @@ set_target_properties(dinput
     SUFFIX ".dll"
 )
 
-
 # Input source files
 target_sources(dinput PRIVATE 
-    "${DIR_PRJ}/dinput.def"                             # Exports DirectInputCreateA
+    "${DIR_SRC}/dinput/exports.def"                        # Exports DirectInputCreateA
 
-    "${DIR_SRC}/DLL/DLLMain.cpp"
-    "${DIR_SRC}/DLL/DLLWrap.cpp"                        # Wrapping of DirectInputCreateA
-    "${DIR_SRC}/ReverseEngineering/FUN.cpp"
-    "${DIR_SRC}/ReverseEngineering/Patching.cpp"
-    "${DIR_SRC}/DBTracks.cpp"
-    "${DIR_SRC}/EXT.cpp"
+    "${DIR_SRC}/dinput/DLLMain.cpp"
+    "${DIR_SRC}/dinput/DLLWrap.cpp"                        # Wrapping of DirectInputCreateA
+    "${DIR_SRC}/dinput/DynamicLoading.cpp"
 )
+
+add_library(swep1rcr_advance SHARED)
+target_include_directories(swep1rcr_advance PRIVATE "${DIR_SRC}/swep1rcr_advance")
+target_compile_definitions(swep1rcr_advance PUBLIC "$<$<CONFIG:DEBUG>:DEBUG>")
+
+# Binary output
+set_target_properties(swep1rcr_advance
+    PROPERTIES
+    LIBRARY_OUTPUT_DIRECTORY "${DIR_PRJ}/bin/${CMAKE_BUILD_TYPE}"
+    RUNTIME_OUTPUT_DIRECTORY "${DIR_PRJ}/bin/${CMAKE_BUILD_TYPE}"
+    PREFIX ""
+    SUFFIX ".dll"
+)
+
+
+# Input source files
+target_sources(swep1rcr_advance PRIVATE 
+    "${DIR_SRC}/swep1rcr_advance/DLLMain.cpp"
+    "${DIR_SRC}/swep1rcr_advance/Patching.cpp"
+    "${DIR_SRC}/swep1rcr_advance/FUN.cpp"
+    "${DIR_SRC}/swep1rcr_advance/DBTracks.cpp"
+    "${DIR_SRC}/swep1rcr_advance/EXT.cpp"
+)
+

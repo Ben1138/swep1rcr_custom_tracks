@@ -59,11 +59,6 @@ namespace Patching
             return;
         }
 
-        if (DAT_00e29a88[0] == 0)
-        {
-            int sdf = 4;
-        }
-
         //PatchFunction(0x0042d600, &FUN::FileGet);                                   // All 3 calls covered, using EXT::FileGet instead
         PatchFunction(0x0042d680, (void*)&FUN::FileOpen);
         PatchFunction(0x0042d640, (void*)&FUN::FileRead);
