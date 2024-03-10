@@ -83,9 +83,10 @@ namespace DynamicLoading
                 return 1;
             }
 
+            // Always sleep to avoid trying to load DLL, while it is written
+            Sleep(100); // ms
             if (CompareFileTime(&ModTime, &g_LastModifiedTime) <= 0)
             {
-                Sleep(100); // ms
                 continue;
             }
 
