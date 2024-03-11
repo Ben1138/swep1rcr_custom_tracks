@@ -51,9 +51,6 @@ namespace FUN
     typedef void(FUN_00412e20_t)();
     static  FUN_00412e20_t* FUN_00412e20 = (FUN_00412e20_t*)0x00412e20;
 
-    typedef void(FUN_0043fce0_t)(MenuState* pState, uint16_t PosX, int param_3, int param_4, float param_5, float param_6, const char* pText);
-    static  FUN_0043fce0_t* FUN_0043fce0 = (FUN_0043fce0_t*)0x0043fce0;
-
 
     // FUN_0042d600
     FILE** FileGet(int32_t FileID)
@@ -1114,7 +1111,6 @@ namespace FUN
         int8_t uVar16;
         int16_t uVar17;
         int32_t uVar18;
-        int local_50;
         char local_40[64];
 
         if (DAT_0050c558 == 0)
@@ -1195,9 +1191,9 @@ namespace FUN
         DAT_0050c560 = iVar3;
         iVar6 = VerifySelectedTrack(pState, g_SelectedTrackIdx);
         cVar4 = GetRequiredPlaceToProceed(pState->CircuitIdx, iVar6);
-        iVar6 = 160;
-
-        if ((DAT_0050c554 == 0) && DAT_0050c560 > 0)
+        
+        int32_t PosY = 160;
+        if (DAT_0050c554 == 0 && DAT_0050c560 > 0)
         {
             for (int8_t i = 0; i < DAT_0050c560; i++)
             {
@@ -1212,7 +1208,7 @@ namespace FUN
                     case 0:
                     {
                         pText = StrSanitise(g_pTxtMirror);
-                        FUN_0043fce0(pState, 30, iVar6, 10, DAT_0050c550, i, pText);
+                        UITextMenu(pState, 30, PosY, 10, DAT_0050c550, i, pText);
                         if (pState->Field_0x6E != 0)
                         {
                             pText = StrSanitise(g_pTxtOn);
@@ -1237,50 +1233,48 @@ namespace FUN
                             pText = StrSanitise(g_pTxtWinnerTakesAll);
                         }
 
-                        rcr_sprintf(local_40, pText);
-                        FUN_0043fce0(pState, 0x1e, iVar6, 10, (char)DAT_0050c550, i, StrSanitise(g_pTxtWinnings));
-                        FUN_0043fce0(pState, 0x55, iVar6, 10, (char)DAT_0050c550, i, local_40);
-                        local_50 = iVar6 + 10;
-                        FUN_0043fce0(pState, 0x2d, local_50, 10, (char)DAT_0050c550, i, StrSanitise(g_pTxt1st));
-                        FUN_0043fce0(pState, 0x2d, iVar6 + 0x14, 10, (char)DAT_0050c550, i, StrSanitise(g_pTxt2nd));
-                        FUN_0043fce0(pState, 0x2d, iVar6 + 0x1e, 10, (char)DAT_0050c550, i, StrSanitise(g_pTxt3rd));
+                        //rcr_sprintf(local_40, pText);
+                        UITextMenu(pState, 30, PosY, 10, (char)DAT_0050c550, i, StrSanitise(g_pTxtWinnings));
+                        UITextMenu(pState, 85, PosY, 10, (char)DAT_0050c550, i, pText);
 
+                        UITextMenu(pState, 45, PosY + 10, 10, (char)DAT_0050c550, i, StrSanitise(g_pTxt1st));
+                        UITextMenu(pState, 45, PosY + 20, 10, (char)DAT_0050c550, i, StrSanitise(g_pTxt2nd));
+                        UITextMenu(pState, 45, PosY + 30, 10, (char)DAT_0050c550, i, StrSanitise(g_pTxt3rd));
                         if (cVar4 == 4)
                         {
-                            FUN_0043fce0(pState, 0x2d, iVar6 + 0x28, 10, (char)DAT_0050c550, i, StrSanitise(g_pTxt4th));
+                            UITextMenu(pState, 45, PosY + 40, 10, (char)DAT_0050c550, i, StrSanitise(g_pTxt4th));
                         }
 
+                        uint16_t PosYIt = PosY + 10;
                         for (int8_t j = 0; j < cVar4; j++)
                         {
-                            float fUnkn = pState->CircuitIdx * DAT_004ac910;
-                            fUnkn = DAT_004ac918 - fUnkn;
-                            fUnkn *= Field_0x8A[pState->WinningsID];
-                            int iUnkn = (int)fUnkn;
-                            pText = StrSanitise("~f0~r~s%d");
-                            rcr_sprintf(local_40, pText, iUnkn);
-                            FUN_0043fce0(pState, 0x69, local_50, 10, (char)DAT_0050c550, i, local_40);
-                            local_50 = local_50 + 10;
+                            float fTruguts = 1.0 + pState->CircuitIdx * 0.5;
+                            // TODO: Das hier scheint ein völlig anderer member zu sein
+                            //fUnkn *= pState->Field_0x8A[pState->WinningsID];
+                            int iTruguts = fTruguts;
+                            pText = StrSanitise("~f0~r~s%.2f");
+                            rcr_sprintf(local_40, pText, fTruguts);
+                            UITextMenu(pState, 105, PosYIt, 10, DAT_0050c550, i, local_40);
+                            PosYIt = PosYIt + 10;
                         }
 
-                        break;
+                        continue;
                     }
                     case 2:
                     {
                         pText = StrSanitise("~f0~s%d");
-                        int a = (char)Field_0x8A[2];
-                        rcr_sprintf(local_40, pText, a);
+                        rcr_sprintf(local_40, pText, (int)pState->NumLaps);
                         pText = g_pTxtLaps;
                         break;
                     }
                     case 3:
                     {
-                        // TODO: Hier weitermachen
-                        pText = StrSanitise(0xb4, _DAT_0050c558 & 0xff);
-                        rcr_sprintf(local_40, pText);
-                        if (pState->field_0x70 > 1)
+                        pText = StrSanitise("~f0~s%d");
+                        rcr_sprintf(local_40, pText, DAT_0050c558);
+                        if (pState->Field_0x70 > 1)
                         {
-                            pText = StrSanitise(0xb4, _DAT_0050c55c & 0xff);
-                            rcr_sprintf(local_40, pText);
+                            pText = StrSanitise("~f0~s%d");
+                            rcr_sprintf(local_40, pText, DAT_0050c55c);
                         }
                         pText = g_pTxtRacers;
                         goto LAB_0043bd30;
@@ -1303,45 +1297,50 @@ namespace FUN
                         pText = g_pTxtAISpeed;
 
                     LAB_0043bd30:
-                        uVar18 = StrSanitise(pText);
-                        FUN_0043fce0(pState, 0x1e, iVar6, 10, (char)DAT_0050c550, i, uVar18);
+                        pText = StrSanitise(pText);
+                        UITextMenu(pState, 30, PosY, 10, (char)DAT_0050c550, i, pText);
                         pText = local_40;
                         uVar13 = DAT_0050c550;
                         goto LAB_0043be29;
                     }
                     case 5:
                     {
-                        iVar6 = iVar6 + 10;
-                        uVar18 = StrSanitise(g_pTxtDemoMode);
-                        FUN_0043fce0(pState, 0x1e, iVar6, 10, (char)DAT_0050c550, i, uVar18);
-                        if (pState->field91_0x64 != 0) {
-                            pText = StrSanitise(s_ / SCREENTEXT_232 / ~f4~sON_004c11bc);
+                        pText = StrSanitise(g_pTxtDemoMode);
+                        UITextMenu(pState, 30, PosY, 10, (char)DAT_0050c550, i, pText);
+                        if (pState->Field_0x64 != 0)
+                        {
+                            pText = StrSanitise(g_pTxtOn);
                             goto LAB_0043be20;
                         }
-                        pText = StrSanitise(s_ / SCREENTEXT_233 / ~f4~sOFF_004c11a0);
+                        pText = StrSanitise(g_pTxtOff);
                         uVar13 = DAT_0050c550;
                         goto LAB_0043be29;
                     }
                     case 6:
                     {
-                        if (*(int*)&pState->field_0x68 < 0) {
-                            pText = StrSanitise(s_ / SCREENTEXT_234 / ~f4~sOFF_004c0fc4);
+                        if (*(int*)&pState->Field_0x68 < 0)
+                        {
+                            pText = StrSanitise(g_pTxtOff2);
                             rcr_sprintf(local_40, pText);
                         }
-                        else {
-                            pText = StrSanitise(0x84, *(int*)&pState->field_0x68 + 1);
-                            rcr_sprintf(local_40, pText);
+                        else
+                        {
+                            pText = StrSanitise("~s%d");
+                            rcr_sprintf(local_40, pText, pState->Field_0x68 + 1);
                         }
-                        pText = s_~f4~sCutscene:_004c0fb4;
+                        pText = g_pTxtCutscene;
                     }
                 }
-                uVar18 = StrSanitise(pText);
-                FUN_0043fce0(pState, 0x1e, iVar6, 10, (char)DAT_0050c550, i, uVar18);
-                pcVar7 = local_40;
+                pText = StrSanitise(pText);
+                UITextMenu(pState, 30, PosY, 10, (char)DAT_0050c550, i, pText);
+
             LAB_0043be20:
                 uVar13 = DAT_0050c550;
+
             LAB_0043be29:
-                FUN_0043fce0(pState, 0x55, iVar6, 10, uVar13, i, pcVar7);
+                UITextMenu(pState, 85, PosY, 10, uVar13, i, local_40);
+
+                PosY = PosY + 10;
             }
         }
 
