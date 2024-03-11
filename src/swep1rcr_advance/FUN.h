@@ -10,6 +10,7 @@ namespace FUN
 
     void __cdecl HandleCircuit(MenuState* pStruct);                                         // FUN_0043b0b0
     void MenuTrackSelection();                                                              // FUN_0043b240
+    void MenuTrackInfo(MenuState* pState);                                                  // FUN_0043b880
     bool IsFreePlay();                                                                      // FUN_0041d6b0
     const char* GetTrackName(int32_t TrackID);                                              // FUN_00440620
     bool IsTrackPlayable(MenuState* pStruct, uint8_t CircuitIdx, uint8_t TrackIdx);         // FUN_00440aa0
@@ -53,6 +54,9 @@ namespace FUN
     //  ~s   Shadow
     typedef void(FUN_00450530_t)(int16_t PosX, int16_t PosY, uint8_t R, uint8_t G, uint8_t B, uint8_t A, const char* pText);
     static  FUN_00450530_t* UIText = (FUN_00450530_t*)0x00450530;
+
+    typedef void(FUN_0043fce0_t)(MenuState* pState, uint16_t PosX, uint16_t PosY, int param_4, float param_5, float param_6, const char* pText);
+    static  FUN_0043fce0_t* UITextMenu = (FUN_0043fce0_t*)0x0043fce0;
 
     typedef void(FUN_00454d40_t)(MenuState* pState, int param_2);
     static  FUN_00454d40_t* SetMenuIdx = (FUN_00454d40_t*)0x00454d40;
