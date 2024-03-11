@@ -1,6 +1,12 @@
 #include <windows.h>
 #include "DynamicLoading.h"
 
+#if !DYN_LOAD
+#include "DBTracks.h"
+#include "Patching.h"
+#endif
+
+
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved)
 {
     switch(fdwReason) 
@@ -8,10 +14,13 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved)
         case DLL_PROCESS_ATTACH:
         {
             // TODO: Check hash of EXE
-#if DEBUG
+#if DYN_LOAD
             MessageBoxA(nullptr, "dinput.dll loaded!", "DLL loaded", MB_ICONINFORMATION | MB_OK);
-#endif
             DynamicLoading::Init();
+#else
+            DBTracks::Init();
+            Patching::PatchAll();
+#endif
             break;
         }
 

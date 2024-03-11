@@ -32,35 +32,50 @@ set_target_properties(dinput
     SUFFIX ".dll"
 )
 
-# Input source files
-target_sources(dinput PRIVATE 
-    "${DIR_SRC}/dinput/exports.def"                        # Exports DirectInputCreateA
+if(DYN_LOAD)
+    target_compile_definitions(dinput PUBLIC "DYN_LOAD")
 
-    "${DIR_SRC}/dinput/DLLMain.cpp"
-    "${DIR_SRC}/dinput/DLLWrap.cpp"                        # Wrapping of DirectInputCreateA
-    "${DIR_SRC}/dinput/DynamicLoading.cpp"
-)
+    target_sources(dinput PRIVATE 
+        "${DIR_SRC}/dinput/exports.def"                                     # Exports DirectInputCreateA
+        "${DIR_SRC}/dinput/DLLMain.cpp"
+        "${DIR_SRC}/dinput/DLLWrap.cpp"                                     # Wrapping of DirectInputCreateA
+        "${DIR_SRC}/dinput/DynamicLoading.cpp"
+    )
 
-add_library(swep1rcr_advance SHARED)
-target_include_directories(swep1rcr_advance PRIVATE "${DIR_SRC}/swep1rcr_advance")
-target_compile_definitions(swep1rcr_advance PUBLIC "$<$<CONFIG:DEBUG>:DEBUG>")
+    add_library(swep1rcr_advance SHARED)
+    target_include_directories(swep1rcr_advance PRIVATE "${DIR_SRC}/swep1rcr_advance")
+    target_compile_definitions(swep1rcr_advance PUBLIC "$<$<CONFIG:DEBUG>:DEBUG>")
+    target_compile_definitions(swep1rcr_advance PUBLIC "DYN_LOAD")
 
-# Binary output
-set_target_properties(swep1rcr_advance
-    PROPERTIES
-    LIBRARY_OUTPUT_DIRECTORY "${DIR_PRJ}/bin/${CMAKE_BUILD_TYPE}"
-    RUNTIME_OUTPUT_DIRECTORY "${DIR_PRJ}/bin/${CMAKE_BUILD_TYPE}"
-    PREFIX ""
-    SUFFIX ".dll"
-)
+    # Binary output
+    set_target_properties(swep1rcr_advance
+        PROPERTIES
+        LIBRARY_OUTPUT_DIRECTORY "${DIR_PRJ}/bin/${CMAKE_BUILD_TYPE}"
+        RUNTIME_OUTPUT_DIRECTORY "${DIR_PRJ}/bin/${CMAKE_BUILD_TYPE}"
+        PREFIX ""
+        SUFFIX ".dll"
+    )
 
+    # Input source files
+    target_sources(swep1rcr_advance PRIVATE 
+        "${DIR_SRC}/swep1rcr_advance/DLLMain.cpp"
+        "${DIR_SRC}/swep1rcr_advance/Patching.cpp"
+        "${DIR_SRC}/swep1rcr_advance/FUN.cpp"
+        "${DIR_SRC}/swep1rcr_advance/DBTracks.cpp"
+        "${DIR_SRC}/swep1rcr_advance/EXT.cpp"
+    )
+else()
+    target_include_directories(dinput PRIVATE "${DIR_SRC}/swep1rcr_advance")
 
-# Input source files
-target_sources(swep1rcr_advance PRIVATE 
-    "${DIR_SRC}/swep1rcr_advance/DLLMain.cpp"
-    "${DIR_SRC}/swep1rcr_advance/Patching.cpp"
-    "${DIR_SRC}/swep1rcr_advance/FUN.cpp"
-    "${DIR_SRC}/swep1rcr_advance/DBTracks.cpp"
-    "${DIR_SRC}/swep1rcr_advance/EXT.cpp"
-)
+    # Input source files
+    target_sources(dinput PRIVATE 
+        "${DIR_SRC}/dinput/exports.def"                                     # Exports DirectInputCreateA
+        "${DIR_SRC}/dinput/DLLMain.cpp"
+        "${DIR_SRC}/dinput/DLLWrap.cpp"                                     # Wrapping of DirectInputCreateA
 
+        "${DIR_SRC}/swep1rcr_advance/Patching.cpp"
+        "${DIR_SRC}/swep1rcr_advance/FUN.cpp"
+        "${DIR_SRC}/swep1rcr_advance/DBTracks.cpp"
+        "${DIR_SRC}/swep1rcr_advance/EXT.cpp"
+    )
+endif()
