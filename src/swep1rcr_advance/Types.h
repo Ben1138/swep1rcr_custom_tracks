@@ -21,10 +21,10 @@ struct MenuState
     uint8_t  Field_0x6E;
     uint8_t  Field_0x6F;
     uint8_t  Field_0x70;
-    uint8_t  Unkn3[0x1E];
-    uint8_t  Field_0x8F;
+    uint8_t  Unkn3[0x1A];
+    int16_t  Field_0x8A[3];
     uint8_t  Field_0x90;
-    uint8_t  Field_0x91;
+    uint8_t  WinningsID;
     uint8_t  Unkn4[0x22];
     ImgDat*  aImages[6];
 };
@@ -36,9 +36,9 @@ static_assert(offsetof(MenuState, Field_0x6D)     == 0x6D);
 static_assert(offsetof(MenuState, Field_0x6E)     == 0x6E);
 static_assert(offsetof(MenuState, Field_0x6F)     == 0x6F);
 static_assert(offsetof(MenuState, Field_0x70)     == 0x70);
-static_assert(offsetof(MenuState, Field_0x8F)     == 0x8F);
+static_assert(offsetof(MenuState, Field_0x8A)     == 0x8A);
 static_assert(offsetof(MenuState, Field_0x90)     == 0x90);
-static_assert(offsetof(MenuState, Field_0x91)     == 0x91);
+static_assert(offsetof(MenuState, WinningsID)     == 0x91);
 static_assert(offsetof(MenuState, aImages)        == 0xB4);
 
 
