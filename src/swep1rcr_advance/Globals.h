@@ -57,6 +57,13 @@ static const char*    g_pTxt1st                         =  (const char*)   0x004
 static const char*    g_pTxt2nd                         =  (const char*)   0x004c10e4;        // "/SCREENTEXT_227/~f4~s2nd"
 static const char*    g_pTxt3rd                         =  (const char*)   0x004c10c8;        // "/SCREENTEXT_228/~f4~s3rd"
 static const char*    g_pTxt4th                         =  (const char*)   0x004c0908;        // "/SCREENTEXT_229/~f4~s4th"
+static const char*    g_pTxtLaps                        =  (const char*)   0x004c1098;        // "/SCREENTEXT_214/~f4~sLaps:"
+static const char*    g_pTxtRacers                      =  (const char*)   0x004c1078;        // "/SCREENTEXT_216/~f4~sRacers:"
+static const char*    g_pTxtSlow                        =  (const char*)   0x004c105c;        // "/SCREENTEXT_219/~f4~sSlow"
+static const char*    g_pTxtAverage                     =  (const char*)   0x004c103c;        // "/SCREENTEXT_220/~f4~sAverage"
+static const char*    g_pTxtFast                        =  (const char*)   0x004c1020;        // "/SCREENTEXT_221/~f4~sFast"
+static const char*    g_pTxtAISpeed                     =  (const char*)   0x004c1000;        // "/SCREENTEXT_218/~f4~sAI Speed:"
+static const char*    g_pTxtDemoMode                    =  (const char*)   0x004c0fe0;        // "/SCREENTEXT_231/~f4~sDemo mode:"
                                                                            
 static const char*    g_pTxtTrackID_00                  =  (const char*)   0x004c1728;        // "/SCREENTEXT_497/~~The Boonta Training Course"
 static const char*    g_pTxtTrackID_01                  =  (const char*)   0x004c1700;        // "/SCREENTEXT_498/~~The Boonta Classic"
@@ -108,6 +115,8 @@ static int8_t&        DAT_0050c560                      = *(int8_t*)       0x005
 static int32_t&       DAT_0050c550                      = *(int32_t*)      0x0050c550;
 static int32_t&       DAT_0050c554                      = *(int32_t*)      0x0050c554;
 static uint8_t*       DAT_0050c430                      =  (uint8_t*)      0x0050c430;        // Length: 4
+static double&        DAT_004ac910                      = *(double*)       0x004ac910;        // Initial value: -0.5    May be just a constant?
+static double&        DAT_004ac918                      = *(double*)       0x004ac918;        // Initial value: 1.0     May be just a constant?
 
 static int32_t*       DAT_00e29160                      =  (int32_t*)      0x00e29160;        // Length: 151 ?
 static int32_t*       DAT_00e29600                      =  (int32_t*)      0x00e29600;        // Length: 151 ?

@@ -1093,281 +1093,260 @@ namespace FUN
     }
 
     // FUN_0043b880
-    // void MenuTrackInfo(MenuState* pState)
-    // {
-    //     char cVar1;
-    //     uint16_t uVar2;
-    //     int8_t iVar3;
-    //     char cVar4;
-    //     int8_t uVar5;
-    //     int iVar6;
-    //     char* pcVar7;
-    //     int32_t iVar8;
-    //     int iVar9;
-    //     int32_t unaff_ESI;
-    //     int32_t unaff_EDI;
-    //     uint32_t* puVar11;
-    //     int64_t lVar12;
-    //     int8_t uVar13;
-    //     int16_t uVar14;
-    //     int8_t uVar15;
-    //     int8_t uVar16;
-    //     int16_t uVar17;
-    //     int32_t uVar18;
-    //     int local_50;
-    //     char local_40[64];
+    void MenuTrackInfo(MenuState* pState)
+    {
+        char cVar1;
+        uint16_t uVar2;
+        int8_t iVar3;
+        char cVar4;
+        int8_t uVar5;
+        int iVar6;
+        char* pcVar7;
+        int32_t iVar8;
+        int iVar9;
+        int32_t unaff_ESI;
+        int32_t unaff_EDI;
+        uint32_t* puVar11;
+        int64_t lVar12;
+        int8_t uVar13;
+        int16_t uVar14;
+        int8_t uVar15;
+        int8_t uVar16;
+        int16_t uVar17;
+        int32_t uVar18;
+        int local_50;
+        char local_40[64];
 
-    //     if (DAT_0050c558 == 0)
-    //     {
-    //         DAT_0050c558 = 12;
-    //     }
-    //     if (DAT_0050c55c == 0)
-    //     {
-    //         DAT_0050c55c = 2;
-    //     }
+        if (DAT_0050c558 == 0)
+        {
+            DAT_0050c558 = 12;
+        }
+        if (DAT_0050c55c == 0)
+        {
+            DAT_0050c55c = 2;
+        }
 
-    //     iVar3 = DAT_0050c560;
-    //     if (DAT_004c4000 != 0)
-    //     {
-    //         DAT_004c4000 = 0;
-    //         FUN_0045bee0(pState, 0x25, -1, 0);
-    //         DAT_0050c550 = 0;
-    //         DAT_0050c554 = 0;
+        iVar3 = DAT_0050c560;
+        if (DAT_004c4000 != 0)
+        {
+            DAT_004c4000 = 0;
+            FUN_0045bee0(pState, 0x25, -1, 0);
+            DAT_0050c550 = 0;
+            DAT_0050c554 = 0;
 
-    //         if (pState->Field_0x0C == 12)
-    //         {
-    //             DAT_00e295a0 = 1.0;
-    //         }
+            if (pState->Field_0x0C == 12)
+            {
+                DAT_00e295a0 = 1.0;
+            }
 
-    //         HandleCircuits(pState);
-    //         if (pState->Field_0x0C != 12)
-    //         {
-    //             FUN_0043b1d0(pState);
-    //         }
+            HandleCircuits(pState);
+            if (pState->Field_0x0C != 12)
+            {
+                FUN_0043b1d0(pState);
+            }
 
-    //         DAT_0050c430[0] = 0xff;
-    //         DAT_0050c430[1] = 0xff;
-    //         DAT_0050c430[2] = 0xff;
-    //         DAT_0050c430[3] = 0xff;
-    //         DAT_0050c430[4] = 0xff;
-    //         DAT_0050c430[5] = 0xff;
-    //         DAT_0050c430[6] = 0xff;
-    //         DAT_0050c430[7] = 0xff;
-    //         DAT_0050c430[8] = 0xff;
-    //         DAT_0050c430[9] = 0xff;
-    //         DAT_0050c430[10] = 0xff;
-    //         DAT_0050c430[11] = 0xff;
-    //         DAT_0050c560 = 0;
+            DAT_0050c430[0]  = 0xff;
+            DAT_0050c430[1]  = 0xff;
+            DAT_0050c430[2]  = 0xff;
+            DAT_0050c430[3]  = 0xff;
+            DAT_0050c430[4]  = 0xff;
+            DAT_0050c430[5]  = 0xff;
+            DAT_0050c430[6]  = 0xff;
+            DAT_0050c430[7]  = 0xff;
+            DAT_0050c430[8]  = 0xff;
+            DAT_0050c430[9]  = 0xff;
+            DAT_0050c430[10] = 0xff;
+            DAT_0050c430[11] = 0xff;
+            DAT_0050c560 = 0;
 
-    //         if (BeatEverything1stPlace(pState))
-    //         {
-    //             iVar6 = (int)DAT_0050c560;
-    //             DAT_0050c560 = DAT_0050c560 + 1;
-    //             DAT_0050c430[iVar6] = 0;
-    //         }
-    //         if (!pState->bIsTournament)
-    //         {
-    //             iVar3 = DAT_0050c560 + 1;
-    //             DAT_0050c430[DAT_0050c560] = 2;
-    //             if (pState->Field_0x6D != 0)
-    //             {
-    //                 goto LAB_0043b9b4;
-    //             }
-    //             DAT_0050c560 = DAT_0050c560 + 2;
-    //             DAT_0050c430[iVar3] = 3;
-    //             DAT_0050c430[DAT_0050c560] = 4;
-    //         }
-    //         else
-    //         {
-    //             iVar6 = VerifySelectedTrack(pState, g_SelectedTrackIdx);
-    //             iVar6 = FUN_00440a20(pState->CircuitIdx, iVar6);
-    //             iVar3 = DAT_0050c560;
-    //             if (iVar6 == 0)
-    //             {
-    //                 goto LAB_0043b9b4;
-    //             }
-    //             DAT_0050c430[DAT_0050c560] = 1;
-    //         }
-    //         iVar3 = DAT_0050c560 + 1;
-    //     }
+            if (BeatEverything1stPlace(pState))
+            {
+                iVar6 = (int)DAT_0050c560;
+                DAT_0050c560 = DAT_0050c560 + 1;
+                DAT_0050c430[iVar6] = 0;
+            }
+            if (!pState->bIsTournament)
+            {
+                iVar3 = DAT_0050c560 + 1;
+                DAT_0050c430[DAT_0050c560] = 2;
+                if (pState->Field_0x6D != 0)
+                {
+                    goto LAB_0043b9b4;
+                }
+                DAT_0050c560 = DAT_0050c560 + 2;
+                DAT_0050c430[iVar3] = 3;
+                DAT_0050c430[DAT_0050c560] = 4;
+            }
+            else
+            {
+                iVar6 = VerifySelectedTrack(pState, g_SelectedTrackIdx);
+                iVar6 = FUN_00440a20(pState->CircuitIdx, iVar6);
+                iVar3 = DAT_0050c560;
+                if (iVar6 == 0)
+                {
+                    goto LAB_0043b9b4;
+                }
+                DAT_0050c430[DAT_0050c560] = 1;
+            }
+            iVar3 = DAT_0050c560 + 1;
+        }
 
-    // LAB_0043b9b4:
-    //     DAT_0050c560 = iVar3;
-    //     iVar6 = VerifySelectedTrack(pState, g_SelectedTrackIdx);
-    //     cVar4 = GetRequiredPlaceToProceed(pState->CircuitIdx, iVar6);
-    //     iVar6 = 160;
+    LAB_0043b9b4:
+        DAT_0050c560 = iVar3;
+        iVar6 = VerifySelectedTrack(pState, g_SelectedTrackIdx);
+        cVar4 = GetRequiredPlaceToProceed(pState->CircuitIdx, iVar6);
+        iVar6 = 160;
 
-    //     if ((DAT_0050c554 == 0) && DAT_0050c560 > 0)
-    //     {
-    //         for (uint8_t i = 0; i < DAT_0050c560; i++)
-    //         {
-    //             if (DAT_0050c430[i] > 6)
-    //             {
-    //                 continue;
-    //             }
+        if ((DAT_0050c554 == 0) && DAT_0050c560 > 0)
+        {
+            for (int8_t i = 0; i < DAT_0050c560; i++)
+            {
+                if (DAT_0050c430[i] > 6)
+                {
+                    continue;
+                }
 
-    //             const char* pText = nullptr;
-    //             switch (DAT_0050c430[i])
-    //             {
-    //                 case 0:
-    //                 {
-    //                     pText = StrSanitise(g_pTxtMirror);
-    //                     FUN_0043fce0(pState, 30, iVar6, 10, DAT_0050c550, i, pText);
-    //                     if (pState->Field_0x6E != 0)
-    //                     {
-    //                         pText = StrSanitise(g_pTxtOn);
-    //                         uVar13 = (int8_t)DAT_0050c550;
-    //                         goto LAB_0043be29;
-    //                     }
-    //                     pText = StrSanitise(g_pTxtOff);
-    //                     goto LAB_0043be20;
-    //                 }
-    //                 case 1:
-    //                 {
-    //                     if (pState->Field_0x91 == 1)
-    //                     {
-    //                         pText = StrSanitise(g_pTxtFair);
-    //                         uVar13 = SUB41(local_40, 0);
-    //                         uVar15 = (undefined)((uint)local_40 >> 8);
-    //                         uVar14 = (undefined2)((uint)local_40 >> 16);
-    //                     }
-    //                     else if (pState->Field_0x91 == 2)
-    //                     {
-    //                         pText = StrSanitise(g_pTxtSkilled);
-    //                         uVar13 = SUB41(local_40, 0);
-    //                         uVar15 = (undefined)((uint)local_40 >> 8);
-    //                         uVar14 = (undefined2)((uint)local_40 >> 16);
-    //                     }
-    //                     else
-    //                     {
-    //                         pText = StrSanitise(g_pTxtWinnerTakesAll);
-    //                         uVar13 = SUB41(local_40, 0);
-    //                         uVar15 = (undefined)((uint)local_40 >> 8);
-    //                         uVar14 = (undefined2)((uint)local_40 >> 16);
-    //                     }
-    //                     rcr_sprintf(local_40, pText);
-    //                     FUN_0043fce0(pState, 0x1e, iVar6, 10, (char)DAT_0050c550, i, StrSanitise(g_pTxtWinnings));
-    //                     FUN_0043fce0(pState, 0x55, iVar6, 10, (char)DAT_0050c550, i, local_40);
-    //                     local_50 = iVar6 + 10;
-    //                     FUN_0043fce0(pState, 0x2d, local_50, 10, (char)DAT_0050c550, i, StrSanitise(g_pTxt1st));
-    //                     FUN_0043fce0(pState, 0x2d, iVar6 + 0x14, 10, (char)DAT_0050c550, i, StrSanitise(g_pTxt2nd));
-    //                     FUN_0043fce0(pState, 0x2d, iVar6 + 0x1e, 10, (char)DAT_0050c550, i, StrSanitise(g_pTxt3rd));
-    //                     if (cVar4 == 4)
-    //                     {
-    //                         FUN_0043fce0(pState, 0x2d, iVar6 + 0x28, 10, (char)DAT_0050c550, i, StrSanitise(g_pTxt4th));
-    //                     }
-    //                     iVar9 = 0;
-    //                     if (0 < cVar4) {
-    //                         do {
-    //                             lVar12 = __ftol((double)CONCAT44(unaff_ESI, unaff_EDI));
-    //                             pText = StrSanitise(0xbc, (int)lVar12);
-    //                             rcr_sprintf(local_40, pText);
-    //                             FUN_0043fce0(pState, 0x69, local_50, 10, (char)DAT_0050c550, i, local_40);
-    //                             iVar9 = iVar9 + 1;
-    //                             local_50 = local_50 + 10;
-    //                         } while (iVar9 < cVar4);
-    //                     }
-    //                     continue;
-    //                 }
-    //                 case 2:
-    //                 {
-    //                     pText = StrSanitise(0xb4, (int)pState->field131_0x8f);
-    //                     rcr_sprintf(local_40, pText);
-    //                     pText = s_ / SCREENTEXT_214 / ~f4~sLaps:_004c1098;
-    //                     break;
-    //                 }
-    //                 case 3:
-    //                 {
-    //                     pText = StrSanitise(0xb4, _DAT_0050c558 & 0xff);
-    //                     rcr_sprintf(local_40, pText);
-    //                     if ('\x01' < (char)pState->field_0x70) {
-    //                         pText = StrSanitise(0xb4, _DAT_0050c55c & 0xff);
-    //                         rcr_sprintf(local_40, pText);
-    //                     }
-    //                     pText = s_ / SCREENTEXT_216 / ~f4~sRacers:_004c1078;
-    //                     goto LAB_0043bd30;
-    //                 }
-    //                 case 4:
-    //                 {
-    //                     if (pState->Field_0x90 == '\x01') {
-    //                         pText = StrSanitise(s_ / SCREENTEXT_219 / ~f4~sSlow_004c105c);
-    //                         uVar13 = SUB41(local_40, 0);
-    //                         uVar15 = (undefined)((uint)local_40 >> 8);
-    //                         uVar14 = (undefined2)((uint)local_40 >> 0x10);
-    //                     }
-    //                     else if (pState->Field_0x90 == '\x02') {
-    //                         pText = StrSanitise(s_ / SCREENTEXT_220 / ~f4~sAverage_004c103c);
-    //                         uVar13 = SUB41(local_40, 0);
-    //                         uVar15 = (undefined)((uint)local_40 >> 8);
-    //                         uVar14 = (undefined2)((uint)local_40 >> 0x10);
-    //                     }
-    //                     else {
-    //                         pText = StrSanitise(s_ / SCREENTEXT_221 / ~f4~sFast_004c1020);
-    //                         uVar13 = SUB41(local_40, 0);
-    //                         uVar15 = (undefined)((uint)local_40 >> 8);
-    //                         uVar14 = (undefined2)((uint)local_40 >> 0x10);
-    //                     }
-    //                     rcr_sprintf((char*)CONCAT22(uVar14, CONCAT11(uVar15, uVar13)), pText);
-    //                     pText = s_ / SCREENTEXT_218 / ~f4~sAI_Speed:_004c1000;
-    //                 LAB_0043bd30:
-    //                     uVar18 = StrSanitise(pText);
-    //                     FUN_0043fce0(pState, 0x1e, iVar6, 10, (char)DAT_0050c550, i, uVar18);
-    //                     pText = local_40;
-    //                     uVar13 = (undefined)DAT_0050c550;
-    //                     goto LAB_0043be29;
-    //                 }
-    //                 case 5:
-    //                 {
-    //                     iVar6 = iVar6 + 10;
-    //                     uVar18 = StrSanitise(s_ / SCREENTEXT_231 / ~f4~sDemo_mode:_004c0fe0);
-    //                     FUN_0043fce0(pState, 0x1e, iVar6, 10, (char)DAT_0050c550, i, uVar18);
-    //                     if (pState->field91_0x64 != 0) {
-    //                         pText = StrSanitise(s_ / SCREENTEXT_232 / ~f4~sON_004c11bc);
-    //                         goto LAB_0043be20;
-    //                     }
-    //                     pText = StrSanitise(s_ / SCREENTEXT_233 / ~f4~sOFF_004c11a0);
-    //                     uVar13 = (undefined)DAT_0050c550;
-    //                     goto LAB_0043be29;
-    //                 }
-    //                 case 6:
-    //                 {
-    //                     if (*(int*)&pState->field_0x68 < 0) {
-    //                         pText = StrSanitise(s_ / SCREENTEXT_234 / ~f4~sOFF_004c0fc4);
-    //                         rcr_sprintf(local_40, pText);
-    //                     }
-    //                     else {
-    //                         pText = StrSanitise(0x84, *(int*)&pState->field_0x68 + 1);
-    //                         rcr_sprintf(local_40, pText);
-    //                     }
-    //                     pText = s_~f4~sCutscene:_004c0fb4;
-    //                 }
-    //             }
-    //             uVar18 = StrSanitise(pText);
-    //             FUN_0043fce0(pState, 0x1e, iVar6, 10, (char)DAT_0050c550, i, uVar18);
-    //             pcVar7 = local_40;
-    //         LAB_0043be20:
-    //             uVar13 = (undefined)DAT_0050c550;
-    //         LAB_0043be29:
-    //             FUN_0043fce0(pState, 0x55, iVar6, 10, uVar13, i, pcVar7);
-    //         }
+                const char* pText = nullptr;
+                switch (DAT_0050c430[i])
+                {
+                    case 0:
+                    {
+                        pText = StrSanitise(g_pTxtMirror);
+                        FUN_0043fce0(pState, 30, iVar6, 10, DAT_0050c550, i, pText);
+                        if (pState->Field_0x6E != 0)
+                        {
+                            pText = StrSanitise(g_pTxtOn);
+                            uVar13 = (int8_t)DAT_0050c550;
+                            goto LAB_0043be29;
+                        }
+                        pText = StrSanitise(g_pTxtOff);
+                        goto LAB_0043be20;
+                    }
+                    case 1:
+                    {
+                        if (pState->WinningsID == 1)
+                        {
+                            pText = StrSanitise(g_pTxtFair);
+                        }
+                        else if (pState->WinningsID == 2)
+                        {
+                            pText = StrSanitise(g_pTxtSkilled);
+                        }
+                        else
+                        {
+                            pText = StrSanitise(g_pTxtWinnerTakesAll);
+                        }
 
+                        rcr_sprintf(local_40, pText);
+                        FUN_0043fce0(pState, 0x1e, iVar6, 10, (char)DAT_0050c550, i, StrSanitise(g_pTxtWinnings));
+                        FUN_0043fce0(pState, 0x55, iVar6, 10, (char)DAT_0050c550, i, local_40);
+                        local_50 = iVar6 + 10;
+                        FUN_0043fce0(pState, 0x2d, local_50, 10, (char)DAT_0050c550, i, StrSanitise(g_pTxt1st));
+                        FUN_0043fce0(pState, 0x2d, iVar6 + 0x14, 10, (char)DAT_0050c550, i, StrSanitise(g_pTxt2nd));
+                        FUN_0043fce0(pState, 0x2d, iVar6 + 0x1e, 10, (char)DAT_0050c550, i, StrSanitise(g_pTxt3rd));
 
+                        if (cVar4 == 4)
+                        {
+                            FUN_0043fce0(pState, 0x2d, iVar6 + 0x28, 10, (char)DAT_0050c550, i, StrSanitise(g_pTxt4th));
+                        }
 
+                        for (int8_t j = 0; j < cVar4; j++)
+                        {
+                            float fUnkn = pState->CircuitIdx * DAT_004ac910;
+                            fUnkn = DAT_004ac918 - fUnkn;
+                            fUnkn *= Field_0x8A[pState->WinningsID];
+                            int iUnkn = (int)fUnkn;
+                            pText = StrSanitise("~f0~r~s%d");
+                            rcr_sprintf(local_40, pText, iUnkn);
+                            FUN_0043fce0(pState, 0x69, local_50, 10, (char)DAT_0050c550, i, local_40);
+                            local_50 = local_50 + 10;
+                        }
 
+                        break;
+                    }
+                    case 2:
+                    {
+                        pText = StrSanitise("~f0~s%d");
+                        int a = (char)Field_0x8A[2];
+                        rcr_sprintf(local_40, pText, a);
+                        pText = g_pTxtLaps;
+                        break;
+                    }
+                    case 3:
+                    {
+                        // TODO: Hier weitermachen
+                        pText = StrSanitise(0xb4, _DAT_0050c558 & 0xff);
+                        rcr_sprintf(local_40, pText);
+                        if (pState->field_0x70 > 1)
+                        {
+                            pText = StrSanitise(0xb4, _DAT_0050c55c & 0xff);
+                            rcr_sprintf(local_40, pText);
+                        }
+                        pText = g_pTxtRacers;
+                        goto LAB_0043bd30;
+                    }
+                    case 4:
+                    {
+                        if (pState->Field_0x90 == 1)
+                        {
+                            pText = StrSanitise(g_pTxtSlow);
+                        }
+                        else if (pState->Field_0x90 == 2)
+                        {
+                            pText = StrSanitise(g_pTxtAverage);
+                        }
+                        else
+                        {
+                            pText = StrSanitise(g_pTxtFast);
+                        }
+                        rcr_sprintf(local_40, pText);
+                        pText = g_pTxtAISpeed;
 
+                    LAB_0043bd30:
+                        uVar18 = StrSanitise(pText);
+                        FUN_0043fce0(pState, 0x1e, iVar6, 10, (char)DAT_0050c550, i, uVar18);
+                        pText = local_40;
+                        uVar13 = DAT_0050c550;
+                        goto LAB_0043be29;
+                    }
+                    case 5:
+                    {
+                        iVar6 = iVar6 + 10;
+                        uVar18 = StrSanitise(g_pTxtDemoMode);
+                        FUN_0043fce0(pState, 0x1e, iVar6, 10, (char)DAT_0050c550, i, uVar18);
+                        if (pState->field91_0x64 != 0) {
+                            pText = StrSanitise(s_ / SCREENTEXT_232 / ~f4~sON_004c11bc);
+                            goto LAB_0043be20;
+                        }
+                        pText = StrSanitise(s_ / SCREENTEXT_233 / ~f4~sOFF_004c11a0);
+                        uVar13 = DAT_0050c550;
+                        goto LAB_0043be29;
+                    }
+                    case 6:
+                    {
+                        if (*(int*)&pState->field_0x68 < 0) {
+                            pText = StrSanitise(s_ / SCREENTEXT_234 / ~f4~sOFF_004c0fc4);
+                            rcr_sprintf(local_40, pText);
+                        }
+                        else {
+                            pText = StrSanitise(0x84, *(int*)&pState->field_0x68 + 1);
+                            rcr_sprintf(local_40, pText);
+                        }
+                        pText = s_~f4~sCutscene:_004c0fb4;
+                    }
+                }
+                uVar18 = StrSanitise(pText);
+                FUN_0043fce0(pState, 0x1e, iVar6, 10, (char)DAT_0050c550, i, uVar18);
+                pcVar7 = local_40;
+            LAB_0043be20:
+                uVar13 = DAT_0050c550;
+            LAB_0043be29:
+                FUN_0043fce0(pState, 0x55, iVar6, 10, uVar13, i, pcVar7);
+            }
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-    //     }
+        return;
+    }
     //     if (DAT_0050c554 == 0) {
     //         uVar18 = 0x40533333;
     //     }
@@ -1536,7 +1515,7 @@ namespace FUN
     //                                 pState->Field_0x6E = pState->Field_0x6E == '\0';
     //                                 break;
     //                             case 1:
-    //                                 pState->Field_0x91 = pState->Field_0x91 + '\x01';
+    //                                 pState->WinningsID = pState->WinningsID + '\x01';
     //                                 break;
     //                             case 2:
     //                                 pState->field131_0x8f = pState->field131_0x8f + '\x01';
@@ -1578,7 +1557,7 @@ namespace FUN
     //                                 pState->Field_0x6E = pState->Field_0x6E == '\0';
     //                                 break;
     //                             case 1:
-    //                                 pState->Field_0x91 = pState->Field_0x91 + -1;
+    //                                 pState->WinningsID = pState->WinningsID + -1;
     //                                 break;
     //                             case 2:
     //                                 pState->field131_0x8f = pState->field131_0x8f + -1;
@@ -1627,11 +1606,11 @@ namespace FUN
     //                 if ('\x03' < (char)pState->Field_0x90) {
     //                     pState->Field_0x90 = 1;
     //                 }
-    //                 if ((char)pState->Field_0x91 < '\x01') {
-    //                     pState->Field_0x91 = 3;
+    //                 if ((char)pState->WinningsID < '\x01') {
+    //                     pState->WinningsID = 3;
     //                 }
-    //                 if ('\x03' < (char)pState->Field_0x91) {
-    //                     pState->Field_0x91 = 1;
+    //                 if ('\x03' < (char)pState->WinningsID) {
+    //                     pState->WinningsID = 1;
     //                 }
     //                 if (*(int*)&pState->field_0x68 < -1) {
     //                     *(undefined4*)&pState->field_0x68 = 0x14;
