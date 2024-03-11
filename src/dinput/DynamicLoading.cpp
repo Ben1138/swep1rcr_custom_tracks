@@ -7,7 +7,6 @@
 
 namespace DynamicLoading
 {
-#if DEBUG
     static HINSTANCE g_hDllCurrent = nullptr;
     static FILETIME g_LastModifiedTime{};
     static uint32_t g_uDllCounter = 0;
@@ -153,12 +152,10 @@ namespace DynamicLoading
         }
 
         return 0;
-    }
-#endif   
+    } 
 
     void Init()
     {
-#if DEBUG
         DWORD dwThreadID = 0;
 
         HANDLE hThread = CreateThread( 
@@ -173,14 +170,6 @@ namespace DynamicLoading
         {
             MessageBoxA(nullptr, "Failed to create new thread!", "Thread fail", MB_ICONERROR | MB_OK);
             return;
-        }
-#else
-        HINSTANCE hDll = LoadLibrary("swep1rcr_advance.dll");
-        if (!hDll)
-        {
-            MessageBoxA(nullptr, "Failed to load 'swep1rcr_advance.dll'!", "DLL fail", MB_ICONERROR | MB_OK);
-            return;
-        }
-#endif        
+        }      
     }
 }
