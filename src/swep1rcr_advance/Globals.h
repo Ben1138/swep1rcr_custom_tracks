@@ -19,6 +19,7 @@ static ImgParam*      g_aImageParams                    =  (ImgParam*)     0x00e
 static int32_t&       g_ImgCount                        = *(int32_t*)      0x004b91b8;
 static int32_t&       g_LoadTrackModel                  = *(int32_t*)      0x00ea05ac;        // Apparently only used when g_bIsFreePlay == true ?
 static PilotInfo*     g_aPilotInfos                     =  (PilotInfo*)    0x004c2714;        // Length: 23
+static int8_t&        g_uNumRacers                      = *(int8_t*)       0x0050c558;
 
 // Array of 2 bits representing the place of each track
 //  11 - 1st place
@@ -70,7 +71,6 @@ static const char*    g_pTxtTrackFavorite               =  (const char*)   0x004
 static const char*    g_pTxtMinPlace3rd                 =  (const char*)   0x004c0f40;        // "/SCREENTEXT_527/~f4~c~sMust place 3rd or better to progress"
 static const char*    g_pTxtMinPlace4th                 =  (const char*)   0x004c0f04;        // "/SCREENTEXT_528/~f4~c~sMust place 4th or better to progress"
 static const char*    g_pTxtCutscene                    =  (const char*)   0x004c0fb4;        // "~f4~sCutscene:"
-                                                                           
 static const char*    g_pTxtTrackID_00                  =  (const char*)   0x004c1728;        // "/SCREENTEXT_497/~~The Boonta Training Course"
 static const char*    g_pTxtTrackID_01                  =  (const char*)   0x004c1700;        // "/SCREENTEXT_498/~~The Boonta Classic"
 static const char*    g_pTxtTrackID_02                  =  (const char*)   0x004c16dc;        // "/SCREENTEXT_499/~~Beedo's Wild Ride"
@@ -115,7 +115,6 @@ static int32_t&       DAT_00e2a698                      = *(int32_t*)      0x00e
 static int32_t&       DAT_004d6b44                      = *(int32_t*)      0x004d6b44;
 static int32_t&       DAT_00ea02b0                      = *(int32_t*)      0x00ea02b0;        // TrackIdx !?
 static float&         DAT_004ac7a4                      = *(float*)        0x004ac7a4;
-static int8_t&        DAT_0050c558                      = *(int8_t*)       0x0050c558;
 static int8_t&        DAT_0050c55c                      = *(int8_t*)       0x0050c55c;
 static int8_t&        DAT_0050c560                      = *(int8_t*)       0x0050c560;
 static int32_t&       DAT_0050c550                      = *(int32_t*)      0x0050c550;
