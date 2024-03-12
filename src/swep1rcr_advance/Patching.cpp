@@ -83,7 +83,7 @@ namespace Patching
         PatchFunction(0x004584a0, (void*)&FUN::InitTracks);
         //PatchFunction(0x004360e0(void*), &FUN::DrawTracks);                         // Get's called just once in MenuTrackSelection()
         PatchFunction(0x0043b240, (void*)&FUN::MenuTrackSelection);
-        PatchFunction(0x0043b880, (void*)&FUN::MenuTrackInfo);
+        //PatchFunction(0x0043b880, (void*)&FUN::MenuTrackInfo);
         PatchFunction(0x00440af0, (void*)&FUN::VerifySelectedTrack);
         PatchFunction(0x00440a00, (void*)&FUN::GetRequiredPlaceToProceed);
 
