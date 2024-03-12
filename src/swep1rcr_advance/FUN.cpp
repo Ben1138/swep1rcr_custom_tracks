@@ -48,6 +48,55 @@ namespace FUN
     typedef void(FUN_00412e20_t)();
     static  FUN_00412e20_t* FUN_00412e20 = (FUN_00412e20_t*)0x00412e20;
 
+    typedef float10(FUN_0042f560_t)(float param_1, float param_2);
+    static  FUN_0042f560_t* FUN_0042f560 = (FUN_0042f560_t*)0x0042f560;
+
+    typedef float10(FUN_0042f3e0_t)(float param_1);
+    static  FUN_0042f3e0_t* FUN_0042f3e0 = (FUN_0042f3e0_t*)0x0042f3e0;
+
+    typedef void(FUN_0042f9b0_t)(float* param_1);
+    static  FUN_0042f9b0_t* FUN_0042f9b0 = (FUN_0042f9b0_t*)0x0042f9b0;
+
+    typedef void(FUN_00450560_t)(int32_t PosX, int32_t PosY, const char *pText);
+    static  FUN_00450560_t* FUN_00450560 = (FUN_00450560_t*)0x00450560;  
+
+    typedef int32_t(FUN_00485880_t)(int param_1, int *param_2);
+    static  FUN_00485880_t* FUN_00485880 = (FUN_00485880_t*)0x00485880;  
+
+    typedef void(FUN_0042fa80_t)(float *param_1,float *param_2,float param_3,float *param_4);
+    static  FUN_0042fa80_t* FUN_0042fa80 = (FUN_0042fa80_t*)0x0042fa80;  
+
+    typedef void(FUN_00431020_t)(uint8_t *param_1,int32_t param_2,int32_t param_3,int32_t param_4);
+    static  FUN_00431020_t* FUN_00431020 = (FUN_00431020_t*)0x00431020;  
+
+    typedef float10(FUN_0042f950_t)(float *param_1,float *param_2);
+    static  FUN_0042f950_t* FUN_0042f950 = (FUN_0042f950_t*)0x0042f950;  
+
+    typedef void(FUN_0044bb10_t)(int32_t *param_1, int param_2);
+    static  FUN_0044bb10_t* FUN_0044bb10 = (FUN_0044bb10_t*)0x0044bb10;  
+
+    typedef void(FUN_0040a120_t)(int param_1);
+    static  FUN_0040a120_t* FUN_0040a120 = (FUN_0040a120_t*)0x0040a120;  
+
+    typedef bool(FUN_00409d70_t)(uint32_t param_1);
+    static  FUN_00409d70_t* FUN_00409d70 = (FUN_00409d70_t*)0x00409d70;  
+
+    typedef void(FUN_00427d90_t)(int PlanetIdx, int param_2);
+    static  FUN_00427d90_t* FUN_00427d90 = (FUN_00427d90_t*)0x00427d90; 
+
+    // Compare two char[3]'s
+    typedef bool(FUN_004409d0_t)(char *param_1, char *param_2);
+    static  FUN_004409d0_t* FUN_004409d0 = (FUN_004409d0_t*)0x00427d90; 
+
+    typedef void(FUN_00440c10_t)(MenuState *pState);
+    static  FUN_00440c10_t* FUN_00440c10 = (FUN_00440c10_t*)0x00440c10; 
+
+    typedef void(FUN_0041e660_t)();
+    static  FUN_0041e660_t* FUN_0041e660 = (FUN_0041e660_t*)0x0041e660; 
+
+    typedef void(FUN_0045a3e0_t)();
+    static  FUN_0045a3e0_t* FUN_0045a3e0 = (FUN_0045a3e0_t*)0x0045a3e0;
+
 
     // FUN_0042d600
     FILE** FileGet(int32_t FileID)
@@ -1089,24 +1138,10 @@ namespace FUN
     // FUN_0043b880
     void MenuTrackInfo(MenuState* pState)
     {
-        char cVar1;
-        uint16_t uVar2;
         int8_t iVar3;
         char cVar4;
-        int8_t uVar5;
         int iVar6;
-        char* pcVar7;
-        int32_t iVar8;
-        int iVar9;
-        int32_t unaff_ESI;
-        int32_t unaff_EDI;
-        uint32_t* puVar11;
-        int64_t lVar12;
         int8_t uVar13;
-        int16_t uVar14;
-        int8_t uVar15;
-        int8_t uVar16;
-        int16_t uVar17;
         int32_t uVar18;
         char local_40[64];
 
@@ -1691,6 +1726,319 @@ namespace FUN
                     FUN_0041e5a0();
                 }
             }
+        }
+    }
+
+    // FUN_004368a0
+    void MenuStartRace(MenuState *pState)
+    {
+        bool bVar1;
+        float fVar2;
+        char cVar3;
+        int32_t uVar4;
+        int iVar5;
+        int iVar6;
+        char cVar7;
+        int iVar8;
+        float10 fVar9;
+        char *pcVar10;
+        char local_71;
+        float local_6c[3];
+        char local_60[32];
+        uint8_t local_40[16];   // Struct?
+        float local_30[12];
+        
+        iVar8 = -1;
+        DAT_0050c480 = 0;
+        if (DAT_004c4000 != 0)
+        {
+            DAT_004c4000 = 0;
+            if (pState->Field_0x0C == 13)
+            {
+                pState->Field_0x5F = 0;
+            }
+
+            Vec3Sub(local_6c, DAT_00e298f0, DAT_00e2af90);
+            fVar9 = (float10)Vec3Mag(local_6c);
+            DAT_0050c11c = (float)fVar9;
+            FUN_0042f9b0(local_6c);
+            fVar9 = (float10)FUN_0042f560(-local_6c[0], local_6c[1]);
+            DAT_0050c2e8[1] = fVar9;
+            fVar9 = (float10)FUN_0042f3e0(local_6c[2]);
+            DAT_0050c2e8[0] = fVar9;
+
+            if (DAT_0050c2e8[1] < 0.0)
+            {
+                DAT_0050c2e8[1] += 360.0;
+            }
+            if (DAT_0050c2e8[1] > 360.0)
+            {
+                DAT_0050c2e8[1] -= 360.0;
+            }
+            if (DAT_0050c2e8[0] < -90.0)
+            {
+                DAT_0050c2e8[0] += 180.0;
+            }
+            if (DAT_0050c2e8[0] > 90.0)
+            {
+                DAT_0050c2e8[0] -= 180.0;
+            }
+
+            cVar7 = 1;
+            DAT_0050c308[0] = 0;
+            DAT_0050c308[1] = 0xff;
+            DAT_0050c308[2] = 0xff;
+            DAT_0050c308[3] = 0xff;
+            DAT_0050c308[4] = 0xff;
+            DAT_0050c308[5] = 0xff;
+            DAT_0050c308[6] = 0xff;
+            DAT_0050c308[7] = 0xff;
+            DAT_0050c308[8] = 0xff;
+            DAT_0050c308[9] = 0xff;
+            DAT_0050c308[10] = 0xff;
+            DAT_0050c308[11] = 0xff;
+
+            if (pState->Field_0x70 == 1)
+            {
+                DAT_0050c308[0] = 0;
+                DAT_0050c308[1] = 1;
+                DAT_0050c308[2] = 0xff;
+                DAT_0050c308[3] = 0xff;
+                cVar7 = 2;
+            }
+
+            cVar3 = cVar7;
+            if (pState->bIsTournament != false)
+            {
+                DAT_0050c308[cVar7] = 2;
+                DAT_0050c308[(char)(cVar7 + 1)] = 3;
+                cVar3 = cVar7 + 3;
+                DAT_0050c308[(char)(cVar7 + 2)] = 4;
+                if (DAT_00e35aa0 < 4)
+                {
+                    iVar6 = (int)cVar3;
+                    cVar3 = cVar7 + 4;
+                    DAT_0050c308[iVar6] = 5;
+                }
+            }
+
+            DAT_0050c524 = cVar3 + 1;
+            DAT_0050c308[cVar3] = 6;
+        }
+
+        FUN_00450560(160, 25, StrSanitise(g_pTxtMainMenu));
+
+        uint16_t PosY = 80;
+        for (uint8_t i = 0; i < DAT_0050c524; i++)
+        {
+            const char* pMenuEntry = nullptr;
+            switch(DAT_0050c308[i])
+            {
+                case 0:
+                {
+                    pMenuEntry = StrSanitise(g_pTxtStartRace);
+                    break;
+                }
+                case 1:
+                {
+                    pMenuEntry = StrSanitise(g_pTxtInspectVehicle);
+                    break;
+                }
+                case 2:
+                {
+                    pMenuEntry = StrSanitise(g_pTxtVehicleUpgrades);
+                    break;
+                }
+                case 3:
+                {
+                    pMenuEntry = StrSanitise(g_pTxtBuyParts);
+                    break;
+                }
+                case 4:
+                {
+                    pMenuEntry = StrSanitise(g_pTxtJunkyard);
+                    break;
+                }
+                case 5:
+                {
+                    pMenuEntry = StrSanitise(g_pTxtBuyPitDroids);
+                    break;
+                }
+                case 6:
+                {
+                    pMenuEntry = StrSanitise(g_pTxtChangeVehicle);
+                    break;
+                }
+                case 7:
+                {
+                    pMenuEntry = StrSanitise(g_pTxtOptions);
+                    break;
+                }
+            }
+
+            rcr_sprintf(local_60, pMenuEntry);
+            UITextMenu(pState, 60, PosY, 10, pState->Field_0x5F, i, local_60);
+            PosY += 10;
+        }
+
+        for (uint8_t i = 0; i < pState->Field_0x70; i++)
+        {
+            if (((&DAT_0050c918)[i] & 0x8000) != 0)
+            {
+                cVar7 = pState->Field_0x5F + 1;
+                pState->Field_0x5F = cVar7;
+                if (DAT_0050c524 + -1 < (int)cVar7)
+                {
+                    pState->Field_0x5F = '\0';
+                }
+                FUN_00440550(0x58);
+            }
+            if (((&DAT_0050c918)[i] & 0x4000) != 0)
+            {
+                cVar7 = pState->Field_0x5F + -1;
+                pState->Field_0x5F = cVar7;
+                if (cVar7 < '\0')
+                {
+                    pState->Field_0x5F = DAT_0050c524 + -1;
+                }
+                FUN_00440550(88);
+            }
+            if (FUN_00485880(56, 0) != 0 || FUN_00485880(184,0) != 0 || FUN_00485880(42,0) != 0 || FUN_00485880(54,0) != 0)
+            {
+                fVar2 = DAT_0050c11c;
+                bVar1 = false;
+                DAT_0050c930 = 0;
+                if (DAT_00e98ea0[i] > 0.1f || DAT_00e98ea0[i] < -0.1)
+                {
+                    bVar1 = true;
+                    DAT_0050c2e8[1] = DAT_0050c2e8[1] - DAT_00e98ea0[iVar6] * DAT_00e22a50 * 105.0;
+                }
+                if (DAT_00e98e80[i] > 0.1 || DAT_00e98e80[i] < -0.1)
+                {
+                    DAT_0050c2e8[0] = DAT_0050c2e8[0] - DAT_00e98e80[i] * DAT_00e22a50 * -67.5;
+                    if (DAT_0050c2e8[0] > 45.0)
+                    {
+                        DAT_0050c2e8[0] = 45.0;
+                    }
+                    if (DAT_0050c2e8[0] < -45.0)
+                    {
+                        DAT_0050c2e8[0] = -45.0;
+                    }
+                    bVar1 = true;
+                }
+                if (bVar1)
+                {
+                    FUN_00431020(local_40, DAT_0050c2e8[1], DAT_0050c2e8[0], 0);
+                    FUN_0042fa80(DAT_00e2af90, DAT_00e298f0, -DAT_0050c11c, local_30);
+                    if (DAT_0050c11c != fVar2)
+                    {
+                        fVar9 = (float10)FUN_0042f950(DAT_00e298f0,DAT_00e2af90);
+                        DAT_0050c11c = (float)fVar9;
+                    }
+                    FUN_0044bb10(DAT_00e2ae80, 0xe298c0);
+                }
+            }
+            if (DAT_004d6b44 != 0)
+            {
+                FUN_00440550(77);
+                iVar8 = 3;
+                DAT_004bfedc = 13;
+            }
+            if (DAT_004d6b48 != 0)
+            {
+                FUN_00440550(84);
+                if (pState->Field_0x5F == 0)
+                {
+                    iVar8 = -1;
+                    FUN_0040a120(0);
+                    FUN_00409d70(0xffffffff);
+                    FUN_00409d70(0);
+                    FUN_00427d90(g_aTrackInfos[pState->TrackID].PlanetIdx, (int)g_aTrackInfos[pState->TrackID].Unkn0);
+                    
+                    if (!IsFreePlay() || FUN_0041d6c0() != 0)
+                    {
+                        if (pState->bIsTournament &&
+                        (((DAT_00e35a84 != g_aTrackInfos[pState->TrackID].FavoritePilot &&
+                            (DAT_00ec8854 != 0.0)) && (DAT_0050c458 == 0))))
+                        {
+                            DAT_004bfedc = 15;
+                        }
+                        DAT_0050c944 = 0xffffffff;
+                        iVar8 = FUN_004409d0(DAT_00e35a60, DAT_004c0948);
+                        if ((iVar8 != 0) && ((DAT_0050c908 & 4) != 0))
+                        {
+                            FUN_00440c10(pState);
+                        }
+                        FUN_0041e660();
+                        return;
+                    }
+                }
+                else
+                {
+                    switch(DAT_0050c308[pState->Field_0x5F])
+                    {
+                        case 1:
+                        {
+                            DAT_004bfedc = 8;
+                            iVar8 = 2;
+                            pState->Field_0x10 = 0;
+                            FUN_0045a3e0();
+                            break;
+                        }
+                        case 2:
+                        {
+                            DAT_004bfedc = 8;
+                            iVar8 = 2;
+                            pState->Field_0x10 = 1;
+                            FUN_0045a3e0();
+                            break;
+                        }
+                        case 3:
+                        {
+                            DAT_004bfedc = 7;
+                            iVar8 = 0;
+                            pState->Field_0x10 = 0;
+                            break;
+                        }
+                        case 4:
+                        {
+                            iVar8 = 1;
+                            DAT_004bfedc = 4;
+                            break;
+                        }
+                        case 5:
+                        {
+                            DAT_004bfedc = 7;
+                            iVar8 = 0;
+                            pState->Field_0x10 = 1;
+                            break;
+                        }
+                        case 6:
+                        {
+                            DAT_004bfedc = 9;
+                            pState->Field_0x6F = i;
+                            iVar8 = 3;
+                            DAT_0050c480 = 1;
+                            break;
+                        }
+                        case 7:
+                        {
+                            pState->Field_0x10 = 1;
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+        
+        if (iVar8 != -1)
+        {
+            if (pState->Field_0x38 == iVar8)
+            {
+                SetMenuIdx(pState,DAT_004bfedc);
+                return;
+            }
+            DAT_0050c944 = 0xffffffff;
         }
     }
 }
