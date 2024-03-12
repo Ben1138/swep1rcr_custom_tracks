@@ -98,6 +98,14 @@ struct PlanetName
     char Name[92];
 };
 
+struct PilotInfo
+{
+    const char* NameFirst;
+    const char* NameLast;
+    uint8_t Unkn[0x2C];
+};
+static_assert(sizeof(PilotInfo) == 0x34);
+
 enum ImgFlags
 {
     IMG_NONE     = 0,

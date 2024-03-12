@@ -30,6 +30,12 @@ namespace FUN
     typedef void(FUN_00456800_t)(MenuState* pState, int PlanetIdx, float Scale);
     static  FUN_00456800_t* DrawHoloPlanet = (FUN_00456800_t*)0x00456800;
 
+    typedef void(FUN_00456c70_t)(MenuState *pState, int TrackID, float param_3);
+    static  FUN_00456c70_t* DrawTrackPreview = (FUN_00456c70_t*)0x00456c70;
+
+    typedef void(FUN_00440150_t)(void* pUnused, int PosY);
+    static  FUN_00440150_t* MenuAxisHorizontal = (FUN_00440150_t*)0x00440150;
+
     typedef void(__cdecl FUN_0043b0b0_t)(MenuState* pState);
     static  FUN_0043b0b0_t* HandleCircuits = (FUN_0043b0b0_t*)0x0043b0b0;
 
