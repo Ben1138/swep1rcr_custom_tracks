@@ -11,6 +11,7 @@ namespace FUN
     void __cdecl HandleCircuit(MenuState* pStruct);                                         // FUN_0043b0b0
     void MenuTrackSelection();                                                              // FUN_0043b240
     void MenuTrackInfo(MenuState* pState);                                                  // FUN_0043b880
+    void MenuStartRace(MenuState *pState);                                                  // FUN_004368a0
     bool IsFreePlay();                                                                      // FUN_0041d6b0
     const char* GetTrackName(int32_t TrackID);                                              // FUN_00440620
     bool IsTrackPlayable(MenuState* pStruct, uint8_t CircuitIdx, uint8_t TrackIdx);         // FUN_00440aa0
@@ -87,4 +88,10 @@ namespace FUN
 
     typedef void(FUN_00428660_t)(uint16_t ImgIdx, uint16_t PosX, uint16_t PosY);
     static  FUN_00428660_t* ImgPosition = (FUN_00428660_t*)0x00428660;
+
+    typedef void(FUN_0042f860_t)(float *pDst,float *pLhs,float *pRhs);
+    static  FUN_0042f860_t* Vec3Sub = (FUN_0042f860_t*)0x0042f860;
+    
+    typedef float10(FUN_0042f8c0_t)(float *pSrc);
+    static  FUN_0042f8c0_t* Vec3Mag = (FUN_0042f8c0_t*)0x0042f8c0;
 }
