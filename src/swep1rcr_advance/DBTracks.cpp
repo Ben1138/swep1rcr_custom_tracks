@@ -9,7 +9,7 @@ namespace DBTracks
 {
     static uint16_t TrackCount = 0;
     TrackInfo g_aNewTrackInfos[TRACKS_COUNT_MAX]{};
-    static char CustomTrackNames[TRACKS_COUNT_MAX][32]{};
+    static char g_aCustomTrackNames[TRACKS_COUNT_MAX][32]{};
 
     void Init()
     {
@@ -32,7 +32,7 @@ namespace DBTracks
             //Infos[i].FavoritePilot = 2;
 
             const uint8_t CustomID = i - 28;
-            snprintf(CustomTrackNames[CustomID], sizeof(CustomTrackNames[CustomID]), "Custom Track %u", CustomID + 1);
+            snprintf(g_aCustomTrackNames[CustomID], sizeof(g_aCustomTrackNames[CustomID]), "Custom Track %u", CustomID + 1);
         }
     }
 
@@ -143,6 +143,6 @@ namespace DBTracks
                 return FUN::StrSanitise(g_pTxtTrackID_24);
         }
 
-        return CustomTrackNames[TrackID - 28];
+        return g_aCustomTrackNames[TrackID - 28];
     }
 }

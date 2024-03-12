@@ -64,6 +64,9 @@ namespace FUN
     typedef void(FUN_0043fce0_t)(MenuState* pState, uint16_t PosX, uint16_t PosY, int param_4, float param_5, float param_6, const char* pText);
     static  FUN_0043fce0_t* UITextMenu = (FUN_0043fce0_t*)0x0043fce0;
 
+    typedef void(FUN_004403e0_t)(MenuState *pState, int param_2, int param_3, int32_t param_4, char param_5);
+    static  FUN_004403e0_t* DrawRecord = (FUN_004403e0_t*)0x004403e0;
+
     typedef void(FUN_00454d40_t)(MenuState* pState, int param_2);
     static  FUN_00454d40_t* SetMenuIdx = (FUN_00454d40_t*)0x00454d40;
 

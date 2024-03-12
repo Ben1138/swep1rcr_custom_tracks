@@ -48,9 +48,6 @@ namespace FUN
     typedef void(FUN_00412e20_t)();
     static  FUN_00412e20_t* FUN_00412e20 = (FUN_00412e20_t*)0x00412e20;
 
-    typedef void(FUN_004403e0_t)(MenuState *pState, int param_2, int param_3, int32_t param_4, char param_5);
-    static  FUN_004403e0_t* FUN_004403e0 = (FUN_004403e0_t*)0x004403e0;
-
 
     // FUN_0042d600
     FILE** FileGet(int32_t FileID)
@@ -712,6 +709,7 @@ namespace FUN
     }
 
     // FUN_00440af0
+    // Returns number of unlocked tracks in given circuit
     int32_t VerifySelectedTrack(MenuState* pState, int32_t SelectedTrackIdx)
     {
         bool bIsPlayable;
@@ -1112,9 +1110,9 @@ namespace FUN
         int32_t uVar18;
         char local_40[64];
 
-        if (DAT_0050c558 == 0)
+        if (g_uNumRacers == 0)
         {
-            DAT_0050c558 = 12;
+            g_uNumRacers = 12;
         }
         if (DAT_0050c55c == 0)
         {
@@ -1156,7 +1154,7 @@ namespace FUN
 
             if (BeatEverything1stPlace(pState))
             {
-                iVar6 = (int)DAT_0050c560;
+                iVar6 = DAT_0050c560;
                 DAT_0050c560 = DAT_0050c560 + 1;
                 DAT_0050c430[iVar6] = 0;
             }
@@ -1174,8 +1172,8 @@ namespace FUN
             }
             else
             {
-                iVar6 = VerifySelectedTrack(pState, g_SelectedTrackIdx);
-                iVar6 = FUN_00440a20(pState->CircuitIdx, iVar6);
+                int32_t NumUnlockedTracks = VerifySelectedTrack(pState, g_SelectedTrackIdx);
+                iVar6 = FUN_00440a20(pState->CircuitIdx, NumUnlockedTracks);
                 iVar3 = DAT_0050c560;
                 if (iVar6 == 0)
                 {
@@ -1188,8 +1186,8 @@ namespace FUN
 
     LAB_0043b9b4:
         DAT_0050c560 = iVar3;
-        iVar6 = VerifySelectedTrack(pState, g_SelectedTrackIdx);
-        cVar4 = GetRequiredPlaceToProceed(pState->CircuitIdx, iVar6);
+        const int32_t NumUnlockedTracks = VerifySelectedTrack(pState, g_SelectedTrackIdx);
+        const uint8_t ReqPlaceToProcceed = GetRequiredPlaceToProceed(pState->CircuitIdx, NumUnlockedTracks);
         
         int32_t PosY = 160;
         if (DAT_0050c554 == 0 && DAT_0050c560 > 0)
@@ -1198,6 +1196,7 @@ namespace FUN
             {
                 if (DAT_0050c430[i] > 6)
                 {
+                    assert(false);
                     continue;
                 }
 
@@ -1235,19 +1234,19 @@ namespace FUN
                             pText = StrSanitise(g_pTxtWinnerTakesAll);
                         }
 
-                        UITextMenu(pState, 30, PosY, 10, (char)DAT_0050c550, i, StrSanitise(g_pTxtWinnings));
-                        UITextMenu(pState, 85, PosY, 10, (char)DAT_0050c550, i, pText);
+                        UITextMenu(pState, 30, PosY, 10, DAT_0050c550, i, StrSanitise(g_pTxtWinnings));
+                        UITextMenu(pState, 85, PosY, 10, DAT_0050c550, i, pText);
 
-                        UITextMenu(pState, 45, PosY + 10, 10, (char)DAT_0050c550, i, StrSanitise(g_pTxt1st));
-                        UITextMenu(pState, 45, PosY + 20, 10, (char)DAT_0050c550, i, StrSanitise(g_pTxt2nd));
-                        UITextMenu(pState, 45, PosY + 30, 10, (char)DAT_0050c550, i, StrSanitise(g_pTxt3rd));
-                        if (cVar4 == 4)
+                        UITextMenu(pState, 45, PosY + 10, 10, DAT_0050c550, i, StrSanitise(g_pTxt1st));
+                        UITextMenu(pState, 45, PosY + 20, 10, DAT_0050c550, i, StrSanitise(g_pTxt2nd));
+                        UITextMenu(pState, 45, PosY + 30, 10, DAT_0050c550, i, StrSanitise(g_pTxt3rd));
+                        if (ReqPlaceToProcceed == 4)
                         {
-                            UITextMenu(pState, 45, PosY + 40, 10, (char)DAT_0050c550, i, StrSanitise(g_pTxt4th));
+                            UITextMenu(pState, 45, PosY + 40, 10, DAT_0050c550, i, StrSanitise(g_pTxt4th));
                         }
 
                         uint16_t PosYIt = PosY + 10;
-                        for (int8_t j = 0; j < cVar4; j++)
+                        for (int8_t j = 0; j < ReqPlaceToProcceed; j++)
                         {
                             float fTruguts = 1.0 + pState->CircuitIdx * 0.5;
                             fTruguts *= pState->Truguts[pState->WinningsID - 1].Truguts[j];
@@ -1262,14 +1261,14 @@ namespace FUN
                     case 2:
                     {
                         pText = StrSanitise("~f0~s%d");
-                        rcr_sprintf(local_40, pText, (int)pState->NumLaps);
+                        rcr_sprintf(local_40, pText, pState->NumLaps);
                         pText = g_pTxtLaps;
                         break;
                     }
                     case 3:
                     {
                         pText = StrSanitise("~f0~s%d");
-                        rcr_sprintf(local_40, pText, DAT_0050c558);
+                        rcr_sprintf(local_40, pText, g_uNumRacers);
                         if (pState->Field_0x70 > 1)
                         {
                             pText = StrSanitise("~f0~s%d");
@@ -1280,11 +1279,11 @@ namespace FUN
                     }
                     case 4:
                     {
-                        if (pState->Field_0x90 == 1)
+                        if (pState->AISpeed == 1)
                         {
                             pText = StrSanitise(g_pTxtSlow);
                         }
-                        else if (pState->Field_0x90 == 2)
+                        else if (pState->AISpeed == 2)
                         {
                             pText = StrSanitise(g_pTxtAverage);
                         }
@@ -1297,7 +1296,7 @@ namespace FUN
 
                     LAB_0043bd30:
                         pText = StrSanitise(pText);
-                        UITextMenu(pState, 30, PosY, 10, (char)DAT_0050c550, i, pText);
+                        UITextMenu(pState, 30, PosY, 10, DAT_0050c550, i, pText);
                         pText = local_40;
                         uVar13 = DAT_0050c550;
                         goto LAB_0043be29;
@@ -1305,7 +1304,7 @@ namespace FUN
                     case 5:
                     {
                         pText = StrSanitise(g_pTxtDemoMode);
-                        UITextMenu(pState, 30, PosY, 10, (char)DAT_0050c550, i, pText);
+                        UITextMenu(pState, 30, PosY, 10, DAT_0050c550, i, pText);
                         if (pState->Field_0x64 != 0)
                         {
                             pText = StrSanitise(g_pTxtOn);
@@ -1317,7 +1316,7 @@ namespace FUN
                     }
                     case 6:
                     {
-                        if (*(int*)&pState->Field_0x68 < 0)
+                        if (pState->Field_0x68 < 0)
                         {
                             pText = StrSanitise(g_pTxtOff2);
                             rcr_sprintf(local_40, pText);
@@ -1353,16 +1352,22 @@ namespace FUN
         }
 
         FUN_00469b90(uVar18);
+
+        TrackInfo Info = DBTracks::GetTrackInfo(pState->TrackID);
         if (DAT_00e295a0 > 0.0)
         {
-            DrawHoloPlanet(pState, g_aTrackInfos[pState->TrackID].PlanetIdx, DAT_00e295a0 * 0.5);
+            DrawHoloPlanet(pState, Info.PlanetIdx, DAT_00e295a0 * 0.5);
         }
         
         if (DAT_0050c554 == 0 && DAT_0050c554 == 0)
         {
-            DrawTrackPreview(pState, pState->TrackID, 0.5);
-            // if ((g_aTrackInfos[pState->TrackID].LoadModel == -1) ||
-            //     (g_aTrackInfos[pState->TrackID].LoadSpline == -1))
+            if (pState->TrackID < 25)
+            {
+                DrawTrackPreview(pState, pState->TrackID, 0.5); 
+            }
+
+            // if ((Info.LoadModel == -1) ||
+            //     (Info.LoadSpline == -1))
             // {
             //     pcVar7 = StrSanitise(g_TxtPlanetNotLoaded);
             //     rcr_sprintf(local_40, pcVar7);
@@ -1393,12 +1398,12 @@ namespace FUN
             FUN_0042de10(local_40, 0);
             FUN_0042de10(local_40, 0);
             MenuAxisHorizontal(nullptr, 38);
-            FUN_004403e0(pState, 100, 55, 0, 0);
-            FUN_004403e0(pState, 220, 55, 0, 3);
+            DrawRecord(pState, 100, 55, 0x437f0000, 0);
+            DrawRecord(pState, 220, 55, 0x437f0000, 3);
 
             // Record 3 Laps
             iVar6 = pState->Field_0x6E + pState->TrackID * 2;
-            if (DAT_00e365f4[iVar6] < 3599.0f)
+            if (pState->TrackID < 25 && DAT_00e365f4[iVar6] < 3599.0f)
             {
                 uint8_t PilotIdx = DAT_00e37404[iVar6];
                 const char* pNameFirst = StrSanitise(g_aPilotInfos[PilotIdx].NameFirst);
@@ -1413,7 +1418,7 @@ namespace FUN
 
             // Record Best Lap
             iVar6 = pState->Field_0x6E + pState->TrackID * 2;
-            if (DAT_00e366bc[iVar6] < 3599.0f)
+            if (pState->TrackID < 25 && DAT_00e366bc[iVar6] < 3599.0f)
             {
                 uint8_t PilotIdx = DAT_00e37436[iVar6];
                 const char* pNameFirst = StrSanitise(g_aPilotInfos[PilotIdx].NameFirst);
@@ -1428,7 +1433,7 @@ namespace FUN
             }
 
             // Track Favorite
-            uint8_t FavPilotIdx = g_aTrackInfos[pState->TrackID].FavoritePilot;
+            uint8_t FavPilotIdx = Info.FavoritePilot;
             const char* pNameFirst = StrSanitise(g_aPilotInfos[FavPilotIdx].NameFirst);
             const char* pNameLast = StrSanitise(g_aPilotInfos[FavPilotIdx].NameLast);
 
@@ -1447,188 +1452,245 @@ namespace FUN
                 iVar6 = FUN_00440a20(pState->CircuitIdx, iVar6);
                 if (iVar6 != 0)
                 {
-                    const char* pMinPlace = cVar4 == 3 ? g_pTxtMinPlace3rd : g_pTxtMinPlace4th;
+                    const char* pMinPlace = ReqPlaceToProcceed == 3 ? g_pTxtMinPlace3rd : g_pTxtMinPlace4th;
                     pMinPlace = StrSanitise(pMinPlace);
                     UIText(160, 115, 163, 190, 17, 255, pMinPlace);
                 }
             }
+
+            if (DAT_0050c554 == 0 && DAT_00e295a0 >= 1.0)
+            {
+                if (DAT_004eb39c == 0)
+                {
+                    if (DAT_004d6b48 != 0 && DAT_00e2a698 == 0)
+                    {
+                        FUN_00440550(84);
+                        if (!pState->bIsTournament)
+                        {
+                            if (pState->Field_0x6D == 0)
+                            {
+                                if (pState->Field_0x70 < 2)
+                                {
+                                    if (pState->Field_0x64 == 0 || g_uNumRacers != 2)
+                                    {
+                                        pState->Field_0x72 = g_uNumRacers;
+                                    }
+                                    else
+                                    {
+                                        pState->Field_0x72 = 1;
+                                    }
+                                }
+                                else
+                                {
+                                    pState->Field_0x72 = DAT_0050c55c;
+                                }
+                            }
+                            else
+                            {
+                                pState->Field_0x72 = 1;
+                            }
+                        }
+                        else
+                        {
+                            pState->Field_0x72 = 12;
+                        }
+                        InitTracks(pState, false);
+                        FUN_0045bee0(pState, 0x24, 3, 0);
+                        DAT_0050c554 = 1;
+                        return;
+                    }
+                    if (DAT_004d6b44 != 0 && DAT_00e2a698 == 0)
+                    {
+                        FUN_00440550(36);
+                        InitTracks(pState, false);
+                        SetMenuIdx(pState, 12);
+                        return;
+                    }
+                }
+                if (DAT_0050c560 > 1)
+                {
+                    if ((DAT_0050c918 & 0x4000) != 0)
+                    {
+                        DAT_0050c550--;
+                        FUN_00440550(88);
+                    }
+                    if ((DAT_0050c918 & 0x8000) != 0)
+                    {
+                        DAT_0050c550++;
+                        FUN_00440550(88);
+                    }
+                    if (DAT_0050c550 < 0)
+                    {
+                        DAT_0050c550 = DAT_0050c560 - 1;
+                    }
+                    if ((DAT_0050c560 - 1) < DAT_0050c550)
+                    {
+                        DAT_0050c550 = 0;
+                    }
+                }
+                if (DAT_0050c560 > 0)
+                {
+                    if ((DAT_0050c918 & 0x20000) != 0)
+                    {
+                        switch (DAT_0050c430[DAT_0050c550])
+                        {
+                            case 0:
+                            {
+                                pState->Field_0x6E = pState->Field_0x6E == 0;
+                                break;
+                            }
+                            case 1:
+                            {
+                                pState->WinningsID++;
+                                break;
+                            }
+                            case 2:
+                            {
+                                pState->NumLaps++;
+                                break;
+                            }
+                            case 3:
+                            {
+                                if (pState->Field_0x70 < 2)
+                                {
+                                    if (g_uNumRacers == 1)
+                                    {
+                                        g_uNumRacers = 2;
+                                    }
+                                    else if (g_uNumRacers < 20)
+                                    {
+                                        g_uNumRacers += 2;
+                                    }
+                                }
+                                else
+                                {
+                                    cVar4 = DAT_0050c55c + 2;
+                                    DAT_0050c55c = cVar4;
+                                    if (cVar4 == 8)
+                                    {
+                                        DAT_0050c55c = 2;
+                                    }
+                                }
+                                break;
+                            }
+                            case 4:
+                            {
+                                pState->AISpeed++;
+                                break;
+                            }
+                            case 5:
+                            {
+                                pState->Field_0x64 = pState->Field_0x64 == 0;
+                                break;
+                            }
+                            case 6:
+                            {
+                                pState->Field_0x68++;
+                            }
+                        }
+                        FUN_00440550(88);
+                    }
+                    if ((DAT_0050c918 & 0x10000) != 0)
+                    {
+                        switch (DAT_0050c430[DAT_0050c550])
+                        {
+                            case 0:
+                            {
+                                pState->Field_0x6E = pState->Field_0x6E == 0;
+                                break;
+                            }
+                            case 1:
+                            {
+                                pState->WinningsID--;
+                                break;
+                            }
+                            case 2:
+                            {
+                                pState->NumLaps--;
+                                break;
+                            }
+                            case 3:
+                            {
+                                if (pState->Field_0x70 < 2)
+                                {
+                                    if (g_uNumRacers == 2)
+                                    {
+                                        g_uNumRacers = 1;
+                                    }
+                                    else if (g_uNumRacers > 2)
+                                    {
+                                        g_uNumRacers -= 2;
+                                    }
+                                }
+                                else
+                                {
+                                    cVar4 = DAT_0050c55c - 2;
+                                    DAT_0050c55c = cVar4;
+                                    if (cVar4 == 0)
+                                    {
+                                        DAT_0050c55c = 6;
+                                    }
+                                }
+                                break;
+                            }
+                            case 4:
+                            {
+                                pState->AISpeed--;
+                                break;
+                            }
+                            case 5:
+                            {
+                                pState->Field_0x64 = pState->Field_0x64 == 0;
+                                break;
+                            }
+                            case 6:
+                            {
+                                pState->Field_0x68--;
+                                break;
+                            }
+                        }
+                        FUN_00440550(88);
+                    }
+                }
+                if (pState->NumLaps < 1)
+                {
+                    pState->NumLaps = 5;
+                }
+                if (pState->NumLaps > 5)
+                {
+                    pState->NumLaps = 1;
+                }
+                if (pState->AISpeed < 1)
+                {
+                    pState->AISpeed = 3;
+                }
+                if (pState->AISpeed > 3)
+                {
+                    pState->AISpeed = 1;
+                }
+                if (pState->WinningsID < 1)
+                {
+                    pState->WinningsID = 3;
+                }
+                if (pState->WinningsID > 3)
+                {
+                    pState->WinningsID = 1;
+                }
+                if (pState->Field_0x68 < -1)
+                {
+                    pState->Field_0x68 = 20;
+                }
+                if (pState->Field_0x68 > 20)
+                {
+                    pState->Field_0x68 = -1;
+                }
+
+                if (IsFreePlay() || FUN_0041d6c0() != 0)
+                {
+                    g_LoadTrackModel = Info.LoadModel;
+                    FUN_0041e5a0();
+                }
+            }
         }
-        //     if ((DAT_0050c554 == 0) && (DAT_00e295a0 >= 1.0))
-        //     {
-        //         puVar11 = &DAT_0050c918;
-        //         do {
-        //             if (DAT_004eb39c == 0) {
-        //                 if ((DAT_004d6b48 != 0) &&
-        //                     (((iVar6 = FUN_0041d6b0(), iVar6 == 0 || (iVar6 = FUN_0041d6c0(), iVar6 != 0)) &&
-        //                         (DAT_00e2a698 == 0)))) {
-        //                     FUN_00440550(0x54);
-        //                     if (pState->bIsTournament == false) {
-        //                         if (pState->Field_0x6D == '\0') {
-        //                             if ((char)pState->field_0x70 < '\x02') {
-        //                                 if ((pState->field91_0x64 == 0) || (DAT_0050c558 != '\x02')) {
-        //                                     pState->field_0x72 = DAT_0050c558;
-        //                                 }
-        //                                 else {
-        //                                     pState->field_0x72 = 1;
-        //                                 }
-        //                             }
-        //                             else {
-        //                                 pState->field_0x72 = DAT_0050c55c;
-        //                             }
-        //                         }
-        //                         else {
-        //                             pState->field_0x72 = 1;
-        //                         }
-        //                     }
-        //                     else {
-        //                         pState->field_0x72 = 0xc;
-        //                     }
-        //                     InitTracks(pState, false);
-        //                     FUN_0045bee0(pState, 0x24, 3, 0);
-        //                     DAT_0050c554 = 1;
-        //                     return;
-        //                 }
-        //                 if ((DAT_004d6b44 != 0) && (DAT_00e2a698 == 0)) {
-        //                     FUN_00440550(0x4d);
-        //                     InitTracks(pState, false);
-        //                     SetMenuIdx(pState, 0xc);
-        //                     return;
-        //                 }
-        //             }
-        //             if ('\x01' < DAT_0050c560) {
-        //                 if ((*puVar11 & 0x4000) != 0) {
-        //                     DAT_0050c550 = DAT_0050c550 + -1;
-        //                     FUN_00440550(0x58);
-        //                 }
-        //                 if ((*puVar11 & 0x8000) != 0) {
-        //                     DAT_0050c550 = DAT_0050c550 + 1;
-        //                     FUN_00440550(0x58);
-        //                 }
-        //                 if (DAT_0050c550 < 0) {
-        //                     DAT_0050c550 = DAT_0050c560 + -1;
-        //                 }
-        //                 if (DAT_0050c560 + -1 < DAT_0050c550) {
-        //                     DAT_0050c550 = 0;
-        //                 }
-        //             }
-        //             if ('\0' < DAT_0050c560) {
-        //                 if ((*puVar11 & 0x20000) != 0) {
-        //                     switch (DAT_0050c430[DAT_0050c550]) {
-        //                         case 0:
-        //                             pState->Field_0x6E = pState->Field_0x6E == '\0';
-        //                             break;
-        //                         case 1:
-        //                             pState->WinningsID = pState->WinningsID + '\x01';
-        //                             break;
-        //                         case 2:
-        //                             pState->field131_0x8f = pState->field131_0x8f + '\x01';
-        //                             break;
-        //                         case 3:
-        //                             if ((char)pState->field_0x70 < '\x02') {
-        //                                 if (DAT_0050c558 == '\b') {
-        //                                     _DAT_0050c558 = CONCAT31(DAT_0050c558_1, 0xc);
-        //                                 }
-        //                                 else if (DAT_0050c558 == '\f') {
-        //                                     _DAT_0050c558 = CONCAT31(DAT_0050c558_1, 1);
-        //                                 }
-        //                                 else {
-        //                                     _DAT_0050c558 = CONCAT31(DAT_0050c558_1, DAT_0050c558 << 1);
-        //                                 }
-        //                             }
-        //                             else {
-        //                                 cVar4 = DAT_0050c55c + '\x02';
-        //                                 _DAT_0050c55c = CONCAT31(DAT_0050c55c_1, cVar4);
-        //                                 if (cVar4 == '\b') {
-        //                                     _DAT_0050c55c = CONCAT31(DAT_0050c55c_1, 2);
-        //                                 }
-        //                             }
-        //                             break;
-        //                         case 4:
-        //                             pState->Field_0x90 = pState->Field_0x90 + '\x01';
-        //                             break;
-        //                         case 5:
-        //                             pState->field91_0x64 = (uint)(pState->field91_0x64 == 0);
-        //                             break;
-        //                         case 6:
-        //                             *(int*)&pState->field_0x68 = *(int*)&pState->field_0x68 + 1;
-        //                     }
-        //                     FUN_00440550(0x58);
-        //                 }
-        //                 if ((*puVar11 & 0x10000) != 0) {
-        //                     switch (DAT_0050c430[DAT_0050c550]) {
-        //                         case 0:
-        //                             pState->Field_0x6E = pState->Field_0x6E == '\0';
-        //                             break;
-        //                         case 1:
-        //                             pState->WinningsID = pState->WinningsID + -1;
-        //                             break;
-        //                         case 2:
-        //                             pState->field131_0x8f = pState->field131_0x8f + -1;
-        //                             break;
-        //                         case 3:
-        //                             if ((char)pState->field_0x70 < '\x02') {
-        //                                 if (DAT_0050c558 == '\f') {
-        //                                     _DAT_0050c558 = CONCAT31(DAT_0050c558_1, 8);
-        //                                 }
-        //                                 else if (DAT_0050c558 == '\x01') {
-        //                                     _DAT_0050c558 = CONCAT31(DAT_0050c558_1, 0xc);
-        //                                 }
-        //                                 else {
-        //                                     _DAT_0050c558 = CONCAT31(DAT_0050c558_1, (byte)DAT_0050c558 >> 1);
-        //                                 }
-        //                             }
-        //                             else {
-        //                                 cVar4 = DAT_0050c55c + -2;
-        //                                 _DAT_0050c55c = CONCAT31(DAT_0050c55c_1, cVar4);
-        //                                 if (cVar4 == '\0') {
-        //                                     _DAT_0050c55c = CONCAT31(DAT_0050c55c_1, 6);
-        //                                 }
-        //                             }
-        //                             break;
-        //                         case 4:
-        //                             pState->Field_0x90 = pState->Field_0x90 + -1;
-        //                             break;
-        //                         case 5:
-        //                             pState->field91_0x64 = (uint)(pState->field91_0x64 == 0);
-        //                             break;
-        //                         case 6:
-        //                             *(int*)&pState->field_0x68 = *(int*)&pState->field_0x68 + -1;
-        //                     }
-        //                     FUN_00440550(0x58);
-        //                 }
-        //             }
-        //             if (pState->field131_0x8f < '\x01') {
-        //                 pState->field131_0x8f = '\x05';
-        //             }
-        //             if ('\x05' < pState->field131_0x8f) {
-        //                 pState->field131_0x8f = '\x01';
-        //             }
-        //             if ((char)pState->Field_0x90 < '\x01') {
-        //                 pState->Field_0x90 = 3;
-        //             }
-        //             if ('\x03' < (char)pState->Field_0x90) {
-        //                 pState->Field_0x90 = 1;
-        //             }
-        //             if ((char)pState->WinningsID < '\x01') {
-        //                 pState->WinningsID = 3;
-        //             }
-        //             if ('\x03' < (char)pState->WinningsID) {
-        //                 pState->WinningsID = 1;
-        //             }
-        //             if (*(int*)&pState->field_0x68 < -1) {
-        //                 *(undefined4*)&pState->field_0x68 = 0x14;
-        //             }
-        //             if (0x14 < *(int*)&pState->field_0x68) {
-        //                 *(undefined4*)&pState->field_0x68 = 0xffffffff;
-        //             }
-        //             puVar11 = puVar11 + 1;
-        //         } while ((int)puVar11 < 0x50c91c);
-        //         iVar6 = FUN_0041d6b0();
-        //         if ((iVar6 == 0) || (iVar6 = FUN_0041d6c0(), iVar6 != 0)) {
-        //             g_LoadTrackModel = g_aTrackInfos[pState->TrackID].LoadModel;
-        //             FUN_0041e5a0();
-        //         }
-        //     }
-        // }
     }
 }
