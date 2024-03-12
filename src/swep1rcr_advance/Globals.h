@@ -18,6 +18,7 @@ static PlanetName*    g_aPlanetNames                    =  (PlanetName*)   0x00e
 static ImgParam*      g_aImageParams                    =  (ImgParam*)     0x00e9ba60;        // Length: 400
 static int32_t&       g_ImgCount                        = *(int32_t*)      0x004b91b8;
 static int32_t&       g_LoadTrackModel                  = *(int32_t*)      0x00ea05ac;        // Apparently only used when g_bIsFreePlay == true ?
+static PilotInfo*     g_aPilotInfos                     =  (PilotInfo*)    0x004c2714;        // Length: 23
 
 // Array of 2 bits representing the place of each track
 //  11 - 1st place
@@ -65,6 +66,9 @@ static const char*    g_pTxtAverage                     =  (const char*)   0x004
 static const char*    g_pTxtFast                        =  (const char*)   0x004c1020;        // "/SCREENTEXT_221/~f4~sFast"
 static const char*    g_pTxtAISpeed                     =  (const char*)   0x004c1000;        // "/SCREENTEXT_218/~f4~sAI Speed:"
 static const char*    g_pTxtDemoMode                    =  (const char*)   0x004c0fe0;        // "/SCREENTEXT_231/~f4~sDemo mode:"
+static const char*    g_pTxtTrackFavorite               =  (const char*)   0x004c0f7c;        // "/SCREENTEXT_529/~f4~c~sTrack Favorite:"
+static const char*    g_pTxtMinPlace3rd                 =  (const char*)   0x004c0f40;        // "/SCREENTEXT_527/~f4~c~sMust place 3rd or better to progress"
+static const char*    g_pTxtMinPlace4th                 =  (const char*)   0x004c0f04;        // "/SCREENTEXT_528/~f4~c~sMust place 4th or better to progress"
 static const char*    g_pTxtCutscene                    =  (const char*)   0x004c0fb4;        // "~f4~sCutscene:"
                                                                            
 static const char*    g_pTxtTrackID_00                  =  (const char*)   0x004c1728;        // "/SCREENTEXT_497/~~The Boonta Training Course"
@@ -126,3 +130,7 @@ static int32_t*       DAT_00e29900                      =  (int32_t*)      0x00e
 static int32_t*       DAT_00e2afa0                      =  (int32_t*)      0x00e2afa0;        // Length: 151 ?
 
 static int32_t*       DAT_00e29a88                      =  (int32_t*)      0x00e29a88;        // a.k.a. &DAT_00e29900[98]
+static float*         DAT_00e365f4                      =  (float*)        0x00e365f4;        // Length: 50 (2 * 25 Track Times?)
+static float*         DAT_00e366bc                      =  (float*)        0x00e366bc;        // Length: 50 (2 * 25 Track Times?)
+static uint8_t*       DAT_00e37404                      =  (uint8_t*)      0x00e37404;        // Length: ??? (50?)
+static uint8_t*       DAT_00e37436                      =  (uint8_t*)      0x00e37436;        // Length: ??? (50?)

@@ -41,15 +41,15 @@ namespace FUN
     typedef void(FUN_0041e5a0_t)();
     static  FUN_0041e5a0_t* FUN_0041e5a0 = (FUN_0041e5a0_t*)0x0041e5a0;
 
-    typedef void(FUN_00440150_t)(char* pText, int param_2);
-    static  FUN_00440150_t* FUN_00440150 = (FUN_00440150_t*)0x00440150;
-
     // ImgSize ?
     typedef void(FUN_004286c0_t)(uint16_t ImgIdx, uint16_t param_2, uint16_t param_3);
     static  FUN_004286c0_t* FUN_004286c0 = (FUN_004286c0_t*)0x004286c0;
 
     typedef void(FUN_00412e20_t)();
     static  FUN_00412e20_t* FUN_00412e20 = (FUN_00412e20_t*)0x00412e20;
+
+    typedef void(FUN_004403e0_t)(MenuState *pState, int param_2, int param_3, int32_t param_4, char param_5);
+    static  FUN_004403e0_t* FUN_004403e0 = (FUN_004403e0_t*)0x004403e0;
 
 
     // FUN_0042d600
@@ -877,8 +877,7 @@ namespace FUN
             pState->TrackID = -1;
         }
 
-        // Horizontal selection
-        FUN_00440150(local_100, 55);
+        MenuAxisHorizontal(nullptr, 55);
 
         uint8_t R, G, B;
         const char* pTxtCircuit = nullptr;
@@ -1344,287 +1343,292 @@ namespace FUN
             }
         }
 
-        return;
+        if (DAT_0050c554 == 0)
+        {
+            uVar18 = 0x40533333;
+        }
+        else
+        {
+            uVar18 = 0xc0533333;
+        }
+
+        FUN_00469b90(uVar18);
+        if (DAT_00e295a0 > 0.0)
+        {
+            DrawHoloPlanet(pState, g_aTrackInfos[pState->TrackID].PlanetIdx, DAT_00e295a0 * 0.5);
+        }
+        
+        if (DAT_0050c554 == 0 && DAT_0050c554 == 0)
+        {
+            DrawTrackPreview(pState, pState->TrackID, 0.5);
+            // if ((g_aTrackInfos[pState->TrackID].LoadModel == -1) ||
+            //     (g_aTrackInfos[pState->TrackID].LoadSpline == -1))
+            // {
+            //     pcVar7 = StrSanitise(g_TxtPlanetNotLoaded);
+            //     rcr_sprintf(local_40, pcVar7);
+            //     pcVar7 = local_40;
+            //     uVar15 = 0xff;
+            //     uVar16 = 0xff;
+            //     uVar17 = 0xffff;
+            //     FUN_004816b0();
+            //     lVar12 = __ftol((double)CONCAT44(pcVar7, CONCAT22(uVar17, CONCAT11(uVar16, uVar15))));
+            //     uVar5 = (undefined)lVar12;
+            //     uVar13 = (undefined)((ulonglong)lVar12 >> 8);
+            //     uVar14 = (undefined2)((ulonglong)lVar12 >> 0x10);
+            //     FUN_004816b0();
+            //     lVar12 = __ftol((double)CONCAT26(uVar17, CONCAT15(uVar16, CONCAT14(uVar15, CONCAT22(uVar14,
+            //         CONCAT11(uVar13, uVar5))))));
+            //     uVar18 = (undefined4)lVar12;
+            //     FUN_004816b0();
+            //     lVar12 = __ftol((double)CONCAT26(uVar14, CONCAT15(uVar13, CONCAT14(uVar5, uVar18))));
+            //     UIText(0xa0, 0xcd, (int)lVar12, uVar18, CONCAT22(uVar14, CONCAT11(uVar13, uVar5)),
+            //         CONCAT22(uVar17, CONCAT11(uVar16, uVar15)), pcVar7);
+            // }
+
+            // Track Name
+            const char* pTrackName = GetTrackName(pState->TrackID);
+            pTrackName = StrSanitise(pTrackName);
+            rcr_sprintf(local_40, "~c~s%s", pTrackName);
+            UIText(0xa0, 0x25, 0, 0xff, 0, 0xff, local_40);
+            FUN_0042de10(local_40, 0);
+            FUN_0042de10(local_40, 0);
+            MenuAxisHorizontal(nullptr, 38);
+            FUN_004403e0(pState, 100, 55, 0, 0);
+            FUN_004403e0(pState, 220, 55, 0, 3);
+
+            // Record 3 Laps
+            iVar6 = pState->Field_0x6E + pState->TrackID * 2;
+            if (DAT_00e365f4[iVar6] < 3599.0f)
+            {
+                uint8_t PilotIdx = DAT_00e37404[iVar6];
+                const char* pNameFirst = StrSanitise(g_aPilotInfos[PilotIdx].NameFirst);
+                const char* pNameLast = StrSanitise(g_aPilotInfos[PilotIdx].NameLast);
+                rcr_sprintf(local_40, "~f4~c~s%s %s", pNameFirst, pNameLast);
+                UIText(100, 78, 163, 190, 17, 255, local_40);
+                ImgVisible(23 + PilotIdx, true);
+                ImgPosition(23 + PilotIdx, 84, 85);
+                ImgScale(23 + PilotIdx, 0.5, 0.5);
+                ImgColor(23 + PilotIdx, 255, 255, 255, 255);
+            }
+
+            // Record Best Lap
+            iVar6 = pState->Field_0x6E + pState->TrackID * 2;
+            if (DAT_00e366bc[iVar6] < 3599.0f)
+            {
+                uint8_t PilotIdx = DAT_00e37436[iVar6];
+                const char* pNameFirst = StrSanitise(g_aPilotInfos[PilotIdx].NameFirst);
+                const char* pNameLast = StrSanitise(g_aPilotInfos[PilotIdx].NameLast);
+                rcr_sprintf(local_40, "~f4~c~s%s %s", pNameFirst, pNameLast);
+
+                UIText(220, 78, 163, 190, 17, 255, local_40);
+                ImgVisible(46 + PilotIdx, true);
+                ImgPosition(46 + PilotIdx, 204, 85);
+                ImgScale(46 + PilotIdx, 0.5, 0.5);
+                ImgColor(46 + PilotIdx, 255, 255, 255, 255);
+            }
+
+            // Track Favorite
+            uint8_t FavPilotIdx = g_aTrackInfos[pState->TrackID].FavoritePilot;
+            const char* pNameFirst = StrSanitise(g_aPilotInfos[FavPilotIdx].NameFirst);
+            const char* pNameLast = StrSanitise(g_aPilotInfos[FavPilotIdx].NameLast);
+
+            UIText(240, 130, 50, 255, 255, 255, StrSanitise(g_pTxtTrackFavorite));
+            rcr_sprintf(local_40, "~f4~c~s%s %s", pNameFirst, pNameLast);
+            UIText(240, 137, 163, 190, 17, 255, local_40);
+            ImgVisible(FavPilotIdx, true);
+            ImgPosition(FavPilotIdx, 208, 145);
+            ImgScale(FavPilotIdx, 1.0, 1.0);
+            ImgColor(FavPilotIdx, 255, 255, 255, 255);
+        
+            // "Must place xxx or better to progress"
+            if (pState->bIsTournament)
+            {
+                iVar6 = VerifySelectedTrack(pState, g_SelectedTrackIdx);
+                iVar6 = FUN_00440a20(pState->CircuitIdx, iVar6);
+                if (iVar6 != 0)
+                {
+                    const char* pMinPlace = cVar4 == 3 ? g_pTxtMinPlace3rd : g_pTxtMinPlace4th;
+                    pMinPlace = StrSanitise(pMinPlace);
+                    UIText(160, 115, 163, 190, 17, 255, pMinPlace);
+                }
+            }
+        }
+        //     if ((DAT_0050c554 == 0) && (DAT_00e295a0 >= 1.0))
+        //     {
+        //         puVar11 = &DAT_0050c918;
+        //         do {
+        //             if (DAT_004eb39c == 0) {
+        //                 if ((DAT_004d6b48 != 0) &&
+        //                     (((iVar6 = FUN_0041d6b0(), iVar6 == 0 || (iVar6 = FUN_0041d6c0(), iVar6 != 0)) &&
+        //                         (DAT_00e2a698 == 0)))) {
+        //                     FUN_00440550(0x54);
+        //                     if (pState->bIsTournament == false) {
+        //                         if (pState->Field_0x6D == '\0') {
+        //                             if ((char)pState->field_0x70 < '\x02') {
+        //                                 if ((pState->field91_0x64 == 0) || (DAT_0050c558 != '\x02')) {
+        //                                     pState->field_0x72 = DAT_0050c558;
+        //                                 }
+        //                                 else {
+        //                                     pState->field_0x72 = 1;
+        //                                 }
+        //                             }
+        //                             else {
+        //                                 pState->field_0x72 = DAT_0050c55c;
+        //                             }
+        //                         }
+        //                         else {
+        //                             pState->field_0x72 = 1;
+        //                         }
+        //                     }
+        //                     else {
+        //                         pState->field_0x72 = 0xc;
+        //                     }
+        //                     InitTracks(pState, false);
+        //                     FUN_0045bee0(pState, 0x24, 3, 0);
+        //                     DAT_0050c554 = 1;
+        //                     return;
+        //                 }
+        //                 if ((DAT_004d6b44 != 0) && (DAT_00e2a698 == 0)) {
+        //                     FUN_00440550(0x4d);
+        //                     InitTracks(pState, false);
+        //                     SetMenuIdx(pState, 0xc);
+        //                     return;
+        //                 }
+        //             }
+        //             if ('\x01' < DAT_0050c560) {
+        //                 if ((*puVar11 & 0x4000) != 0) {
+        //                     DAT_0050c550 = DAT_0050c550 + -1;
+        //                     FUN_00440550(0x58);
+        //                 }
+        //                 if ((*puVar11 & 0x8000) != 0) {
+        //                     DAT_0050c550 = DAT_0050c550 + 1;
+        //                     FUN_00440550(0x58);
+        //                 }
+        //                 if (DAT_0050c550 < 0) {
+        //                     DAT_0050c550 = DAT_0050c560 + -1;
+        //                 }
+        //                 if (DAT_0050c560 + -1 < DAT_0050c550) {
+        //                     DAT_0050c550 = 0;
+        //                 }
+        //             }
+        //             if ('\0' < DAT_0050c560) {
+        //                 if ((*puVar11 & 0x20000) != 0) {
+        //                     switch (DAT_0050c430[DAT_0050c550]) {
+        //                         case 0:
+        //                             pState->Field_0x6E = pState->Field_0x6E == '\0';
+        //                             break;
+        //                         case 1:
+        //                             pState->WinningsID = pState->WinningsID + '\x01';
+        //                             break;
+        //                         case 2:
+        //                             pState->field131_0x8f = pState->field131_0x8f + '\x01';
+        //                             break;
+        //                         case 3:
+        //                             if ((char)pState->field_0x70 < '\x02') {
+        //                                 if (DAT_0050c558 == '\b') {
+        //                                     _DAT_0050c558 = CONCAT31(DAT_0050c558_1, 0xc);
+        //                                 }
+        //                                 else if (DAT_0050c558 == '\f') {
+        //                                     _DAT_0050c558 = CONCAT31(DAT_0050c558_1, 1);
+        //                                 }
+        //                                 else {
+        //                                     _DAT_0050c558 = CONCAT31(DAT_0050c558_1, DAT_0050c558 << 1);
+        //                                 }
+        //                             }
+        //                             else {
+        //                                 cVar4 = DAT_0050c55c + '\x02';
+        //                                 _DAT_0050c55c = CONCAT31(DAT_0050c55c_1, cVar4);
+        //                                 if (cVar4 == '\b') {
+        //                                     _DAT_0050c55c = CONCAT31(DAT_0050c55c_1, 2);
+        //                                 }
+        //                             }
+        //                             break;
+        //                         case 4:
+        //                             pState->Field_0x90 = pState->Field_0x90 + '\x01';
+        //                             break;
+        //                         case 5:
+        //                             pState->field91_0x64 = (uint)(pState->field91_0x64 == 0);
+        //                             break;
+        //                         case 6:
+        //                             *(int*)&pState->field_0x68 = *(int*)&pState->field_0x68 + 1;
+        //                     }
+        //                     FUN_00440550(0x58);
+        //                 }
+        //                 if ((*puVar11 & 0x10000) != 0) {
+        //                     switch (DAT_0050c430[DAT_0050c550]) {
+        //                         case 0:
+        //                             pState->Field_0x6E = pState->Field_0x6E == '\0';
+        //                             break;
+        //                         case 1:
+        //                             pState->WinningsID = pState->WinningsID + -1;
+        //                             break;
+        //                         case 2:
+        //                             pState->field131_0x8f = pState->field131_0x8f + -1;
+        //                             break;
+        //                         case 3:
+        //                             if ((char)pState->field_0x70 < '\x02') {
+        //                                 if (DAT_0050c558 == '\f') {
+        //                                     _DAT_0050c558 = CONCAT31(DAT_0050c558_1, 8);
+        //                                 }
+        //                                 else if (DAT_0050c558 == '\x01') {
+        //                                     _DAT_0050c558 = CONCAT31(DAT_0050c558_1, 0xc);
+        //                                 }
+        //                                 else {
+        //                                     _DAT_0050c558 = CONCAT31(DAT_0050c558_1, (byte)DAT_0050c558 >> 1);
+        //                                 }
+        //                             }
+        //                             else {
+        //                                 cVar4 = DAT_0050c55c + -2;
+        //                                 _DAT_0050c55c = CONCAT31(DAT_0050c55c_1, cVar4);
+        //                                 if (cVar4 == '\0') {
+        //                                     _DAT_0050c55c = CONCAT31(DAT_0050c55c_1, 6);
+        //                                 }
+        //                             }
+        //                             break;
+        //                         case 4:
+        //                             pState->Field_0x90 = pState->Field_0x90 + -1;
+        //                             break;
+        //                         case 5:
+        //                             pState->field91_0x64 = (uint)(pState->field91_0x64 == 0);
+        //                             break;
+        //                         case 6:
+        //                             *(int*)&pState->field_0x68 = *(int*)&pState->field_0x68 + -1;
+        //                     }
+        //                     FUN_00440550(0x58);
+        //                 }
+        //             }
+        //             if (pState->field131_0x8f < '\x01') {
+        //                 pState->field131_0x8f = '\x05';
+        //             }
+        //             if ('\x05' < pState->field131_0x8f) {
+        //                 pState->field131_0x8f = '\x01';
+        //             }
+        //             if ((char)pState->Field_0x90 < '\x01') {
+        //                 pState->Field_0x90 = 3;
+        //             }
+        //             if ('\x03' < (char)pState->Field_0x90) {
+        //                 pState->Field_0x90 = 1;
+        //             }
+        //             if ((char)pState->WinningsID < '\x01') {
+        //                 pState->WinningsID = 3;
+        //             }
+        //             if ('\x03' < (char)pState->WinningsID) {
+        //                 pState->WinningsID = 1;
+        //             }
+        //             if (*(int*)&pState->field_0x68 < -1) {
+        //                 *(undefined4*)&pState->field_0x68 = 0x14;
+        //             }
+        //             if (0x14 < *(int*)&pState->field_0x68) {
+        //                 *(undefined4*)&pState->field_0x68 = 0xffffffff;
+        //             }
+        //             puVar11 = puVar11 + 1;
+        //         } while ((int)puVar11 < 0x50c91c);
+        //         iVar6 = FUN_0041d6b0();
+        //         if ((iVar6 == 0) || (iVar6 = FUN_0041d6c0(), iVar6 != 0)) {
+        //             g_LoadTrackModel = g_aTrackInfos[pState->TrackID].LoadModel;
+        //             FUN_0041e5a0();
+        //         }
+        //     }
+        // }
     }
-    //     if (DAT_0050c554 == 0) {
-    //         uVar18 = 0x40533333;
-    //     }
-    //     else {
-    //         uVar18 = 0xc0533333;
-    //     }
-    //     FUN_00469b90(uVar18);
-    //     if (0.0 < DAT_00e295a0) {
-    //         DrawHoloPlanet(pState, CONCAT22((char)g_aTrackInfos[pState->TrackID].PlanetIdx >> 7,
-    //             (short)(char)g_aTrackInfos[pState->TrackID].PlanetIdx),
-    //             DAT_00e295a0 * 0.5);
-    //     }
-    //     if ((DAT_0050c554 == 0) &&
-    //         (FUN_00456c70(pState, CONCAT22(pState->TrackID >> 7, (short)pState->TrackID), 0.5),
-    //             DAT_0050c554 == 0)) {
-    //         if ((g_aTrackInfos[pState->TrackID].LoadModel == -1) ||
-    //             (g_aTrackInfos[pState->TrackID].LoadSpline == -1)) {
-    //             pcVar7 = StrSanitise(g_TxtPlanetNotLoaded);
-    //             rcr_sprintf(local_40, pcVar7);
-    //             pcVar7 = local_40;
-    //             uVar15 = 0xff;
-    //             uVar16 = 0xff;
-    //             uVar17 = 0xffff;
-    //             FUN_004816b0();
-    //             lVar12 = __ftol((double)CONCAT44(pcVar7, CONCAT22(uVar17, CONCAT11(uVar16, uVar15))));
-    //             uVar5 = (undefined)lVar12;
-    //             uVar13 = (undefined)((ulonglong)lVar12 >> 8);
-    //             uVar14 = (undefined2)((ulonglong)lVar12 >> 0x10);
-    //             FUN_004816b0();
-    //             lVar12 = __ftol((double)CONCAT26(uVar17, CONCAT15(uVar16, CONCAT14(uVar15, CONCAT22(uVar14,
-    //                 CONCAT11(uVar13, uVar5))))));
-    //             uVar18 = (undefined4)lVar12;
-    //             FUN_004816b0();
-    //             lVar12 = __ftol((double)CONCAT26(uVar14, CONCAT15(uVar13, CONCAT14(uVar5, uVar18))));
-    //             UIText(0xa0, 0xcd, (int)lVar12, uVar18, CONCAT22(uVar14, CONCAT11(uVar13, uVar5)),
-    //                 CONCAT22(uVar17, CONCAT11(uVar16, uVar15)), pcVar7);
-    //         }
-    //         pcVar7 = GetTrackName((int)pState->TrackID);
-    //         pcVar7 = StrSanitise(0xc0, pcVar7);
-    //         iVar8 = rcr_sprintf(local_40, pcVar7);
-    //         UIText(0xa0, 0x25, 0, 0xffffffff, 0, 0xffffffff, local_40);
-    //         FUN_0042de10(local_40, 0);
-    //         uVar5 = 0x26;
-    //         uVar13 = 0;
-    //         uVar14 = 0;
-    //         FUN_0042de10(local_40, 0);
-    //         lVar12 = __ftol((double)CONCAT44(iVar8, CONCAT22(uVar14, CONCAT11(uVar13, uVar5))));
-    //         FUN_00440150((char)lVar12);
-    //         FUN_004403e0(pState, 100, 0x37, 0, 0);
-    //         FUN_004403e0(pState, 0xdc, 0x37, 0, 3);
-    //         iVar6 = (int)(char)pState->Field_0x6E + pState->TrackID * 2;
-    //         if (*(float*)(&DAT_00e365f4 + iVar6 * 4) < 3599.99) {
-    //             iVar6 = (int)(char)(&DAT_00e37404)[iVar6];
-    //             uVar18 = StrSanitise((&PTR_s_ / SCREENTEXT_323 / ~~Skywalker_004c2718)[iVar6 * 0xd]);
-    //             uVar5 = StrSanitise((char)(&PTR_s_ / SCREENTEXT_322 / ~~Anakin_004c2714)[iVar6 * 0xd], uVar18);
-    //             pcVar7 = StrSanitise(0xa4, uVar5);
-    //             rcr_sprintf(local_40, pcVar7);
-    //             UIText(100, 0x4e, 0xffffffa3, 0xffffffbe, 0x11, 0xffffffff, local_40);
-    //             uVar2 = (uint16_t)(iVar6 + 0x17);
-    //             ImgVisible(uVar2, true);
-    //             ImgPosition((char)(iVar6 + 0x17), 0x54, 0x55);
-    //             ImgScale(uVar2, 0.5, 0.5);
-    //             ImgColor(uVar2, 0xff, 0xff, 0xff, 0xff);
-    //         }
-    //         iVar6 = (int)(char)pState->Field_0x6E + pState->TrackID * 2;
-    //         if (*(float*)(&DAT_00e366bc + iVar6 * 4) < 3599.99) {
-    //             iVar6 = (int)(char)(&DAT_00e37436)[iVar6];
-    //             uVar18 = StrSanitise((&PTR_s_ / SCREENTEXT_323 / ~~Skywalker_004c2718)[iVar6 * 0xd]);
-    //             uVar5 = StrSanitise((char)(&PTR_s_ / SCREENTEXT_322 / ~~Anakin_004c2714)[iVar6 * 0xd], uVar18);
-    //             pcVar7 = StrSanitise(0xa4, uVar5);
-    //             rcr_sprintf(local_40, pcVar7);
-    //             UIText(0xdc, 0x4e, 0xffffffa3, 0xffffffbe, 0x11, 0xffffffff, local_40);
-    //             uVar2 = (uint16_t)(iVar6 + 0x2e);
-    //             ImgVisible(uVar2, true);
-    //             ImgPosition((char)(iVar6 + 0x2e), 0xcc, 0x55);
-    //             ImgScale(uVar2, 0.5, 0.5);
-    //             ImgColor(uVar2, 0xff, 0xff, 0xff, 0xff);
-    //         }
-    //         cVar1 = g_aTrackInfos[pState->TrackID].FavoritePilot;
-    //         pcVar7 = StrSanitise(s_ / SCREENTEXT_529 / ~f4~c~sTrack_Fav_004c0f7c);
-    //         UIText(0xf0, 0x82, 0x32, 0xffffffff, 0xffffffff, 0xffffffff, pcVar7);
-    //         uVar18 = StrSanitise((&PTR_s_ / SCREENTEXT_323 / ~~Skywalker_004c2718)[cVar1 * 0xd]);
-    //         uVar5 = StrSanitise((char)(&PTR_s_ / SCREENTEXT_322 / ~~Anakin_004c2714)[cVar1 * 0xd], uVar18);
-    //         pcVar7 = StrSanitise(0xa4, uVar5);
-    //         rcr_sprintf(local_40, pcVar7);
-    //         UIText(0xf0, 0x89, 0xffffffa3, 0xffffffbe, 0x11, 0xffffffff, local_40);
-    //         ImgVisible((short)cVar1, true);
-    //         ImgPosition(cVar1, 0xd0, 0x91);
-    //         ImgScale((short)cVar1, 1.0, 1.0);
-    //         ImgColor((short)cVar1, 0xff, 0xff, 0xff, 0xff);
-    //         if (pState->bIsTournament != false) {
-    //             iVar6 = VerifySelectedTrack(pState, g_SelectedTrackIdx);
-    //             iVar6 = FUN_00440a20(pState->CircuitIdx, iVar6);
-    //             if (iVar6 != 0) {
-    //                 if (cVar4 == '\x03') {
-    //                     pcVar7 = s_ / SCREENTEXT_527 / ~f4~c~sMust_plac_004c0f40;
-    //                 }
-    //                 else {
-    //                     pcVar7 = s_ / SCREENTEXT_528 / ~f4~c~sMust_plac_004c0f04;
-    //                 }
-    //                 pcVar7 = StrSanitise(pcVar7);
-    //                 UIText(0xa0, 0x73, 0xffffffa3, 0xffffffbe, 0x11, 0xffffffff, pcVar7);
-    //             }
-    //         }
-    //         if ((DAT_0050c554 == 0) && (1.0 <= DAT_00e295a0)) {
-    //             puVar11 = &DAT_0050c918;
-    //             do {
-    //                 if (DAT_004eb39c == 0) {
-    //                     if ((DAT_004d6b48 != 0) &&
-    //                         (((iVar6 = FUN_0041d6b0(), iVar6 == 0 || (iVar6 = FUN_0041d6c0(), iVar6 != 0)) &&
-    //                             (DAT_00e2a698 == 0)))) {
-    //                         FUN_00440550(0x54);
-    //                         if (pState->bIsTournament == false) {
-    //                             if (pState->Field_0x6D == '\0') {
-    //                                 if ((char)pState->field_0x70 < '\x02') {
-    //                                     if ((pState->field91_0x64 == 0) || (DAT_0050c558 != '\x02')) {
-    //                                         pState->field_0x72 = DAT_0050c558;
-    //                                     }
-    //                                     else {
-    //                                         pState->field_0x72 = 1;
-    //                                     }
-    //                                 }
-    //                                 else {
-    //                                     pState->field_0x72 = DAT_0050c55c;
-    //                                 }
-    //                             }
-    //                             else {
-    //                                 pState->field_0x72 = 1;
-    //                             }
-    //                         }
-    //                         else {
-    //                             pState->field_0x72 = 0xc;
-    //                         }
-    //                         InitTracks(pState, false);
-    //                         FUN_0045bee0(pState, 0x24, 3, 0);
-    //                         DAT_0050c554 = 1;
-    //                         return;
-    //                     }
-    //                     if ((DAT_004d6b44 != 0) && (DAT_00e2a698 == 0)) {
-    //                         FUN_00440550(0x4d);
-    //                         InitTracks(pState, false);
-    //                         SetMenuIdx(pState, 0xc);
-    //                         return;
-    //                     }
-    //                 }
-    //                 if ('\x01' < DAT_0050c560) {
-    //                     if ((*puVar11 & 0x4000) != 0) {
-    //                         DAT_0050c550 = DAT_0050c550 + -1;
-    //                         FUN_00440550(0x58);
-    //                     }
-    //                     if ((*puVar11 & 0x8000) != 0) {
-    //                         DAT_0050c550 = DAT_0050c550 + 1;
-    //                         FUN_00440550(0x58);
-    //                     }
-    //                     if (DAT_0050c550 < 0) {
-    //                         DAT_0050c550 = DAT_0050c560 + -1;
-    //                     }
-    //                     if (DAT_0050c560 + -1 < DAT_0050c550) {
-    //                         DAT_0050c550 = 0;
-    //                     }
-    //                 }
-    //                 if ('\0' < DAT_0050c560) {
-    //                     if ((*puVar11 & 0x20000) != 0) {
-    //                         switch (DAT_0050c430[DAT_0050c550]) {
-    //                             case 0:
-    //                                 pState->Field_0x6E = pState->Field_0x6E == '\0';
-    //                                 break;
-    //                             case 1:
-    //                                 pState->WinningsID = pState->WinningsID + '\x01';
-    //                                 break;
-    //                             case 2:
-    //                                 pState->field131_0x8f = pState->field131_0x8f + '\x01';
-    //                                 break;
-    //                             case 3:
-    //                                 if ((char)pState->field_0x70 < '\x02') {
-    //                                     if (DAT_0050c558 == '\b') {
-    //                                         _DAT_0050c558 = CONCAT31(DAT_0050c558_1, 0xc);
-    //                                     }
-    //                                     else if (DAT_0050c558 == '\f') {
-    //                                         _DAT_0050c558 = CONCAT31(DAT_0050c558_1, 1);
-    //                                     }
-    //                                     else {
-    //                                         _DAT_0050c558 = CONCAT31(DAT_0050c558_1, DAT_0050c558 << 1);
-    //                                     }
-    //                                 }
-    //                                 else {
-    //                                     cVar4 = DAT_0050c55c + '\x02';
-    //                                     _DAT_0050c55c = CONCAT31(DAT_0050c55c_1, cVar4);
-    //                                     if (cVar4 == '\b') {
-    //                                         _DAT_0050c55c = CONCAT31(DAT_0050c55c_1, 2);
-    //                                     }
-    //                                 }
-    //                                 break;
-    //                             case 4:
-    //                                 pState->Field_0x90 = pState->Field_0x90 + '\x01';
-    //                                 break;
-    //                             case 5:
-    //                                 pState->field91_0x64 = (uint)(pState->field91_0x64 == 0);
-    //                                 break;
-    //                             case 6:
-    //                                 *(int*)&pState->field_0x68 = *(int*)&pState->field_0x68 + 1;
-    //                         }
-    //                         FUN_00440550(0x58);
-    //                     }
-    //                     if ((*puVar11 & 0x10000) != 0) {
-    //                         switch (DAT_0050c430[DAT_0050c550]) {
-    //                             case 0:
-    //                                 pState->Field_0x6E = pState->Field_0x6E == '\0';
-    //                                 break;
-    //                             case 1:
-    //                                 pState->WinningsID = pState->WinningsID + -1;
-    //                                 break;
-    //                             case 2:
-    //                                 pState->field131_0x8f = pState->field131_0x8f + -1;
-    //                                 break;
-    //                             case 3:
-    //                                 if ((char)pState->field_0x70 < '\x02') {
-    //                                     if (DAT_0050c558 == '\f') {
-    //                                         _DAT_0050c558 = CONCAT31(DAT_0050c558_1, 8);
-    //                                     }
-    //                                     else if (DAT_0050c558 == '\x01') {
-    //                                         _DAT_0050c558 = CONCAT31(DAT_0050c558_1, 0xc);
-    //                                     }
-    //                                     else {
-    //                                         _DAT_0050c558 = CONCAT31(DAT_0050c558_1, (byte)DAT_0050c558 >> 1);
-    //                                     }
-    //                                 }
-    //                                 else {
-    //                                     cVar4 = DAT_0050c55c + -2;
-    //                                     _DAT_0050c55c = CONCAT31(DAT_0050c55c_1, cVar4);
-    //                                     if (cVar4 == '\0') {
-    //                                         _DAT_0050c55c = CONCAT31(DAT_0050c55c_1, 6);
-    //                                     }
-    //                                 }
-    //                                 break;
-    //                             case 4:
-    //                                 pState->Field_0x90 = pState->Field_0x90 + -1;
-    //                                 break;
-    //                             case 5:
-    //                                 pState->field91_0x64 = (uint)(pState->field91_0x64 == 0);
-    //                                 break;
-    //                             case 6:
-    //                                 *(int*)&pState->field_0x68 = *(int*)&pState->field_0x68 + -1;
-    //                         }
-    //                         FUN_00440550(0x58);
-    //                     }
-    //                 }
-    //                 if (pState->field131_0x8f < '\x01') {
-    //                     pState->field131_0x8f = '\x05';
-    //                 }
-    //                 if ('\x05' < pState->field131_0x8f) {
-    //                     pState->field131_0x8f = '\x01';
-    //                 }
-    //                 if ((char)pState->Field_0x90 < '\x01') {
-    //                     pState->Field_0x90 = 3;
-    //                 }
-    //                 if ('\x03' < (char)pState->Field_0x90) {
-    //                     pState->Field_0x90 = 1;
-    //                 }
-    //                 if ((char)pState->WinningsID < '\x01') {
-    //                     pState->WinningsID = 3;
-    //                 }
-    //                 if ('\x03' < (char)pState->WinningsID) {
-    //                     pState->WinningsID = 1;
-    //                 }
-    //                 if (*(int*)&pState->field_0x68 < -1) {
-    //                     *(undefined4*)&pState->field_0x68 = 0x14;
-    //                 }
-    //                 if (0x14 < *(int*)&pState->field_0x68) {
-    //                     *(undefined4*)&pState->field_0x68 = 0xffffffff;
-    //                 }
-    //                 puVar11 = puVar11 + 1;
-    //             } while ((int)puVar11 < 0x50c91c);
-    //             iVar6 = FUN_0041d6b0();
-    //             if ((iVar6 == 0) || (iVar6 = FUN_0041d6c0(), iVar6 != 0)) {
-    //                 g_LoadTrackModel = g_aTrackInfos[pState->TrackID].LoadModel;
-    //                 FUN_0041e5a0();
-    //             }
-    //         }
-    //     }
-    // }
 }
