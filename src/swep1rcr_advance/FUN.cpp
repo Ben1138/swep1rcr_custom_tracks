@@ -1218,6 +1218,8 @@ namespace FUN
                         pText = StrSanitise(g_pTxtOff);
                         goto LAB_0043be20;
                     }
+
+                    // Tournament track winnings
                     case 1:
                     {
                         if (pState->WinningsID == 1)
@@ -1228,12 +1230,12 @@ namespace FUN
                         {
                             pText = StrSanitise(g_pTxtSkilled);
                         }
-                        else
+                        else // == 3
                         {
+                            assert(pState->WinningsID == 3);
                             pText = StrSanitise(g_pTxtWinnerTakesAll);
                         }
 
-                        //rcr_sprintf(local_40, pText);
                         UITextMenu(pState, 30, PosY, 10, (char)DAT_0050c550, i, StrSanitise(g_pTxtWinnings));
                         UITextMenu(pState, 85, PosY, 10, (char)DAT_0050c550, i, pText);
 
@@ -1249,11 +1251,9 @@ namespace FUN
                         for (int8_t j = 0; j < cVar4; j++)
                         {
                             float fTruguts = 1.0 + pState->CircuitIdx * 0.5;
-                            // TODO: Das hier scheint ein völlig anderer member zu sein
-                            //fUnkn *= pState->Field_0x8A[pState->WinningsID];
-                            int iTruguts = fTruguts;
-                            pText = StrSanitise("~f0~r~s%.2f");
-                            rcr_sprintf(local_40, pText, fTruguts);
+                            fTruguts *= pState->Truguts[pState->WinningsID - 1].Truguts[j];
+                            pText = StrSanitise("~f0~r~s%d");
+                            rcr_sprintf(local_40, pText, (int)fTruguts);
                             UITextMenu(pState, 105, PosYIt, 10, DAT_0050c550, i, local_40);
                             PosYIt = PosYIt + 10;
                         }

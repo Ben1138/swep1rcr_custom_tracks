@@ -7,6 +7,18 @@ typedef long double float10;
 struct ImgDat;
 struct UnknStruct2;
 
+union Winnings
+{
+    struct
+    {
+        int16_t Truguts1st;
+        int16_t Truguts2nd;
+        int16_t Truguts3rd;
+        int16_t Truguts4th;
+    };
+    int16_t Truguts[4];
+};
+
 struct MenuState
 {
     uint8_t  Unkn0[0x08];
@@ -23,13 +35,12 @@ struct MenuState
     uint8_t  Field_0x6E;
     uint8_t  Field_0x6F;
     uint8_t  Field_0x70;
-    uint8_t  Unkn4[0x19];
-    int16_t  Field_0x8A[2];
-    int8_t   Field_0x8E;
-    int8_t   NumLaps;
+    uint8_t  Unkn4[0x1E];
+    uint8_t  NumLaps;
     uint8_t  Field_0x90;
     uint8_t  WinningsID;
-    uint8_t  Unkn5[0x22];
+    Winnings Truguts[3];
+    uint8_t  Unkn5[0x0A];
     ImgDat*  aImages[6];
 };
 static_assert(offsetof(MenuState, Field_0x0C)     == 0x0C);
@@ -42,11 +53,10 @@ static_assert(offsetof(MenuState, Field_0x6D)     == 0x6D);
 static_assert(offsetof(MenuState, Field_0x6E)     == 0x6E);
 static_assert(offsetof(MenuState, Field_0x6F)     == 0x6F);
 static_assert(offsetof(MenuState, Field_0x70)     == 0x70);
-static_assert(offsetof(MenuState, Field_0x8A)     == 0x8A);
-static_assert(offsetof(MenuState, Field_0x8E)     == 0x8E);
 static_assert(offsetof(MenuState, NumLaps)        == 0x8F);
 static_assert(offsetof(MenuState, Field_0x90)     == 0x90);
 static_assert(offsetof(MenuState, WinningsID)     == 0x91);
+static_assert(offsetof(MenuState, Truguts)        == 0x92);
 static_assert(offsetof(MenuState, aImages)        == 0xB4);
 
 
