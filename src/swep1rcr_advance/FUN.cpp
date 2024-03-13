@@ -86,7 +86,7 @@ namespace FUN
 
     // Compare two char[3]'s
     typedef bool(FUN_004409d0_t)(char *param_1, char *param_2);
-    static  FUN_004409d0_t* FUN_004409d0 = (FUN_004409d0_t*)0x00427d90; 
+    static  FUN_004409d0_t* FUN_004409d0 = (FUN_004409d0_t*)0x004409d0; 
 
     typedef void(FUN_00440c10_t)(MenuState *pState);
     static  FUN_00440c10_t* FUN_00440c10 = (FUN_00440c10_t*)0x00440c10; 
@@ -1836,7 +1836,7 @@ namespace FUN
             {
                 case 0:
                 {
-                    pMenuEntry = StrSanitise(g_pTxtStartRace);
+                    pMenuEntry = "~f4~sLos Geht's"; //StrSanitise(g_pTxtStartRace);
                     break;
                 }
                 case 1:
@@ -1953,12 +1953,14 @@ namespace FUN
                     FUN_0040a120(0);
                     FUN_00409d70(0xffffffff);
                     FUN_00409d70(0);
-                    FUN_00427d90(g_aTrackInfos[pState->TrackID].PlanetIdx, (int)g_aTrackInfos[pState->TrackID].Unkn0);
+
+                    TrackInfo Info = DBTracks::GetTrackInfo(pState->TrackID);
+                    FUN_00427d90(Info.PlanetIdx, Info.Unkn0);
                     
                     if (!IsFreePlay() || FUN_0041d6c0() != 0)
                     {
                         if (pState->bIsTournament &&
-                        (((DAT_00e35a84 != g_aTrackInfos[pState->TrackID].FavoritePilot &&
+                        (((DAT_00e35a84 != Info.FavoritePilot &&
                             (DAT_00ec8854 != 0.0)) && (DAT_0050c458 == 0))))
                         {
                             DAT_004bfedc = 15;
