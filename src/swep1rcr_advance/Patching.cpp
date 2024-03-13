@@ -93,7 +93,7 @@ namespace Patching
 
         PatchFunction(0x00440a20, (void*)&FUN::FUN_00440a20);
         PatchFunction(0x0041d6c0, (void*)&FUN::FUN_0041d6c0);
-        //PatchFunction(0x0045b290, (void*)&FUN::FUN_0045b290);
+        PatchFunction(0x0045b290, (void*)&FUN::FUN_0045b290);
 
         
         // DBTracks::g_aNewTrackInfos
