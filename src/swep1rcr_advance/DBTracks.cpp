@@ -9,7 +9,8 @@ namespace DBTracks
 {
     static uint16_t TrackCount = 0;
     TrackInfo g_aNewTrackInfos[TRACKS_COUNT_MAX]{};
-    static char g_aCustomTrackNames[TRACKS_COUNT_MAX][32]{};
+    static char g_aCustomTrackNames[CUSTOM_TRACKS_MAX][32]{};
+    static EXT::Version g_aCustomTrackBuildVersions[CUSTOM_TRACKS_MAX];
 
     void Init()
     {
@@ -26,14 +27,16 @@ namespace DBTracks
         for (uint16_t i = 28; i < TrackCount; i++)
         {
             g_aNewTrackInfos[i] = g_aTrackInfos[16];
-            //Infos[i].LoadModel = 142;
-            //Infos[i].LoadSpline = 52;
-            //Infos[i].PlanetIdx = 1;
-            //Infos[i].FavoritePilot = 2;
+            // g_aNewTrackInfos[i].LoadModel = 142;
+            // g_aNewTrackInfos[i].LoadSpline = 52;
+            // g_aNewTrackInfos[i].PlanetIdx = 1;
+            // g_aNewTrackInfos[i].FavoritePilot = 2;
 
             const uint8_t CustomID = i - 28;
             snprintf(g_aCustomTrackNames[CustomID], sizeof(g_aCustomTrackNames[CustomID]), "Custom Track %u", CustomID + 1);
+            g_aCustomTrackBuildVersions[CustomID] = { 1, 0, 0 };
         }
+        //g_aCustomTrackBuildVersions[3] = { 1, 0, 1 };
     }
 
     uint16_t GetTotalTrackCount()
@@ -80,6 +83,15 @@ namespace DBTracks
             return TrackInfo();
         }
         return g_aNewTrackInfos[TrackID];
+    }
+
+    EXT::Version GetTrackBuildVersion(uint16_t TrackID)
+    {
+        if (TrackID < 25)
+        {
+            return EXT::Version();
+        }
+        return g_aCustomTrackBuildVersions[TrackID - 28];
     }
 
     const char* GetTrackName(uint16_t TrackID)

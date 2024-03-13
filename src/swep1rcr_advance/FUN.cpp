@@ -1,6 +1,7 @@
 #include "FUN.h"
 #include "EXT.h"
 #include "DBTracks.h"
+#include "Version.h"
 #include <windows.h>
 #include <assert.h>
 #include <stdio.h>
@@ -96,6 +97,49 @@ namespace FUN
 
     typedef void(FUN_0045a3e0_t)();
     static  FUN_0045a3e0_t* FUN_0045a3e0 = (FUN_0045a3e0_t*)0x0045a3e0;
+
+    typedef void(FUN_0045bb60_t)();
+    static  FUN_0045bb60_t* FUN_0045bb60 = (FUN_0045bb60_t*)0x0045bb60;
+    
+    typedef void(FUN_0045b5d0_t)(MenuState *pState);
+    static FUN_0045b5d0_t* FUN_0045b5d0 = (FUN_0045b5d0_t*)0x0045b5d0;
+
+    typedef void(FUN_00408640_t)(uint8_t param_1);
+    static FUN_00408640_t* FUN_00408640 = (FUN_00408640_t*)0x00408640;
+
+typedef void(FUN_0041bd90_t)(int32_t param_1,int32_t param_2,int32_t param_3);
+static FUN_0041bd90_t* FUN_0041bd90 = (FUN_0041bd90_t*)0x0041bd90;
+
+typedef int(FUN_00420f90_t)();
+static FUN_00420f90_t* FUN_00420f90 = (FUN_00420f90_t*)0x00420f90;
+
+typedef int*(FUN_0045b610_t)(MenuState *pState,int *param_2);
+static FUN_0045b610_t* FUN_0045b610 = (FUN_0045b610_t*)0x0045b610;
+
+typedef int*(FUN_0045b7d0_t)(MenuState *pState,int *param_2);
+static FUN_0045b7d0_t* FUN_0045b7d0 = (FUN_0045b7d0_t*)0x0045b7d0;
+
+typedef void(FUN_0041dd50_t)(MenuState *pState, UnknStruct3 *pUnkn3);
+static FUN_0041dd50_t* FUN_0041dd50 = (FUN_0041dd50_t*)0x0041dd50;
+
+typedef void(FUN_0041bd50_t)(int32_t param_1);
+static FUN_0041bd50_t* FUN_0041bd50 = (FUN_0041bd50_t*)0x0041bd50;
+
+typedef void(FUN_00445aa0_t)(int param_1);
+static FUN_00445aa0_t* FUN_00445aa0 = (FUN_00445aa0_t*)0x00445aa0;
+
+typedef void(FUN_00447300_t)(int param_1, int32_t param_2);
+static FUN_00447300_t* FUN_00447300 = (FUN_00447300_t*)0x00447300;
+
+typedef void(FUN_00450c50_t)(int param_1, UnknStruct3 *pUnkn3);
+static FUN_00450c50_t* FUN_00450c50 = (FUN_00450c50_t*)0x00450c50;
+
+typedef void(FUN_00449e30_t)();
+static FUN_00449e30_t* FUN_00449e30 = (FUN_00449e30_t*)0x00449e30;
+
+typedef void(FUN_0045b210_t)(MenuState *pState);
+static FUN_0045b210_t* FUN_0045b210 = (FUN_0045b210_t*)0x0045b210;
+
 
 
     // FUN_0042d600
@@ -506,7 +550,6 @@ namespace FUN
             }
             else
             {
-                // Custom Tracks are always playable
                 return true;
             }
         }
@@ -700,8 +743,17 @@ namespace FUN
                 }
             }
 
+            EXT::Version TrackBuildVersion = DBTracks::GetTrackBuildVersion(TotalTrackIdx);
+            const bool bTooNew = TrackBuildVersion > VERSION;
+
             const bool bIsPlayable = IsTrackPlayable(pState, CircuitIdx, TrackIdx);
-            if (!bIsPlayable)
+            if (bTooNew)
+            {
+                B = 50;
+                G = 50;
+                R = 255;
+            }
+            else if (!bIsPlayable)
             {
                 B = 128;
                 G = 128;
@@ -811,8 +863,14 @@ namespace FUN
         int32_t uVar6;
         char local_100[256];
 
+        rcr_sprintf(local_100, "~f5~sVersion: %s", VERSION.ToString());
+        UIText(5, 5, 255, 255, 255, 255, local_100);
+
         MenuState* pState = g_pMenuState;
         const TrackInfo Track = DBTracks::GetTrackInfo(pState->TrackID);
+
+                EXT::Version SelectedTrackBuildVersion = DBTracks::GetTrackBuildVersion(pState->TrackID);
+        const bool bSelectedTooNew = SelectedTrackBuildVersion > VERSION;
 
         if (DAT_004c4000 != 0)
         {
@@ -964,6 +1022,8 @@ namespace FUN
             }
             default:
             {
+                assert(pState->TrackID >= 28);
+
                 char BufferPage[128];
                 rcr_sprintf(BufferPage, "~c~sCustom Tracks - Page %u/%u", pState->CircuitIdx - 3, DBTracks::GetCircuitCount(true) - 4);
                 pTxtCircuit = StrSanitise(BufferPage);
@@ -971,10 +1031,18 @@ namespace FUN
                 G = DBTracks::COLOR_G;
                 R = DBTracks::COLOR_R;
 
-                //UIText(55, 80, 50, 255, 255, 255, "~f4~sFile Version: 1");
-
-                const char* pDescription = "Brief description of the track";
-                EXT::DrawTextBox(55, 150, 50, 255, 255, 255, "~f4~s", pDescription, 17, 7, 8);
+                rcr_sprintf(local_100, "~f4~sBuild for: %s", SelectedTrackBuildVersion.ToString());
+                if (bSelectedTooNew)
+                {
+                    UIText(55, 80, 255, 50, 50, 255, local_100);
+                    EXT::DrawTextBox(55, 150, 255, 50, 50, 255, "~f4~s", "Please update!", 17, 7, 8);
+                }
+                else
+                {
+                    UIText(55, 80, 50, 255, 255, 255, local_100);
+                    const char* pDescription = "Brief description of the track";
+                    EXT::DrawTextBox(55, 150, 50, 255, 255, 255, "~f4~s", pDescription, 17, 7, 8);
+                }
                 break;
             }
         }
@@ -1051,7 +1119,7 @@ namespace FUN
             uint32_t& puVar2 = DAT_0050c918;
             if (DAT_004eb39c == 0)
             {
-                if (DAT_004d6b48 != 0 && (IsFreePlay() == 0 || FUN_0041d6c0()!= 0) && pState->TrackID >= 0)
+                if (DAT_004d6b48 != 0 && (IsFreePlay() == 0 || FUN_0041d6c0()!= 0) && pState->TrackID >= 0 && !bSelectedTooNew)
                 {
                     if (g_bIsFreePlay != 0)
                     {
@@ -1071,14 +1139,14 @@ namespace FUN
                 }
                 if ((DAT_004d6b44 != 0) && (DAT_00e2a698 == 0))
                 {
-                    if (g_bIsFreePlay != 0)
+                    if (g_bIsFreePlay)
                     {
                         FUN_004118b0();
                         return;
                     }
 
                     FUN_00440550(0x4d);
-                    if (IsFreePlay() != 0 && FUN_0041d6c0() != 0)
+                    if (IsFreePlay() && FUN_0041d6c0() != 0)
                     {
                         return;
                     }
@@ -1396,9 +1464,9 @@ namespace FUN
         
         if (DAT_0050c554 == 0 && DAT_0050c554 == 0)
         {
-            if (pState->TrackID < 25)
+            if (pState->TrackID < 28)
             {
-                DrawTrackPreview(pState, pState->TrackID, 0.5); 
+                DrawTrackPreview(pState, pState->TrackID, 0.5);
             }
 
             // if ((Info.LoadModel == -1) ||
@@ -1433,38 +1501,47 @@ namespace FUN
             FUN_0042de10(local_40, 0);
             FUN_0042de10(local_40, 0);
             MenuAxisHorizontal(nullptr, 38);
-            DrawRecord(pState, 100, 55, 0x437f0000, 0);
-            DrawRecord(pState, 220, 55, 0x437f0000, 3);
 
-            // Record 3 Laps
-            iVar6 = pState->Field_0x6E + pState->TrackID * 2;
-            if (pState->TrackID < 25 && DAT_00e365f4[iVar6] < 3599.0f)
+            if (pState->TrackID < 28)
             {
-                uint8_t PilotIdx = DAT_00e37404[iVar6];
-                const char* pNameFirst = StrSanitise(g_aPilotInfos[PilotIdx].NameFirst);
-                const char* pNameLast = StrSanitise(g_aPilotInfos[PilotIdx].NameLast);
-                rcr_sprintf(local_40, "~f4~c~s%s %s", pNameFirst, pNameLast);
-                UIText(100, 78, 163, 190, 17, 255, local_40);
-                ImgVisible(23 + PilotIdx, true);
-                ImgPosition(23 + PilotIdx, 84, 85);
-                ImgScale(23 + PilotIdx, 0.5, 0.5);
-                ImgColor(23 + PilotIdx, 255, 255, 255, 255);
+                DrawRecord(pState, 100, 55, 0x437f0000, 0);
+                DrawRecord(pState, 220, 55, 0x437f0000, 3);
+
+                // Record 3 Laps
+                iVar6 = pState->Field_0x6E + pState->TrackID * 2;
+                if (pState->TrackID < 28 && DAT_00e365f4[iVar6] < 3599.0f)
+                {
+                    uint8_t PilotIdx = DAT_00e37404[iVar6];
+                    const char* pNameFirst = StrSanitise(g_aPilotInfos[PilotIdx].NameFirst);
+                    const char* pNameLast = StrSanitise(g_aPilotInfos[PilotIdx].NameLast);
+                    rcr_sprintf(local_40, "~f4~c~s%s %s", pNameFirst, pNameLast);
+                    UIText(100, 78, 163, 190, 17, 255, local_40);
+                    ImgVisible(23 + PilotIdx, true);
+                    ImgPosition(23 + PilotIdx, 84, 85);
+                    ImgScale(23 + PilotIdx, 0.5, 0.5);
+                    ImgColor(23 + PilotIdx, 255, 255, 255, 255);
+                }
+
+                // Record Best Lap
+                iVar6 = pState->Field_0x6E + pState->TrackID * 2;
+                if (pState->TrackID < 28 && DAT_00e366bc[iVar6] < 3599.0f)
+                {
+                    uint8_t PilotIdx = DAT_00e37436[iVar6];
+                    const char* pNameFirst = StrSanitise(g_aPilotInfos[PilotIdx].NameFirst);
+                    const char* pNameLast = StrSanitise(g_aPilotInfos[PilotIdx].NameLast);
+                    rcr_sprintf(local_40, "~f4~c~s%s %s", pNameFirst, pNameLast);
+
+                    UIText(220, 78, 163, 190, 17, 255, local_40);
+                    ImgVisible(46 + PilotIdx, true);
+                    ImgPosition(46 + PilotIdx, 204, 85);
+                    ImgScale(46 + PilotIdx, 0.5, 0.5);
+                    ImgColor(46 + PilotIdx, 255, 255, 255, 255);
+                }
             }
-
-            // Record Best Lap
-            iVar6 = pState->Field_0x6E + pState->TrackID * 2;
-            if (pState->TrackID < 25 && DAT_00e366bc[iVar6] < 3599.0f)
+            else
             {
-                uint8_t PilotIdx = DAT_00e37436[iVar6];
-                const char* pNameFirst = StrSanitise(g_aPilotInfos[PilotIdx].NameFirst);
-                const char* pNameLast = StrSanitise(g_aPilotInfos[PilotIdx].NameLast);
-                rcr_sprintf(local_40, "~f4~c~s%s %s", pNameFirst, pNameLast);
-
-                UIText(220, 78, 163, 190, 17, 255, local_40);
-                ImgVisible(46 + PilotIdx, true);
-                ImgPosition(46 + PilotIdx, 204, 85);
-                ImgScale(46 + PilotIdx, 0.5, 0.5);
-                ImgColor(46 + PilotIdx, 255, 255, 255, 255);
+                UIText(160, 75, 50, 255, 255, 255, "~f5~s~cRecords not available");
+                UIText(160, 90, 50, 255, 255, 255, "~f5~s~cfor custom tracks");
             }
 
             // Track Favorite
@@ -1748,6 +1825,10 @@ namespace FUN
         uint8_t local_40[16];   // Struct?
         float local_30[12];
         
+        const char* pTrackName = DBTracks::GetTrackName(pState->TrackID);
+        rcr_sprintf(local_60, "~f5~s~c%s", pTrackName);
+        UIText(160, 40, 255, 255, 255, 255, local_60);
+
         iVar8 = -1;
         DAT_0050c480 = 0;
         if (DAT_004c4000 != 0)
@@ -1808,7 +1889,7 @@ namespace FUN
             }
 
             cVar3 = cVar7;
-            if (pState->bIsTournament != false)
+            if (pState->bIsTournament)
             {
                 DAT_0050c308[cVar7] = 2;
                 DAT_0050c308[(char)(cVar7 + 1)] = 3;
@@ -1887,9 +1968,9 @@ namespace FUN
             {
                 cVar7 = pState->Field_0x5F + 1;
                 pState->Field_0x5F = cVar7;
-                if (DAT_0050c524 + -1 < (int)cVar7)
+                if ((DAT_0050c524 - 1) < cVar7)
                 {
-                    pState->Field_0x5F = '\0';
+                    pState->Field_0x5F = 0;
                 }
                 FUN_00440550(0x58);
             }
@@ -1897,7 +1978,7 @@ namespace FUN
             {
                 cVar7 = pState->Field_0x5F + -1;
                 pState->Field_0x5F = cVar7;
-                if (cVar7 < '\0')
+                if (cVar7 < 0)
                 {
                     pState->Field_0x5F = DAT_0050c524 + -1;
                 }
@@ -1947,6 +2028,8 @@ namespace FUN
             if (DAT_004d6b48 != 0)
             {
                 FUN_00440550(84);
+
+                // Start Race
                 if (pState->Field_0x5F == 0)
                 {
                     iVar8 = -1;
@@ -1959,25 +2042,25 @@ namespace FUN
                     
                     if (!IsFreePlay() || FUN_0041d6c0() != 0)
                     {
-                        if (pState->bIsTournament &&
-                        (((DAT_00e35a84 != Info.FavoritePilot &&
-                            (DAT_00ec8854 != 0.0)) && (DAT_0050c458 == 0))))
+                        if (pState->bIsTournament && DAT_00e35a84 != Info.FavoritePilot && DAT_00ec8854 != 0.0f && DAT_0050c458 == 0)
                         {
                             DAT_004bfedc = 15;
                         }
+
                         DAT_0050c944 = 0xffffffff;
                         iVar8 = FUN_004409d0(DAT_00e35a60, DAT_004c0948);
                         if ((iVar8 != 0) && ((DAT_0050c908 & 4) != 0))
                         {
                             FUN_00440c10(pState);
                         }
+
                         FUN_0041e660();
                         return;
                     }
                 }
                 else
                 {
-                    switch(DAT_0050c308[pState->Field_0x5F])
+                    switch (DAT_0050c308[pState->Field_0x5F])
                     {
                         case 1:
                         {
@@ -2037,10 +2120,152 @@ namespace FUN
         {
             if (pState->Field_0x38 == iVar8)
             {
-                SetMenuIdx(pState,DAT_004bfedc);
+                SetMenuIdx(pState, DAT_004bfedc);
                 return;
             }
             DAT_0050c944 = 0xffffffff;
         }
+    }
+
+    void FUN_0045b290(MenuState *pState, int* param_2, int param_3)
+    {
+        int8_t iVar1;
+        uint8_t uVar2;
+        char cVar3;
+        int iVar4;
+        int32_t unaff_ESI;
+        int32_t unaff_EDI;
+        int64_t lVar5;
+        UnknStruct3 Unkn3;
+        
+        FUN_0045bb60();
+        FUN_0045b5d0(pState);
+        FUN_00408640(60);
+        {
+            uint8_t TrackID = 0;
+            if (pState->Field_0x64 == 2)
+            {
+                pState->Field_0x70 = 1;
+                pState->Field_0x72 = 3;
+                do
+                { //0x427bd4
+                    do
+                    {
+                        // Not sure what this is exaclty...
+                        pState->Field_0x00 = FUN_004816b0();
+                        float hmk = (float)pState->Field_0x00;
+                        hmk *= DAT_004acfa8;
+                        hmk *= DAT_004ad1cc;
+                        TrackID = (uint8_t)hmk;
+                        pState->TrackID = TrackID;
+                    } while (TrackID == 19);
+                } while (DBTracks::GetTrackInfo(TrackID).LoadModel == -1 || DBTracks::GetTrackInfo(TrackID).Unkn0 != 0);
+            }
+        }
+
+        if (DAT_0050ca3c != 0)
+        {
+            if ((pState->Field_0x14 & 8) != 0)
+            {
+                pState->TrackID = DAT_00e29890[DAT_0050c960];
+            }
+            pState->Field_0x64 = 1;
+            DAT_00e364a8 = DAT_00e364a8 | 0x40;
+        }
+
+        iVar4 = IsFreePlay();
+        if (iVar4 != 0)
+        {
+            FUN_0041bd90(1, 10, 120);
+            pState->bIsTournament = false;
+            uVar2 = FUN_00420f90();
+            pState->Field_0x70 = uVar2;
+            cVar3 = FUN_00420f90();
+            pState->Field_0x72 = cVar3 + (char)DAT_00ea02b4;
+            pState->TrackID = (int8_t)DAT_00ea02b0;
+            pState->NumLaps = (uint8_t)DAT_00ea02b8;
+        }
+        if (DAT_0050ca3c != 0)
+        {
+            iVar1 = DAT_00e29890[DAT_0050c960];
+            pState->Field_0x64 = 1;
+            pState->TrackID = iVar1;
+            DAT_00e364a8 = DAT_00e364a8 | 0x40;
+        }
+
+        FUN_00408640(0x46);
+        iVar4 = IsFreePlay();
+        if (iVar4 == 0)
+        {
+            Unkn3.Field_0x04 = FUN_0045b7d0(pState, param_2);
+        }
+        else
+        {
+            Unkn3.Field_0x04 = FUN_0045b610(pState, param_2);
+        }
+
+        Unkn3.Field_0x08 = (int32_t)(char)pState->Field_0x72;
+        if (pState->Field_0x64 == 2)
+        {
+            Unkn3.Field_0x08 = 3;
+        }
+        else if (DAT_0050ca3c != 0)
+        {
+            Unkn3.Field_0x08 = 2;
+        }
+
+        Unkn3.Field_0x18 = -1;
+        Unkn3.Field_0x20 = 0;
+
+        TrackInfo Info = DBTracks::GetTrackInfo(pState->TrackID);
+        Unkn3.LoadSpline = Info.LoadSpline;
+        Unkn3.LoadModel = Info.LoadModel;
+
+        if (pState->Field_0x64 == 2)
+        {
+            Unkn3.Field_0x20 = 0x1e;
+        }
+        else if (DAT_0050ca3c != 0)
+        {
+            Unkn3.Field_0x20 = 1000000;
+        }
+
+        Unkn3.Field_0x24 = (int32_t)(char)pState->NumLaps;
+        if (pState->bIsTournament != false)
+        {
+            Unkn3.Field_0x24 = 3;
+        }
+
+        // Original fallback by LucasArts to "Mon Gazza Speedway"
+        if (Unkn3.LoadModel == -1 || Unkn3.LoadSpline == -1)
+        {
+            Unkn3.LoadModel = g_aTrackInfos[16].LoadModel;
+            Unkn3.LoadSpline = g_aTrackInfos[16].LoadSpline;
+            Unkn3.PlanetIdx = g_aTrackInfos[16].PlanetIdx;
+            Unkn3.Unkn0 = g_aTrackInfos[16].Unkn0;
+        }
+
+        if (param_3 == 0 && IsFreePlay() && pState->Field_0x64 != 2 && FUN_0041d6c0() != 0)
+        {
+            FUN_0041dd50(pState,&Unkn3);
+        }
+
+        FUN_00408640(80);
+        FUN_0041bd50(1);
+        Unkn3.Field_0x00 = 0x4265676e;
+        FUN_00408640(90);
+        if (pState->Field_0x68 > -1)
+        {
+            FUN_00445aa0(1);
+            FUN_00447300(0x5363656e, 1);
+            Unkn3.Field_0x04 = (int*)pState->Field_0x68;
+            FUN_00450c50(0x5363656e, &Unkn3);
+            return;
+        }
+
+        FUN_00449e30();
+        FUN_00450c50(0x4a646765, &Unkn3);
+        FUN_0045b210(pState);
+        return;
     }
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include <stdint.h>
 #include "Types.h"
+#include "EXT.h"
 
 
 namespace DBTracks
@@ -22,6 +23,8 @@ namespace DBTracks
     uint16_t GetCircuitCount(bool bIncludeCustom);
     uint16_t GetTrackCount(uint16_t CircuitIdx);
     TrackInfo GetTrackInfo(uint16_t TrackID);
+    TrackInfo GetTrackInfo(uint16_t TrackID);
+    EXT::Version GetTrackBuildVersion(uint16_t TrackID);
     const char* GetTrackName(uint16_t TrackID);
 
     inline TrackInfo GetTrackInfo(uint16_t CircuitIdx, uint16_t CircuitTrackIdx)

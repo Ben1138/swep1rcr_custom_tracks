@@ -26,6 +26,7 @@ namespace FUN
 
     bool FUN_00440a20(int32_t CircuitIdx, int32_t TrackIdx);
     int32_t FUN_0041d6c0();
+    void FUN_0045b290(MenuState *pState, int* param_2, int param_3);                        // FUN_0045b290
 
 
     typedef void(FUN_00456800_t)(MenuState* pState, int PlanetIdx, float Scale);

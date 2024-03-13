@@ -164,4 +164,11 @@ static int32_t&       DAT_0050c944                      = *(int32_t*)      0x005
 static char*          DAT_00e35a60                      =  (char*)         0x00e35a60;        // Length: 3
 static char*          DAT_004c0948                      =  (char*)         0x004c0948;        // Length: 3
 static int32_t&       DAT_0050c908                      = *(int32_t*)      0x0050c908;
-
+static float&         DAT_004acfa8                      = *(float*)        0x004acfa8;        // Read only?
+static float&         DAT_004ad1cc                      = *(float*)        0x004ad1cc;        // Read only?
+static int32_t&       DAT_0050ca3c                      = *(int32_t*)      0x0050ca3c;
+static uint8_t*       DAT_00e29890                      =  (uint8_t*)      0x00e29890;        // Length: 16? TrackID's?
+static uint8_t&       DAT_0050c960                      = *(uint8_t*)      0x0050c960;
+static int32_t&       DAT_00e364a8                      = *(int32_t*)      0x00e364a8;
+static int32_t&       DAT_00ea02b4                      = *(int32_t*)      0x00ea02b4;
+static int32_t&       DAT_00ea02b8                      = *(int32_t*)      0x00ea02b8;
