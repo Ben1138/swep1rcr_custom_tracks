@@ -22,11 +22,13 @@ union Winnings
 static_assert(sizeof(bool) == sizeof(uint8_t));
 struct MenuState
 {
-    uint8_t  Unkn0[0x08];
+    int32_t  Field_0x00;
+    uint8_t  Unkn0[0x04];
     int32_t  MenuIdx;
     int32_t  Field_0x0C;
     int32_t  Field_0x10;
-    uint8_t  Unkn1[0x24];
+    int32_t  Field_0x14;
+    uint8_t  Unkn1[0x20];
     int32_t  Field_0x38;
     uint8_t  Unkn2[0x21];
     int8_t   TrackID;
@@ -50,9 +52,11 @@ struct MenuState
     uint8_t  Unkn5[0x0A];
     ImgDat*  aImages[6];
 };
+static_assert(offsetof(MenuState, Field_0x00)     == 0x00);
 static_assert(offsetof(MenuState, MenuIdx)        == 0x08);
 static_assert(offsetof(MenuState, Field_0x0C)     == 0x0C);
 static_assert(offsetof(MenuState, Field_0x10)     == 0x10);
+static_assert(offsetof(MenuState, Field_0x14)     == 0x14);
 static_assert(offsetof(MenuState, Field_0x38)     == 0x38);
 static_assert(offsetof(MenuState, TrackID)        == 0x5D);
 static_assert(offsetof(MenuState, CircuitIdx)     == 0x5E);
@@ -85,6 +89,21 @@ struct UnknStruct2
     int32_t  Unkn1;
 };
 
+struct UnknStruct3
+{
+    int32_t Field_0x00;
+    int*    Field_0x04;
+    int32_t Field_0x08;
+    int32_t PlanetIdx;
+    int32_t LoadModel;
+    int32_t LoadSpline;
+    int32_t Field_0x18;
+    int32_t Unkn0;
+    int32_t Field_0x20;
+    int32_t Field_0x24;
+};
+
+
 // Get's referenced in:
 // - MenuBeforeRace
 // - HandleProgress
@@ -103,7 +122,7 @@ struct TrackInfo
     int32_t  LoadSpline;
     uint8_t  Unkn0;
     uint8_t  PlanetIdx;             // Determines preview image, planet holo, planet name and intro movie
-    int8_t   FavoritePilot;
+    uint8_t  FavoritePilot;
 };
 
 struct PlanetName

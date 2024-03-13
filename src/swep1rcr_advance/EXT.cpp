@@ -8,6 +8,15 @@
 
 namespace EXT
 {
+    const char* Version::ToString()
+    {
+        // This is not thread safe!
+        // But since SWEP1RCR is single threaded, I guess it's fine.
+        static char cBuffer[64];
+        snprintf(cBuffer, sizeof(cBuffer), "%d.%d.%d", m_uMajor, m_uMinor, m_uPatch);
+        return cBuffer;
+    }
+
     // Used to be part of FileOpen (FUN_0042d680)
     const char* GetFilePath(int32_t FileID)
     {

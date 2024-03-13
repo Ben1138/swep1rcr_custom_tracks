@@ -5,6 +5,42 @@
 
 namespace EXT
 {
+    class Version
+    {
+    public:
+        uint16_t m_uMajor = 0;
+        uint16_t m_uMinor = 0;
+        uint16_t m_uPatch = 0;
+
+    public:
+        inline bool operator==(const Version& rOther)
+        {
+            return 
+                m_uMajor == rOther.m_uMajor &&
+                m_uMinor == rOther.m_uMinor &&
+                m_uPatch == rOther.m_uPatch;
+        }
+
+        inline bool operator<(const Version& rOther)
+        {
+            return 
+                m_uMajor  < rOther.m_uMajor ||
+               (m_uMajor == rOther.m_uMajor && m_uMinor  < rOther.m_uMinor) ||
+               (m_uMajor == rOther.m_uMajor && m_uMinor == rOther.m_uMinor && m_uPatch < rOther.m_uPatch);
+        }
+
+        inline bool operator>(const Version& rOther)
+        {
+            return 
+                m_uMajor  > rOther.m_uMajor ||
+               (m_uMajor == rOther.m_uMajor && m_uMinor  > rOther.m_uMinor) ||
+               (m_uMajor == rOther.m_uMajor && m_uMinor == rOther.m_uMinor && m_uPatch > rOther.m_uPatch);
+        }
+
+    public:
+        const char* ToString();
+    };
+
     const char* GetFilePath(int32_t FileID);
     uint16_t GetImgStartBackground(uint16_t TrackIdx);
     uint16_t GetImgStartBorder(uint16_t TrackIdx);
