@@ -37,6 +37,16 @@ namespace EXT
                (m_uMajor == rOther.m_uMajor && m_uMinor == rOther.m_uMinor && m_uPatch > rOther.m_uPatch);
         }
 
+        inline bool operator<=(const Version& rOther)
+        {
+            return *this < rOther || *this == rOther;
+        }
+
+        inline bool operator>=(const Version& rOther)
+        {
+            return *this > rOther || *this == rOther;
+        }
+
     public:
         const char* ToString();
     };

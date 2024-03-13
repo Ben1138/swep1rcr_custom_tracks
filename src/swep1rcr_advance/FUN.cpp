@@ -869,9 +869,6 @@ static FUN_0045b210_t* FUN_0045b210 = (FUN_0045b210_t*)0x0045b210;
         MenuState* pState = g_pMenuState;
         const TrackInfo Track = DBTracks::GetTrackInfo(pState->TrackID);
 
-                EXT::Version SelectedTrackBuildVersion = DBTracks::GetTrackBuildVersion(pState->TrackID);
-        const bool bSelectedTooNew = SelectedTrackBuildVersion > VERSION;
-
         if (DAT_004c4000 != 0)
         {
             DAT_004c4000 = 0;
@@ -981,7 +978,7 @@ static FUN_0045b210_t* FUN_0045b210 = (FUN_0045b210_t*)0x0045b210;
         {
             pState->TrackID = -1;
         }
-
+        
         MenuAxisHorizontal(nullptr, 55);
 
         uint8_t R, G, B;
@@ -1023,6 +1020,7 @@ static FUN_0045b210_t* FUN_0045b210 = (FUN_0045b210_t*)0x0045b210;
             default:
             {
                 assert(pState->TrackID >= 28);
+                EXT::Version SelectedTrackBuildVersion = DBTracks::GetTrackBuildVersion(pState->TrackID);
 
                 char BufferPage[128];
                 rcr_sprintf(BufferPage, "~c~sCustom Tracks - Page %u/%u", pState->CircuitIdx - 3, DBTracks::GetCircuitCount(true) - 4);
@@ -1032,7 +1030,7 @@ static FUN_0045b210_t* FUN_0045b210 = (FUN_0045b210_t*)0x0045b210;
                 R = DBTracks::COLOR_R;
 
                 rcr_sprintf(local_100, "~f4~sBuild for: %s", SelectedTrackBuildVersion.ToString());
-                if (bSelectedTooNew)
+                if (SelectedTrackBuildVersion > VERSION)
                 {
                     UIText(55, 80, 255, 50, 50, 255, local_100);
                     EXT::DrawTextBox(55, 150, 255, 50, 50, 255, "~f4~s", "Please update!", 17, 7, 8);
@@ -1119,7 +1117,7 @@ static FUN_0045b210_t* FUN_0045b210 = (FUN_0045b210_t*)0x0045b210;
             uint32_t& puVar2 = DAT_0050c918;
             if (DAT_004eb39c == 0)
             {
-                if (DAT_004d6b48 != 0 && (IsFreePlay() == 0 || FUN_0041d6c0()!= 0) && pState->TrackID >= 0 && !bSelectedTooNew)
+                if (DAT_004d6b48 != 0 && (IsFreePlay() == 0 || FUN_0041d6c0()!= 0) && pState->TrackID >= 0 && DBTracks::GetTrackBuildVersion(pState->TrackID) <= VERSION)
                 {
                     if (g_bIsFreePlay != 0)
                     {
@@ -2148,7 +2146,7 @@ static FUN_0045b210_t* FUN_0045b210 = (FUN_0045b210_t*)0x0045b210;
                 pState->Field_0x70 = 1;
                 pState->Field_0x72 = 3;
                 do
-                { //0x427bd4
+                {
                     do
                     {
                         // Not sure what this is exaclty...
@@ -2193,7 +2191,7 @@ static FUN_0045b210_t* FUN_0045b210 = (FUN_0045b210_t*)0x0045b210;
             DAT_00e364a8 = DAT_00e364a8 | 0x40;
         }
 
-        FUN_00408640(0x46);
+        FUN_00408640(70);
         iVar4 = IsFreePlay();
         if (iVar4 == 0)
         {
@@ -2223,7 +2221,7 @@ static FUN_0045b210_t* FUN_0045b210 = (FUN_0045b210_t*)0x0045b210;
 
         if (pState->Field_0x64 == 2)
         {
-            Unkn3.Field_0x20 = 0x1e;
+            Unkn3.Field_0x20 = 30;
         }
         else if (DAT_0050ca3c != 0)
         {
@@ -2231,7 +2229,7 @@ static FUN_0045b210_t* FUN_0045b210 = (FUN_0045b210_t*)0x0045b210;
         }
 
         Unkn3.Field_0x24 = (int32_t)(char)pState->NumLaps;
-        if (pState->bIsTournament != false)
+        if (pState->bIsTournament)
         {
             Unkn3.Field_0x24 = 3;
         }
@@ -2264,7 +2262,21 @@ static FUN_0045b210_t* FUN_0045b210 = (FUN_0045b210_t*)0x0045b210;
         }
 
         FUN_00449e30();
+
+        // void FUN_00463ff0(undefined4 param_1,undefined4 param_2)
+        // {
+        //     DAT_0050ca8c = param_1;      // Sollte bei "Boonta Training" 0 sein
+        //     DAT_0050ca90 = param_2;      // Sollte bei "Boonta Training" 0 sein
+        //     return;
+        // }
+        // FUN_0045dd80 -> FUN_00466bd0 -> FUN_00464630 -> FUN_00463ff0
+
+        // FUN_00463ff0 get's called from here
         FUN_00450c50(0x4a646765, &Unkn3);
+
+        //                 p1      p1[0x6B], p1[0x70]    p1, p2          p1, p2
+        // call[0] -> FUN_00463a50 -> FUN_00466bd0 -> FUN_00464630 -> FUN_00463ff0
+
         FUN_0045b210(pState);
         return;
     }
