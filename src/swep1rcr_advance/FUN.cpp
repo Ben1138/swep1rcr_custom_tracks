@@ -2125,6 +2125,7 @@ static FUN_0045b210_t* FUN_0045b210 = (FUN_0045b210_t*)0x0045b210;
         }
     }
 
+    // Get's executed once on "Start Race"
     void FUN_0045b290(MenuState *pState, int* param_2, int param_3)
     {
         int8_t iVar1;
@@ -2276,6 +2277,11 @@ static FUN_0045b210_t* FUN_0045b210 = (FUN_0045b210_t*)0x0045b210;
 
         //                 p1      p1[0x6B], p1[0x70]    p1, p2          p1, p2
         // call[0] -> FUN_00463a50 -> FUN_00466bd0 -> FUN_00464630 -> FUN_00463ff0
+
+        // Original:  0x5cec690
+        // Patched:   0x5cdc690
+
+        
 
         FUN_0045b210(pState);
         return;

@@ -1,6 +1,7 @@
 #include "DBTracks.h"
 #include "Globals.h"
 #include "FUN.h"
+#include "Version.h"
 #include <stdio.h>
 #include <assert.h>
 
@@ -26,15 +27,15 @@ namespace DBTracks
         TrackCount = 28 + NumCustomTracks;
         for (uint16_t i = 28; i < TrackCount; i++)
         {
-            g_aNewTrackInfos[i] = g_aTrackInfos[16];
-            // g_aNewTrackInfos[i].LoadModel = 142;
-            // g_aNewTrackInfos[i].LoadSpline = 52;
-            // g_aNewTrackInfos[i].PlanetIdx = 1;
-            // g_aNewTrackInfos[i].FavoritePilot = 2;
+            //g_aNewTrackInfos[i] = g_aTrackInfos[16];
+            g_aNewTrackInfos[i].LoadModel = 142;
+            g_aNewTrackInfos[i].LoadSpline = 51;
+            g_aNewTrackInfos[i].PlanetIdx = 1;
+            g_aNewTrackInfos[i].FavoritePilot = 2;
 
             const uint8_t CustomID = i - 28;
             snprintf(g_aCustomTrackNames[CustomID], sizeof(g_aCustomTrackNames[CustomID]), "Custom Track %u", CustomID + 1);
-            g_aCustomTrackBuildVersions[CustomID] = { 1, 0, 0 };
+            g_aCustomTrackBuildVersions[CustomID] = VERSION;
         }
         //g_aCustomTrackBuildVersions[3] = { 1, 0, 1 };
     }

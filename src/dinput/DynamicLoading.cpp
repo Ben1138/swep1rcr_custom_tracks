@@ -125,6 +125,8 @@ namespace DynamicLoading
                     MessageBoxA(nullptr, cMsg, "DLL fail", MB_ICONERROR | MB_OK);
                     return 1;
                 }
+                
+                Sleep(100);
                 if (!DeleteFile(cCurrName))
                 {
                     snprintf(cMsg, sizeof(cMsg), "Failed to delete '%s'!", cCurrName);
@@ -156,8 +158,14 @@ namespace DynamicLoading
 
     void Init()
     {
-        DWORD dwThreadID = 0;
+        for (uint16_t i = 0; i < 256; i++)
+        {
+            char cNextName[128];
+            snprintf(cNextName, sizeof(cNextName), "swep1rcr_advance_%d.dll", i);
+            DeleteFile(cNextName);
+        }
 
+        DWORD dwThreadID = 0;
         HANDLE hThread = CreateThread( 
             nullptr,                // default security attributes
             0,                      // use default stack size  
