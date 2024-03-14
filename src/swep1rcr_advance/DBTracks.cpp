@@ -29,7 +29,7 @@ namespace DBTracks
         {
             //g_aNewTrackInfos[i] = g_aTrackInfos[16];
             g_aNewTrackInfos[i].LoadModel = 142;
-            g_aNewTrackInfos[i].LoadSpline = 51;
+            g_aNewTrackInfos[i].LoadSpline = 52;
             g_aNewTrackInfos[i].PlanetIdx = 1;
             g_aNewTrackInfos[i].FavoritePilot = 2;
 
