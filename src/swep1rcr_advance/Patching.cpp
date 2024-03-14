@@ -19,7 +19,6 @@ namespace Patching
 
     static OldInstructions g_aOlds[1024];
     static uint16_t g_uOldCount = 0;
-
     inline void PatchFunction(uint32_t pStart, void* pFunction)
     {
         assert(pStart >= s_pSegmTextStart);
@@ -93,8 +92,13 @@ namespace Patching
 
         PatchFunction(0x00440a20, (void*)&FUN::FUN_00440a20);
         PatchFunction(0x0041d6c0, (void*)&FUN::FUN_0041d6c0);
-        PatchFunction(0x0045b290, (void*)&FUN::FUN_0045b290);
+        //PatchFunction(0x0045b290, (void*)&FUN::FUN_0045b290);
 
+        // TODO: Implement UnPatch
+        PatchMemoryAccess(0x0045b437 + 2, ((uint8_t*)DBTracks::g_aNewTrackInfos) + offsetof(TrackInfo, LoadModel));
+        PatchMemoryAccess(0x0045b42d + 2, ((uint8_t*)DBTracks::g_aNewTrackInfos) + offsetof(TrackInfo, LoadSpline));
+        PatchMemoryAccess(0x0045b426 + 3, ((uint8_t*)DBTracks::g_aNewTrackInfos) + offsetof(TrackInfo, PlanetIdx));
+        PatchMemoryAccess(0x0045b441 + 3, ((uint8_t*)DBTracks::g_aNewTrackInfos) + offsetof(TrackInfo, Unkn0));
         
         // DBTracks::g_aNewTrackInfos
         // FUN_0045b290
