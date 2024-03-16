@@ -1,15 +1,12 @@
-# Star Wars Episode I Racer - Advanced
+# Star Wars Episode I Racer - Custom Tracks Support
 
-This project patches hand picked functions at runtime to increase functionality.  
+This project patches hand picked functions at runtime to extend the original games functionality towards support for custom tracks.  
 This is currently **only** compatible with the [GOG version](https://www.gog.com/de/game/star_wars_episode_i_racer) of the game!
-
-## Enhancements
-- Support for custom Tracks in **Free Play** Mode
 
 ## Installation
 Just download and put [dinput.dll](TODO) into your **Star Wars Episode I Racer** installation directory, or build it from source (see instructions below). The mod should take effect immediately.
 
-## Building from source
+## Build from source
 Execute all `cmake` commands within the root directory of this repository.  
 The output will be a 32-Bit Windows DLL: `./bin/Release/dinput.dll`.  
 When compiling with MinGW for i686, the resulting DLL will be compatible down to Windows 95, with MSVC down to Windows Vista.

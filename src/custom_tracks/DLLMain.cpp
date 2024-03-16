@@ -10,7 +10,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved)
         {
             // TODO: Check hash of EXE
 // #if DEBUG
-//             MessageBoxA(nullptr, "swep1rcr_advance.dll loaded!", "DLL loaded", MB_ICONINFORMATION | MB_OK);
+//             MessageBoxA(nullptr, "custom_tracks.dll loaded!", "DLL loaded", MB_ICONINFORMATION | MB_OK);
 // #endif
             Tracks::Init();
             Patching::PatchAll();
