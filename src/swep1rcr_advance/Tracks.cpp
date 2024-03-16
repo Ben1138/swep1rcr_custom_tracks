@@ -1,4 +1,4 @@
-#include "DBTracks.h"
+#include "Tracks.h"
 #include "Globals.h"
 #include "FUN.h"
 #include "Version.h"
@@ -6,12 +6,12 @@
 #include <assert.h>
 
 
-namespace DBTracks
+namespace Tracks
 {
     static uint16_t TrackCount = 0;
     TrackInfo g_aNewTrackInfos[TRACKS_COUNT_MAX]{};
     static char g_aCustomTrackNames[CUSTOM_TRACKS_MAX][32]{};
-    static EXT::Version g_aCustomTrackBuildVersions[CUSTOM_TRACKS_MAX];
+    static Version g_aCustomTrackBuildVersions[CUSTOM_TRACKS_MAX];
 
     void Init()
     {
@@ -86,11 +86,11 @@ namespace DBTracks
         return g_aNewTrackInfos[TrackID];
     }
 
-    EXT::Version GetTrackBuildVersion(uint16_t TrackID)
+    Version GetTrackBuildVersion(uint16_t TrackID)
     {
         if (TrackID < 25)
         {
-            return EXT::Version();
+            return Version();
         }
         return g_aCustomTrackBuildVersions[TrackID - 28];
     }

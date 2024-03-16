@@ -61,7 +61,7 @@ if(DYN_LOAD)
         "${DIR_SRC}/swep1rcr_advance/DLLMain.cpp"
         "${DIR_SRC}/swep1rcr_advance/Patching.cpp"
         "${DIR_SRC}/swep1rcr_advance/FUN.cpp"
-        "${DIR_SRC}/swep1rcr_advance/DBTracks.cpp"
+        "${DIR_SRC}/swep1rcr_advance/Tracks.cpp"
         "${DIR_SRC}/swep1rcr_advance/EXT.cpp"
     )
 else()
@@ -75,7 +75,7 @@ else()
 
         "${DIR_SRC}/swep1rcr_advance/Patching.cpp"
         "${DIR_SRC}/swep1rcr_advance/FUN.cpp"
-        "${DIR_SRC}/swep1rcr_advance/DBTracks.cpp"
+        "${DIR_SRC}/swep1rcr_advance/Tracks.cpp"
         "${DIR_SRC}/swep1rcr_advance/EXT.cpp"
     )
 endif()

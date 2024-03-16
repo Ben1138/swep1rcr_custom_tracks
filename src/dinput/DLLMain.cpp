@@ -2,7 +2,7 @@
 #include "DynamicLoading.h"
 
 #if !DYN_LOAD
-#include "DBTracks.h"
+#include "Tracks.h"
 #include "Patching.h"
 #endif
 
@@ -18,7 +18,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved)
             MessageBoxA(nullptr, "dinput.dll loaded!", "DLL loaded", MB_ICONINFORMATION | MB_OK);
             DynamicLoading::Init();
 #else
-            DBTracks::Init();
+            Tracks::Init();
             Patching::PatchAll();
 #endif
             break;

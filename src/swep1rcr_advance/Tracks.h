@@ -4,7 +4,7 @@
 #include "EXT.h"
 
 
-namespace DBTracks
+namespace Tracks
 {
     // This is mainly limited by the amount of available image slots. See Functions.cpp
     // Actually, 72 would be available
@@ -14,7 +14,7 @@ namespace DBTracks
     constexpr uint8_t COLOR_G  = 80;
     constexpr uint8_t COLOR_B  = 240;
 
-    constexpr uint16_t TRACKS_COUNT_MAX = 28 + DBTracks::CUSTOM_TRACKS_MAX;
+    constexpr uint16_t TRACKS_COUNT_MAX = 28 + Tracks::CUSTOM_TRACKS_MAX;
     extern TrackInfo g_aNewTrackInfos[TRACKS_COUNT_MAX];
 
 
@@ -24,7 +24,7 @@ namespace DBTracks
     uint16_t GetTrackCount(uint16_t CircuitIdx);
     TrackInfo GetTrackInfo(uint16_t TrackID);
     TrackInfo GetTrackInfo(uint16_t TrackID);
-    EXT::Version GetTrackBuildVersion(uint16_t TrackID);
+    Version GetTrackBuildVersion(uint16_t TrackID);
     const char* GetTrackName(uint16_t TrackID);
 
     inline TrackInfo GetTrackInfo(uint16_t CircuitIdx, uint16_t CircuitTrackIdx)

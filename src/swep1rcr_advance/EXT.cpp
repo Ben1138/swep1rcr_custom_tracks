@@ -1,7 +1,7 @@
 #include "EXT.h"
 #include "Globals.h"
 #include "FUN.h"
-#include "DBTracks.h"
+#include "Tracks.h"
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
@@ -44,7 +44,7 @@ namespace EXT
 
         // Slots 256 - 399 seem to be free...
         // 144 slots / 2 = 72 possible custom tracks
-        assert(TrackID < DBTracks::CUSTOM_TRACKS_MAX);
+        assert(TrackID < Tracks::CUSTOM_TRACKS_MAX);
         return 256 + TrackID;
     }
 
@@ -58,8 +58,8 @@ namespace EXT
 
         // Slots 256 - 399 seem to be free...
         // 144 slots / 2 = 72 possible custom tracks
-        assert(TrackID < DBTracks::CUSTOM_TRACKS_MAX);
-        return 256 + DBTracks::CUSTOM_TRACKS_MAX + TrackID;
+        assert(TrackID < Tracks::CUSTOM_TRACKS_MAX);
+        return 256 + Tracks::CUSTOM_TRACKS_MAX + TrackID;
     }
 
     void DrawTextBox(

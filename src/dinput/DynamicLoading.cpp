@@ -9,43 +9,44 @@ namespace DynamicLoading
 {
     static HINSTANCE g_hDllCurrent = nullptr;
     static FILETIME g_LastModifiedTime{};
+    static uint32_t g_uDllCounter = 0;
 
-    // HANDLE GetMainThreadHandle()
-    // {
-    //     HANDLE hThreadSnap = INVALID_HANDLE_VALUE; 
-    //     THREADENTRY32 te32; 
+    HANDLE GetMainThreadHandle()
+    {
+        HANDLE hThreadSnap = INVALID_HANDLE_VALUE; 
+        THREADENTRY32 te32; 
         
-    //     // Take a snapshot of all running threads  
-    //     hThreadSnap = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0); 
-    //     if(hThreadSnap == INVALID_HANDLE_VALUE) 
-    //     {
-    //         return INVALID_HANDLE_VALUE; 
-    //     }
+        // Take a snapshot of all running threads  
+        hThreadSnap = CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0); 
+        if(hThreadSnap == INVALID_HANDLE_VALUE) 
+        {
+            return INVALID_HANDLE_VALUE; 
+        }
         
-    //     // Fill in the size of the structure before using it. 
-    //     te32.dwSize = sizeof(THREADENTRY32); 
+        // Fill in the size of the structure before using it. 
+        te32.dwSize = sizeof(THREADENTRY32); 
         
-    //     // Retrieve information about the first thread,
-    //     // and exit if unsuccessful
-    //     if(!Thread32First(hThreadSnap, &te32)) 
-    //     {
-    //         MessageBoxA(nullptr, "'Thread32First()' failed!", "Error", MB_ICONERROR | MB_OK);
-    //         CloseHandle(hThreadSnap);     // Must clean up the snapshot object!
-    //         return INVALID_HANDLE_VALUE;
-    //     }
+        // Retrieve information about the first thread,
+        // and exit if unsuccessful
+        if(!Thread32First(hThreadSnap, &te32)) 
+        {
+            MessageBoxA(nullptr, "'Thread32First()' failed!", "Error", MB_ICONERROR | MB_OK);
+            CloseHandle(hThreadSnap);     // Must clean up the snapshot object!
+            return INVALID_HANDLE_VALUE;
+        }
 
-    //     HANDLE hMainThread = OpenThread(READ_CONTROL | SYNCHRONIZE | WRITE_DAC | WRITE_OWNER, false, te32.th32ThreadID);
-    //     if (!hMainThread)
-    //     {
-    //         MessageBoxA(nullptr, "'Failed to open main thread!", "Error", MB_ICONERROR | MB_OK);
-    //         CloseHandle(hThreadSnap);
-    //         return INVALID_HANDLE_VALUE;
-    //     }
+        HANDLE hMainThread = OpenThread(READ_CONTROL | SYNCHRONIZE | WRITE_DAC | WRITE_OWNER, false, te32.th32ThreadID);
+        if (!hMainThread)
+        {
+            MessageBoxA(nullptr, "'Failed to open main thread!", "Error", MB_ICONERROR | MB_OK);
+            CloseHandle(hThreadSnap);
+            return INVALID_HANDLE_VALUE;
+        }
 
-    //     //  Don't forget to clean up the snapshot object.
-    //     CloseHandle(hThreadSnap);
-    //     return hMainThread;
-    // }
+        //  Don't forget to clean up the snapshot object.
+        CloseHandle(hThreadSnap);
+        return hMainThread;
+    }
 
     DWORD WINAPI LoadThread(LPVOID lpParam)
     {
@@ -58,7 +59,7 @@ namespace DynamicLoading
                 nullptr,
                 OPEN_EXISTING,
                 FILE_ATTRIBUTE_READONLY,
-                0
+                NULL
             );
 
             if (!hDllFile)
@@ -88,6 +89,9 @@ namespace DynamicLoading
                 continue;
             }
 
+            //
+            // This is a race condition! We actually have to halt the main thread here while patching!
+            //
             // Doesn't work...
             // const HANDLE hMainThread = GetMainThreadHandle();
             // if (!hMainThread)
@@ -101,27 +105,49 @@ namespace DynamicLoading
             //     return 1;
             // }
 
+            g_LastModifiedTime = ModTime;
+
             char cMsg[256];
+            char cCurrName[128];
+            char cNextName[128];
+            snprintf(cCurrName, sizeof(cCurrName), "swep1rcr_advance_%d.dll", g_uDllCounter);
+            snprintf(cNextName, sizeof(cNextName), "swep1rcr_advance_%d.dll", g_uDllCounter + 1);
+
+            if (!CopyFile("swep1rcr_advance.dll", cNextName, false))
+            {
+                snprintf(cMsg, sizeof(cMsg), "Failed to copy 'swep1rcr_advance.dll' to '%s'!", cNextName);
+                MessageBoxA(nullptr, cMsg, "Copy failed", MB_ICONERROR | MB_OK);
+                return 1;
+            }
+
             if (g_hDllCurrent)
             {
                 if (!FreeLibrary(g_hDllCurrent))
                 {
-                    snprintf(cMsg, sizeof(cMsg), "Failed to free 'swep1rcr_advance.dll'!");
+                    snprintf(cMsg, sizeof(cMsg), "Failed to free '%s'!", cCurrName);
                     MessageBoxA(nullptr, cMsg, "DLL fail", MB_ICONERROR | MB_OK);
                     return 1;
                 }
-                g_hDllCurrent = nullptr;
+                
+                Sleep(100);
+                if (!DeleteFile(cCurrName))
+                {
+                    snprintf(cMsg, sizeof(cMsg), "Failed to delete '%s'!", cCurrName);
+                    MessageBoxA(nullptr, cMsg, "Delete failed", MB_ICONERROR | MB_OK);
+                    return 1;
+                }
             }
-            assert(!g_hDllCurrent);
 
-            g_hDllCurrent = LoadLibrary("swep1rcr_advance.dll");
-            if (!g_hDllCurrent)
+            HINSTANCE hDllNext = LoadLibrary(cNextName);
+            if (!hDllNext)
             {
-                snprintf(cMsg, sizeof(cMsg), "Failed to load 'swep1rcr_advance.dll'!");
+                snprintf(cMsg, sizeof(cMsg), "Failed to load '%s'!", cNextName);
                 MessageBoxA(nullptr, cMsg, "DLL fail", MB_ICONERROR | MB_OK);
                 return 1;
             }
-            g_LastModifiedTime = ModTime;
+
+            g_hDllCurrent = hDllNext;
+            g_uDllCounter++;
 
             // if (ResumeThread(hMainThread) == -1)
             // {
@@ -144,12 +170,12 @@ namespace DynamicLoading
 
         DWORD dwThreadID = 0;
         HANDLE hThread = CreateThread( 
-            nullptr,          // default security attributes
-            0,                // use default stack size  
-            LoadThread,       // thread function name
-            nullptr,          // argument to thread function 
-            0,                // use default creation flags 
-            &dwThreadID);     // returns the thread identifier 
+            nullptr,                // default security attributes
+            0,                      // use default stack size  
+            LoadThread,             // thread function name
+            nullptr,                // argument to thread function 
+            0,                      // use default creation flags 
+            &dwThreadID);           // returns the thread identifier 
 
         if (!hThread)
         {

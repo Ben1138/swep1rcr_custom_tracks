@@ -1,7 +1,7 @@
 #include "FUN.h"
 #include "Patching.h"
 #include "Globals.h"
-#include "DBTracks.h"
+#include "Tracks.h"
 #include <windows.h>
 #include <assert.h>
 
@@ -95,12 +95,12 @@ namespace Patching
         //PatchFunction(0x0045b290, (void*)&FUN::FUN_0045b290);
 
         // TODO: Implement UnPatch
-        PatchMemoryAccess(0x0045b437 + 2, ((uint8_t*)DBTracks::g_aNewTrackInfos) + offsetof(TrackInfo, LoadModel));
-        PatchMemoryAccess(0x0045b42d + 2, ((uint8_t*)DBTracks::g_aNewTrackInfos) + offsetof(TrackInfo, LoadSpline));
-        PatchMemoryAccess(0x0045b426 + 3, ((uint8_t*)DBTracks::g_aNewTrackInfos) + offsetof(TrackInfo, PlanetIdx));
-        PatchMemoryAccess(0x0045b441 + 3, ((uint8_t*)DBTracks::g_aNewTrackInfos) + offsetof(TrackInfo, Unkn0));
+        PatchMemoryAccess(0x0045b437 + 2, ((uint8_t*)Tracks::g_aNewTrackInfos) + offsetof(TrackInfo, LoadModel));
+        PatchMemoryAccess(0x0045b42d + 2, ((uint8_t*)Tracks::g_aNewTrackInfos) + offsetof(TrackInfo, LoadSpline));
+        PatchMemoryAccess(0x0045b426 + 3, ((uint8_t*)Tracks::g_aNewTrackInfos) + offsetof(TrackInfo, PlanetIdx));
+        PatchMemoryAccess(0x0045b441 + 3, ((uint8_t*)Tracks::g_aNewTrackInfos) + offsetof(TrackInfo, Unkn0));
         
-        // DBTracks::g_aNewTrackInfos
+        // Tracks::g_aNewTrackInfos
         // FUN_0045b290
         // FUN_00457410
         // FUN_0043ca30
@@ -109,44 +109,44 @@ namespace Patching
         // FUN_0044e320
         // FUN_004586e0
         // FUN_0045b7d0
-        //PatchMemoryAccess(0x0043BEDC + 0x02, DBTracks::g_aNewTrackInfos + 0x0000);       // READ   CMP      MenuTrackInfo
-        //PatchMemoryAccess(0x0043C679 + 0x03, DBTracks::g_aNewTrackInfos + 0x0000);       // READ   MOV      MenuTrackInfo
-        //PatchMemoryAccess(0x0043B3D4 + 0x02, DBTracks::g_aNewTrackInfos + 0x0000);       // READ   CMP      MenuTrackSelection
-        //PatchMemoryAccess(0x0043B798 + 0x03, DBTracks::g_aNewTrackInfos + 0x0000);       // READ   MOV      MenuTrackSelection
-        //PatchMemoryAccess(0x0045B2F5 + 0x02, DBTracks::g_aNewTrackInfos + 0x0000);       // READ   CMP      FUN_0045b290
-        //PatchMemoryAccess(0x0045B437 + 0x02, DBTracks::g_aNewTrackInfos + 0x0000);       // READ   MOV      FUN_0045b290
-        //PatchMemoryAccess(0x0043BEE4 + 0x02, DBTracks::g_aNewTrackInfos + 0x0004);       // READ   CMP      MenuTrackInfo
-        //PatchMemoryAccess(0x0043B3DC + 0x02,Old DBTracks::g_aNewTrackInfos + 0x0004);       // READ   CMP      MenuTrackSelection
-        //PatchMemoryAccess(0x0045B42D + 0x02, DBTracks::g_aNewTrackInfos + 0x0004);       // READ   MOV      FUN_0045b290
-        //PatchMemoryAccess(0x00436DB9 + 0x03, DBTracks::g_aNewTrackInfos + 0x0008);       // READ   MOVSX    MenuBeforeRace
-        //PatchMemoryAccess(0x0045B2FE + 0x02, DBTracks::g_aNewTrackInfos + 0x0008);       // READ   MOV      FUN_0045b290
-        //PatchMemoryAccess(0x0045B441 + 0x03, DBTracks::g_aNewTrackInfos + 0x0008);       // READ   MOVSX    FUN_0045b290
-        //PatchMemoryAccess(0x0043BE90 + 0x04, DBTracks::g_aNewTrackInfos + 0x0009);       // READ   MOVSX    MenuTrackInfo
-        //PatchMemoryAccess(0x00436DC0 + 0x03, DBTracks::g_aNewTrackInfos + 0x0009);       // READ   MOVSX    MenuBeforeRace
-        //PatchMemoryAccess(0x0043B302 + 0x03, DBTracks::g_aNewTrackInfos + 0x0009);       // READ   MOV      MenuTrackSelection
-        //PatchMemoryAccess(0x0043B5FE + 0x05, DBTracks::g_aNewTrackInfos + 0x0009);       // READ   MOVSX    MenuTrackSelection
-        //PatchMemoryAccess(0x0043B64D + 0x04, DBTracks::g_aNewTrackInfos + 0x0009);       // READ   MOVSX    MenuTrackSelection
-        //PatchMemoryAccess(0x0043B342 + 0x03, DBTracks::g_aNewTrackInfos + 0x0009);       // READ   MOV      MenuTrackSelection
-        //PatchMemoryAccess(0x0045B426 + 0x03, DBTracks::g_aNewTrackInfos + 0x0009);       // READ   MOVSX    FUN_0045b290
-        //PatchMemoryAccess(0x0045B55E + 0x04, DBTracks::g_aNewTrackInfos + 0x0009);       // READ   MOVSX    FUN_0045b290
-        //PatchMemoryAccess(0x00457509 + 0x04, DBTracks::g_aNewTrackInfos + 0x0009);       // READ   MOVSX    FUN_00457410
-        //PatchMemoryAccess(0x00457556 + 0x03, DBTracks::g_aNewTrackInfos + 0x0009);       // READ   MOV      FUN_00457410
-        //PatchMemoryAccess(0x0043C1C7 + 0x04, DBTracks::g_aNewTrackInfos + 0x000A);       // READ   MOVSX    MenuTrackInfo
-        //PatchMemoryAccess(0x00436EDC + 0x03, DBTracks::g_aNewTrackInfos + 0x000A);       // READ   CMP      MenuBeforeRace
-        //PatchMemoryAccess(0x0043CD92 + 0x04, DBTracks::g_aNewTrackInfos + 0x000A);       // READ   MOVSX    FUN_0043ca30
-        //PatchMemoryAccess(0x0043CDB7 + 0x04, DBTracks::g_aNewTrackInfos + 0x000A);       // READ   MOVSX    FUN_0043ca30
-        //PatchMemoryAccess(0x0045BAD2 + 0x03, DBTracks::g_aNewTrackInfos + 0x000A);       // READ   MOV      FUN_0045bab0
-        //PatchMemoryAccess(0x0045BB02 + 0x03, DBTracks::g_aNewTrackInfos + 0x000A);       // READ   MOV      FUN_0045bab0
-        //PatchMemoryAccess(0x0044E3C8 + 0x02, DBTracks::g_aNewTrackInfos + 0x000A);       // READ   MOV      FUN_0044e320
-        //PatchMemoryAccess(0x0044E3DD + 0x02, DBTracks::g_aNewTrackInfos + 0x000A);       // READ   MOV      FUN_0044e320
-        //PatchMemoryAccess(0x0043A2A7 + 0x04, DBTracks::g_aNewTrackInfos + 0x000A);       // READ   MOVSX    HandleProgress
-        //PatchMemoryAccess(0x0045907B + 0x04, DBTracks::g_aNewTrackInfos + 0x000A);       // READ   MOVSX    FUN_004586e0
-        //PatchMemoryAccess(0x00458F4A + 0x04, DBTracks::g_aNewTrackInfos + 0x000A);       // READ   MOVSX    FUN_004586e0
-        //PatchMemoryAccess(0x0045B873 + 0x03, DBTracks::g_aNewTrackInfos + 0x000A);       // READ   MOV      FUN_0045b7d0
-        //PatchMemoryAccess(0x0045B4D9 + 0x02, DBTracks::g_aNewTrackInfos + 0x00C0);       // READ   MOV      FUN_0045b290
-        //PatchMemoryAccess(0x0045B4DF + 0x02, DBTracks::g_aNewTrackInfos + 0x00C4);       // READ   MOV      FUN_0045b290
-        //PatchMemoryAccess(0x0045B4ED + 0x03, DBTracks::g_aNewTrackInfos + 0x00C8);       // READ   MOVSX    FUN_0045b290
-        //PatchMemoryAccess(0x0045B4D2 + 0x03, DBTracks::g_aNewTrackInfos + 0x00C9);       // READ   MOVSX    FUN_0045b290
+        //PatchMemoryAccess(0x0043BEDC + 0x02, Tracks::g_aNewTrackInfos + 0x0000);       // READ   CMP      MenuTrackInfo
+        //PatchMemoryAccess(0x0043C679 + 0x03, Tracks::g_aNewTrackInfos + 0x0000);       // READ   MOV      MenuTrackInfo
+        //PatchMemoryAccess(0x0043B3D4 + 0x02, Tracks::g_aNewTrackInfos + 0x0000);       // READ   CMP      MenuTrackSelection
+        //PatchMemoryAccess(0x0043B798 + 0x03, Tracks::g_aNewTrackInfos + 0x0000);       // READ   MOV      MenuTrackSelection
+        //PatchMemoryAccess(0x0045B2F5 + 0x02, Tracks::g_aNewTrackInfos + 0x0000);       // READ   CMP      FUN_0045b290
+        //PatchMemoryAccess(0x0045B437 + 0x02, Tracks::g_aNewTrackInfos + 0x0000);       // READ   MOV      FUN_0045b290
+        //PatchMemoryAccess(0x0043BEE4 + 0x02, Tracks::g_aNewTrackInfos + 0x0004);       // READ   CMP      MenuTrackInfo
+        //PatchMemoryAccess(0x0043B3DC + 0x02,Old Tracks::g_aNewTrackInfos + 0x0004);       // READ   CMP      MenuTrackSelection
+        //PatchMemoryAccess(0x0045B42D + 0x02, Tracks::g_aNewTrackInfos + 0x0004);       // READ   MOV      FUN_0045b290
+        //PatchMemoryAccess(0x00436DB9 + 0x03, Tracks::g_aNewTrackInfos + 0x0008);       // READ   MOVSX    MenuBeforeRace
+        //PatchMemoryAccess(0x0045B2FE + 0x02, Tracks::g_aNewTrackInfos + 0x0008);       // READ   MOV      FUN_0045b290
+        //PatchMemoryAccess(0x0045B441 + 0x03, Tracks::g_aNewTrackInfos + 0x0008);       // READ   MOVSX    FUN_0045b290
+        //PatchMemoryAccess(0x0043BE90 + 0x04, Tracks::g_aNewTrackInfos + 0x0009);       // READ   MOVSX    MenuTrackInfo
+        //PatchMemoryAccess(0x00436DC0 + 0x03, Tracks::g_aNewTrackInfos + 0x0009);       // READ   MOVSX    MenuBeforeRace
+        //PatchMemoryAccess(0x0043B302 + 0x03, Tracks::g_aNewTrackInfos + 0x0009);       // READ   MOV      MenuTrackSelection
+        //PatchMemoryAccess(0x0043B5FE + 0x05, Tracks::g_aNewTrackInfos + 0x0009);       // READ   MOVSX    MenuTrackSelection
+        //PatchMemoryAccess(0x0043B64D + 0x04, Tracks::g_aNewTrackInfos + 0x0009);       // READ   MOVSX    MenuTrackSelection
+        //PatchMemoryAccess(0x0043B342 + 0x03, Tracks::g_aNewTrackInfos + 0x0009);       // READ   MOV      MenuTrackSelection
+        //PatchMemoryAccess(0x0045B426 + 0x03, Tracks::g_aNewTrackInfos + 0x0009);       // READ   MOVSX    FUN_0045b290
+        //PatchMemoryAccess(0x0045B55E + 0x04, Tracks::g_aNewTrackInfos + 0x0009);       // READ   MOVSX    FUN_0045b290
+        //PatchMemoryAccess(0x00457509 + 0x04, Tracks::g_aNewTrackInfos + 0x0009);       // READ   MOVSX    FUN_00457410
+        //PatchMemoryAccess(0x00457556 + 0x03, Tracks::g_aNewTrackInfos + 0x0009);       // READ   MOV      FUN_00457410
+        //PatchMemoryAccess(0x0043C1C7 + 0x04, Tracks::g_aNewTrackInfos + 0x000A);       // READ   MOVSX    MenuTrackInfo
+        //PatchMemoryAccess(0x00436EDC + 0x03, Tracks::g_aNewTrackInfos + 0x000A);       // READ   CMP      MenuBeforeRace
+        //PatchMemoryAccess(0x0043CD92 + 0x04, Tracks::g_aNewTrackInfos + 0x000A);       // READ   MOVSX    FUN_0043ca30
+        //PatchMemoryAccess(0x0043CDB7 + 0x04, Tracks::g_aNewTrackInfos + 0x000A);       // READ   MOVSX    FUN_0043ca30
+        //PatchMemoryAccess(0x0045BAD2 + 0x03, Tracks::g_aNewTrackInfos + 0x000A);       // READ   MOV      FUN_0045bab0
+        //PatchMemoryAccess(0x0045BB02 + 0x03, Tracks::g_aNewTrackInfos + 0x000A);       // READ   MOV      FUN_0045bab0
+        //PatchMemoryAccess(0x0044E3C8 + 0x02, Tracks::g_aNewTrackInfos + 0x000A);       // READ   MOV      FUN_0044e320
+        //PatchMemoryAccess(0x0044E3DD + 0x02, Tracks::g_aNewTrackInfos + 0x000A);       // READ   MOV      FUN_0044e320
+        //PatchMemoryAccess(0x0043A2A7 + 0x04, Tracks::g_aNewTrackInfos + 0x000A);       // READ   MOVSX    HandleProgress
+        //PatchMemoryAccess(0x0045907B + 0x04, Tracks::g_aNewTrackInfos + 0x000A);       // READ   MOVSX    FUN_004586e0
+        //PatchMemoryAccess(0x00458F4A + 0x04, Tracks::g_aNewTrackInfos + 0x000A);       // READ   MOVSX    FUN_004586e0
+        //PatchMemoryAccess(0x0045B873 + 0x03, Tracks::g_aNewTrackInfos + 0x000A);       // READ   MOV      FUN_0045b7d0
+        //PatchMemoryAccess(0x0045B4D9 + 0x02, Tracks::g_aNewTrackInfos + 0x00C0);       // READ   MOV      FUN_0045b290
+        //PatchMemoryAccess(0x0045B4DF + 0x02, Tracks::g_aNewTrackInfos + 0x00C4);       // READ   MOV      FUN_0045b290
+        //PatchMemoryAccess(0x0045B4ED + 0x03, Tracks::g_aNewTrackInfos + 0x00C8);       // READ   MOVSX    FUN_0045b290
+        //PatchMemoryAccess(0x0045B4D2 + 0x03, Tracks::g_aNewTrackInfos + 0x00C9);       // READ   MOVSX    FUN_0045b290
 
         // Call Stack on last crash:
         //00456CA6	FUN_00456c70
