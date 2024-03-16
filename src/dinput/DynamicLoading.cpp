@@ -48,12 +48,12 @@ namespace DynamicLoading
         return hMainThread;
     }
 
-    DWORD WINAPI LoadThread(LPVOID lpParam)
+    DWORD WINAPI DllWatcher(LPVOID lpParam)
     {
         while (true)
         {
             const HANDLE hDllFile = CreateFileA(
-                "swep1rcr_advance.dll",
+                "custom_tracks.dll",
                 GENERIC_READ,
                 FILE_SHARE_READ,
                 nullptr,
@@ -64,7 +64,7 @@ namespace DynamicLoading
 
             if (!hDllFile)
             {
-                MessageBoxA(nullptr, "Cannot find 'swep1rcr_advance.dll'!", "DLL fail", MB_ICONERROR | MB_OK);
+                MessageBoxA(nullptr, "Cannot find 'custom_tracks.dll'!", "DLL fail", MB_ICONERROR | MB_OK);
                 return 1;
             }
 
@@ -78,7 +78,7 @@ namespace DynamicLoading
 
             if (!bGotTime)
             {
-                MessageBoxA(nullptr, "Failed to get file time for 'swep1rcr_advance.dll'!", "File fail", MB_ICONERROR | MB_OK);
+                MessageBoxA(nullptr, "Failed to get file time for 'custom_tracks.dll'!", "File fail", MB_ICONERROR | MB_OK);
                 return 1;
             }
 
@@ -113,9 +113,9 @@ namespace DynamicLoading
             snprintf(cCurrName, sizeof(cCurrName), "swep1rcr_advance_%d.dll", g_uDllCounter);
             snprintf(cNextName, sizeof(cNextName), "swep1rcr_advance_%d.dll", g_uDllCounter + 1);
 
-            if (!CopyFile("swep1rcr_advance.dll", cNextName, false))
+            if (!CopyFile("custom_tracks.dll", cNextName, false))
             {
-                snprintf(cMsg, sizeof(cMsg), "Failed to copy 'swep1rcr_advance.dll' to '%s'!", cNextName);
+                snprintf(cMsg, sizeof(cMsg), "Failed to copy 'custom_tracks.dll' to '%s'!", cNextName);
                 MessageBoxA(nullptr, cMsg, "Copy failed", MB_ICONERROR | MB_OK);
                 return 1;
             }
@@ -172,7 +172,7 @@ namespace DynamicLoading
         HANDLE hThread = CreateThread( 
             nullptr,                // default security attributes
             0,                      // use default stack size  
-            LoadThread,             // thread function name
+            DllWatcher,             // thread function name
             nullptr,                // argument to thread function 
             0,                      // use default creation flags 
             &dwThreadID);           // returns the thread identifier 

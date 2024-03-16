@@ -42,13 +42,13 @@ if(DYN_LOAD)
         "${DIR_SRC}/dinput/DynamicLoading.cpp"
     )
 
-    add_library(swep1rcr_advance SHARED)
-    target_include_directories(swep1rcr_advance PRIVATE "${DIR_SRC}/swep1rcr_advance")
-    target_compile_definitions(swep1rcr_advance PUBLIC "$<$<CONFIG:DEBUG>:DEBUG>")
-    target_compile_definitions(swep1rcr_advance PUBLIC "DYN_LOAD")
+    add_library(custom_tracks SHARED)
+    target_include_directories(custom_tracks PRIVATE "${DIR_SRC}/custom_tracks")
+    target_compile_definitions(custom_tracks PUBLIC "$<$<CONFIG:DEBUG>:DEBUG>")
+    target_compile_definitions(custom_tracks PUBLIC "DYN_LOAD")
 
     # Binary output
-    set_target_properties(swep1rcr_advance
+    set_target_properties(custom_tracks
         PROPERTIES
         LIBRARY_OUTPUT_DIRECTORY "${DIR_PRJ}/bin/${CMAKE_BUILD_TYPE}"
         RUNTIME_OUTPUT_DIRECTORY "${DIR_PRJ}/bin/${CMAKE_BUILD_TYPE}"
@@ -57,16 +57,16 @@ if(DYN_LOAD)
     )
 
     # Input source files
-    target_sources(swep1rcr_advance PRIVATE 
-        "${DIR_SRC}/swep1rcr_advance/DLLMain.cpp"
-        "${DIR_SRC}/swep1rcr_advance/Patching.cpp"
-        "${DIR_SRC}/swep1rcr_advance/FUN.cpp"
-        "${DIR_SRC}/swep1rcr_advance/Tracks.cpp"
-        "${DIR_SRC}/swep1rcr_advance/EXT.cpp"
-        "${DIR_SRC}/swep1rcr_advance/Version.cpp"
+    target_sources(custom_tracks PRIVATE 
+        "${DIR_SRC}/custom_tracks/DLLMain.cpp"
+        "${DIR_SRC}/custom_tracks/Patching.cpp"
+        "${DIR_SRC}/custom_tracks/FUN.cpp"
+        "${DIR_SRC}/custom_tracks/Tracks.cpp"
+        "${DIR_SRC}/custom_tracks/EXT.cpp"
+        "${DIR_SRC}/custom_tracks/Version.cpp"
     )
 else()
-    target_include_directories(dinput PRIVATE "${DIR_SRC}/swep1rcr_advance")
+    target_include_directories(dinput PRIVATE "${DIR_SRC}/custom_tracks")
 
     # Input source files
     target_sources(dinput PRIVATE 
@@ -74,10 +74,10 @@ else()
         "${DIR_SRC}/dinput/DLLMain.cpp"
         "${DIR_SRC}/dinput/DLLWrap.cpp"                                     # Wrapping of DirectInputCreateA
 
-        "${DIR_SRC}/swep1rcr_advance/Patching.cpp"
-        "${DIR_SRC}/swep1rcr_advance/FUN.cpp"
-        "${DIR_SRC}/swep1rcr_advance/Tracks.cpp"
-        "${DIR_SRC}/swep1rcr_advance/EXT.cpp"
-        "${DIR_SRC}/swep1rcr_advance/Version.cpp"
+        "${DIR_SRC}/custom_tracks/Patching.cpp"
+        "${DIR_SRC}/custom_tracks/FUN.cpp"
+        "${DIR_SRC}/custom_tracks/Tracks.cpp"
+        "${DIR_SRC}/custom_tracks/EXT.cpp"
+        "${DIR_SRC}/custom_tracks/Version.cpp"
     )
 endif()
