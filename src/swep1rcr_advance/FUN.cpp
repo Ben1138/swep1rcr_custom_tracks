@@ -1,6 +1,6 @@
 #include "FUN.h"
 #include "EXT.h"
-#include "DBTracks.h"
+#include "Tracks.h"
 #include "Version.h"
 #include <windows.h>
 #include <assert.h>
@@ -107,38 +107,38 @@ namespace FUN
     typedef void(FUN_00408640_t)(uint8_t param_1);
     static FUN_00408640_t* FUN_00408640 = (FUN_00408640_t*)0x00408640;
 
-typedef void(FUN_0041bd90_t)(int32_t param_1,int32_t param_2,int32_t param_3);
-static FUN_0041bd90_t* FUN_0041bd90 = (FUN_0041bd90_t*)0x0041bd90;
+    typedef void(FUN_0041bd90_t)(int32_t param_1,int32_t param_2,int32_t param_3);
+    static FUN_0041bd90_t* FUN_0041bd90 = (FUN_0041bd90_t*)0x0041bd90;
 
-typedef int(FUN_00420f90_t)();
-static FUN_00420f90_t* FUN_00420f90 = (FUN_00420f90_t*)0x00420f90;
+    typedef int(FUN_00420f90_t)();
+    static FUN_00420f90_t* FUN_00420f90 = (FUN_00420f90_t*)0x00420f90;
 
-typedef int*(FUN_0045b610_t)(MenuState *pState,int *param_2);
-static FUN_0045b610_t* FUN_0045b610 = (FUN_0045b610_t*)0x0045b610;
+    typedef int*(FUN_0045b610_t)(MenuState *pState,int *param_2);
+    static FUN_0045b610_t* FUN_0045b610 = (FUN_0045b610_t*)0x0045b610;
 
-typedef int*(FUN_0045b7d0_t)(MenuState *pState,int *param_2);
-static FUN_0045b7d0_t* FUN_0045b7d0 = (FUN_0045b7d0_t*)0x0045b7d0;
+    typedef int*(FUN_0045b7d0_t)(MenuState *pState,int *param_2);
+    static FUN_0045b7d0_t* FUN_0045b7d0 = (FUN_0045b7d0_t*)0x0045b7d0;
 
-typedef void(FUN_0041dd50_t)(MenuState *pState, UnknStruct3 *pUnkn3);
-static FUN_0041dd50_t* FUN_0041dd50 = (FUN_0041dd50_t*)0x0041dd50;
+    typedef void(FUN_0041dd50_t)(MenuState *pState, UnknStruct3 *pUnkn3);
+    static FUN_0041dd50_t* FUN_0041dd50 = (FUN_0041dd50_t*)0x0041dd50;
 
-typedef void(FUN_0041bd50_t)(int32_t param_1);
-static FUN_0041bd50_t* FUN_0041bd50 = (FUN_0041bd50_t*)0x0041bd50;
+    typedef void(FUN_0041bd50_t)(int32_t param_1);
+    static FUN_0041bd50_t* FUN_0041bd50 = (FUN_0041bd50_t*)0x0041bd50;
 
-typedef void(FUN_00445aa0_t)(int param_1);
-static FUN_00445aa0_t* FUN_00445aa0 = (FUN_00445aa0_t*)0x00445aa0;
+    typedef void(FUN_00445aa0_t)(int param_1);
+    static FUN_00445aa0_t* FUN_00445aa0 = (FUN_00445aa0_t*)0x00445aa0;
 
-typedef void(FUN_00447300_t)(int param_1, int32_t param_2);
-static FUN_00447300_t* FUN_00447300 = (FUN_00447300_t*)0x00447300;
+    typedef void(FUN_00447300_t)(int param_1, int32_t param_2);
+    static FUN_00447300_t* FUN_00447300 = (FUN_00447300_t*)0x00447300;
 
-typedef void(FUN_00450c50_t)(int param_1, UnknStruct3 *pUnkn3);
-static FUN_00450c50_t* FUN_00450c50 = (FUN_00450c50_t*)0x00450c50;
+    typedef void(FUN_00450c50_t)(int param_1, UnknStruct3 *pUnkn3);
+    static FUN_00450c50_t* FUN_00450c50 = (FUN_00450c50_t*)0x00450c50;
 
-typedef void(FUN_00449e30_t)();
-static FUN_00449e30_t* FUN_00449e30 = (FUN_00449e30_t*)0x00449e30;
+    typedef void(FUN_00449e30_t)();
+    static FUN_00449e30_t* FUN_00449e30 = (FUN_00449e30_t*)0x00449e30;
 
-typedef void(FUN_0045b210_t)(MenuState *pState);
-static FUN_0045b210_t* FUN_0045b210 = (FUN_0045b210_t*)0x0045b210;
+    typedef void(FUN_0045b210_t)(MenuState *pState);
+    static FUN_0045b210_t* FUN_0045b210 = (FUN_0045b210_t*)0x0045b210;
 
 
 
@@ -264,180 +264,6 @@ static FUN_0045b210_t* FUN_0045b210 = (FUN_0045b210_t*)0x0045b210;
         }
     }
 
-    // FUN_00448780
-    /*uint32_t* ReadModel(int param_1)
-    {
-        uint32_t uVar1;
-        int iVar2;
-        uint32_t uVar3;
-        int iVar4;
-        uint32_t uVar5;
-        uint32_t uVar6;
-        char* pDstBuffer;
-        uint32_t* puVar7;
-        uint32_t* puVar8;
-        uint32_t local_14;
-        int local_10;
-        uint32_t local_c[3];
-
-        FileOpen(3);
-        FileOpen(0);
-        DAT_0050c600 = 1;
-        DAT_0050c628 = 0;
-        DAT_0050c62c = 0;
-        DAT_0050c630 = 0;
-        DAT_00e981e0 = 0;
-        DAT_00e98240 = 0;
-        DAT_00e98248 = 0;
-
-        FileRead(0, 0, (char*)&local_14, 4);
-        local_14 = (local_14 & 0xff00 | local_14 << 0x10) << 8 | (local_14 & 0xff0000 | local_14 >> 0x10) >> 8;
-        if ((-1 < param_1) && (param_1 < (int)local_14))
-        {
-            FileRead(0, param_1 * 8 + 4, (char*)local_c, 0xc);
-            puVar8 = local_c;
-            for (int8_t i = 3; i > 0; i--)
-            {
-                uVar6 = *puVar8;
-                *puVar8 = (uVar6 & 0xff00 | uVar6 << 0x10) << 8 | (uVar6 >> 0x10 | uVar6 & 0xff0000) >> 8;
-                puVar8 = puVar8 + 1;
-            }
-
-            iVar4 = local_c[1] - local_c[0];
-            uVar6 = local_c[2] - local_c[1];
-
-            if (iVar4 < 0x25801)
-            {
-                FileRead(0, local_c[0], (char*)&DAT_00e6b180, iVar4);
-
-                iVar4 = (int)(iVar4 + (iVar4 >> 0x1f & 3U)) >> 2;
-                if (iVar4 > 0)
-                {
-                    puVar8 = &DAT_00e6b180;
-                }
-                for (int32_t i = iVar4; i > 0; i--)
-                {
-                    uVar1 = *puVar8;
-                    *puVar8 = (uVar1 & 0xff00 | uVar1 << 0x10) << 8 | (uVar1 & 0xff0000 | uVar1 >> 0x10) >> 8;
-                    puVar8 = puVar8 + 1;
-                }
-
-                local_10 = FUN_00445b40();
-                puVar8 = (uint32_t*)(local_10 + 7U & 0xfffffff8);
-                FileRead(0, local_c[1], (char*)puVar8, 0xc);
-                uVar1 = *puVar8;
-
-                if (((uVar1 & 0xff00 | uVar1 << 0x10) << 8 | (uVar1 >> 0x10 | uVar1 & 0xff0000) >> 8) == 0x436f6d70)
-                {
-                    uVar1 = puVar8[2];
-                    iVar4 = uVar6 - 0xc;
-                    uVar6 = (uVar1 & 0xff00 | uVar1 << 0x10) << 8 | (uVar1 & 0xff0000 | uVar1 >> 0x10) >> 8;
-                    iVar2 = FUN_00445bf0();
-                    if (iVar2 < (int)(uVar6 + 8))
-                    {
-                        DAT_0050c610 = 1;
-                        FileClose(3);
-                        FileClose(0);
-                        return (uint32_t*)0x0;
-                    }
-                    pDstBuffer = (char*)(DAT_00e981e4 - iVar4 & 0xfffffff8);
-                    if ((char*)(uVar6 + (int)puVar8) <= pDstBuffer)
-                    {
-                        FileRead(0, local_c[1] + 0xc, pDstBuffer, iVar4);
-                        FUN_0042d520(pDstBuffer, puVar8);
-                        FUN_00445b20((char*)(uVar6 + (int)puVar8));
-
-                    LAB_00448a31:
-                        iVar4 = 0;
-                        DAT_00e9822c = local_10;
-                        DAT_00e6b164 = FUN_00445b40();
-                        local_10 = FUN_00445b40();
-
-                        if (DAT_0050c604 != 0)
-                        {
-                            FUN_00445b40();
-                            FUN_00445b40();
-                            FUN_00445b40();
-                            FUN_00445b40();
-                        }
-
-                        puVar7 = puVar8;
-                        if (0 < (int)uVar6 >> 2)
-                        {
-                            do
-                            {
-                                if (((&DAT_00e6b180)[iVar4 >> 5] & 1 << (0x1f - ((uint8_t)iVar4 & 0x1f) & 0x1f)) != 0)
-                                {
-                                    uVar1 = *puVar7;
-                                    uVar5 = (uVar1 & 0xff0000 | uVar1 >> 0x10) >> 8;
-                                    uVar3 = (uVar1 & 0xff00 | uVar1 << 0x10) << 8 | uVar5;
-                                    *puVar7 = uVar3;
-                                    if ((uVar1 << 0x10 & 0xff0000) == 0xa0000)
-                                    {
-                                        FUN_00447490((uVar1 & 0xff00) << 8 | uVar5, puVar7, puVar7 + 1);
-                                    }
-                                    else if (uVar3 != 0)
-                                    {
-                                        *puVar7 = uVar3 + (int)puVar8;
-                                    }
-                                }
-
-                                puVar7 = puVar7 + 1;
-                                iVar4 = iVar4 + 1;
-                            } while (iVar4 < (int)uVar6 >> 2);
-                        }
-
-                        FUN_004485d0(puVar8);
-                        uVar6 = *puVar8;
-                        if ((((uVar6 == 0x4d6f646c) || (uVar6 == 0x5472616b)) || (uVar6 == 0x506f6464)) ||
-                            (((uVar6 == 0x50617274 || (uVar6 == 0x5363656e)) ||
-                                ((uVar6 == 0x4d416c74 || (uVar6 == 0x50757070))))))
-                        {
-                            puVar8 = puVar8 + 1;
-                        }
-                        else
-                        {
-                            FUN_00426910(uVar6);
-                        }
-
-                        if (DAT_0050c604 != 0)
-                        {
-                            FUN_00445b40();
-                            FUN_00445b40();
-                            FUN_00445b40();
-                            FUN_00445b40();
-                        }
-                        iVar4 = FUN_00445b40();
-                        DAT_00e98240 = iVar4 - local_10;
-                        DAT_00e981e0 = DAT_00e6b164 - DAT_00e9822c;
-                        FileClose(3);
-                        FileClose(0);
-                        return puVar8;
-                    }
-                    FileClose(3);
-                }
-                else
-                {
-                    iVar4 = FUN_00445bf0();
-                    if ((int)(uVar6 + 8) <= iVar4)
-                    {
-                        FileRead(0, local_c[1], (char*)puVar8, uVar6);
-                        FUN_00445b20(uVar6 + (int)puVar8);
-                        goto LAB_00448a31;
-                    }
-                    FileClose(3);
-                }
-                FileClose(0);
-                DAT_0050c610 = 1;
-                return (uint32_t*)0x0;
-            }
-        }
-
-        FileClose(3);
-        FileClose(0);
-        return (uint32_t*)0x0;
-    }*/
-
     // FUN_004282f0
     void ImgReset(uint16_t ImgIdx, ImgDat* pImgDat)
     {
@@ -485,7 +311,7 @@ static FUN_0045b210_t* FUN_0045b210 = (FUN_0045b210_t*)0x0045b210;
             //{
             //    g_CircuitIdxMax = 2;
             //}
-            g_CircuitIdxMax = DBTracks::GetCircuitCount(true) - 1;
+            g_CircuitIdxMax = Tracks::GetCircuitCount(true) - 1;
 
             if (pState->CircuitIdx < 4)
             {
@@ -499,7 +325,7 @@ static FUN_0045b210_t* FUN_0045b210 = (FUN_0045b210_t*)0x0045b210;
             }
             else
             {
-                g_TracksInCurrentCircuit = DBTracks::GetTrackCount(pState->CircuitIdx);
+                g_TracksInCurrentCircuit = Tracks::GetTrackCount(pState->CircuitIdx);
             }
         }
         else
@@ -559,7 +385,7 @@ static FUN_0045b210_t* FUN_0045b210 = (FUN_0045b210_t*)0x0045b210;
     // FUN_00440620
     const char* GetTrackName(int32_t TrackID)
     {
-        return DBTracks::GetTrackName(TrackID);
+        return Tracks::GetTrackName(TrackID);
     }
 
     // FUN_0041d6b0
@@ -597,7 +423,7 @@ static FUN_0045b210_t* FUN_0045b210 = (FUN_0045b210_t*)0x0045b210;
 
         if (bInitTracks)
         {
-            const int32_t NumCircuits = DBTracks::GetCircuitCount(!pState->bIsTournament);
+            const int32_t NumCircuits = Tracks::GetCircuitCount(!pState->bIsTournament);
 
             for (int32_t CircuitIdx = 0; CircuitIdx < NumCircuits; CircuitIdx++)
             {
@@ -654,7 +480,7 @@ static FUN_0045b210_t* FUN_0045b210 = (FUN_0045b210_t*)0x0045b210;
     // Get's called at just once place: MenuTrackSelection()
     void DrawTracks(MenuState* pState, uint8_t CircuitIdx)
     {
-        const uint8_t NumTracks = DBTracks::GetTrackCount(CircuitIdx);
+        const uint8_t NumTracks = Tracks::GetTrackCount(CircuitIdx);
         if (NumTracks == 0)
         {
             return;
@@ -736,14 +562,14 @@ static FUN_0045b210_t* FUN_0045b210 = (FUN_0045b210_t*)0x0045b210;
                 // Custom Tracks
                 default:
                 {
-                    B = DBTracks::COLOR_B;
-                    G = DBTracks::COLOR_G;
-                    R = DBTracks::COLOR_R;
+                    B = Tracks::COLOR_B;
+                    G = Tracks::COLOR_G;
+                    R = Tracks::COLOR_R;
                     break;
                 }
             }
 
-            EXT::Version TrackBuildVersion = DBTracks::GetTrackBuildVersion(TotalTrackIdx);
+            Version TrackBuildVersion = Tracks::GetTrackBuildVersion(TotalTrackIdx);
             const bool bTooNew = TrackBuildVersion > VERSION;
 
             const bool bIsPlayable = IsTrackPlayable(pState, CircuitIdx, TrackIdx);
@@ -815,7 +641,7 @@ static FUN_0045b210_t* FUN_0045b210 = (FUN_0045b210_t*)0x0045b210;
     {
         bool bIsPlayable;
         uint8_t TrackCount = 0;
-        const uint8_t NumTracks = DBTracks::GetTrackCount(pState->CircuitIdx);
+        const uint8_t NumTracks = Tracks::GetTrackCount(pState->CircuitIdx);
         if (NumTracks == 0)
         {
             return -1;
@@ -867,7 +693,7 @@ static FUN_0045b210_t* FUN_0045b210 = (FUN_0045b210_t*)0x0045b210;
         UIText(5, 5, 255, 255, 255, 255, local_100);
 
         MenuState* pState = g_pMenuState;
-        const TrackInfo Track = DBTracks::GetTrackInfo(pState->TrackID);
+        const TrackInfo Track = Tracks::GetTrackInfo(pState->TrackID);
 
         if (DAT_004c4000 != 0)
         {
@@ -967,7 +793,7 @@ static FUN_0045b210_t* FUN_0045b210 = (FUN_0045b210_t*)0x0045b210;
                 UIText(160, 205, R, G, B, 255, local_100);
             }
 
-            const char* pTrackName = DBTracks::GetTrackName(pState->TrackID);
+            const char* pTrackName = Tracks::GetTrackName(pState->TrackID);
             rcr_sprintf(local_100, "~c~s%s", pTrackName);
             UIText(160, 54, 0, 255, 0, 255, local_100);
             pcVar2 = local_100;
@@ -1020,14 +846,14 @@ static FUN_0045b210_t* FUN_0045b210 = (FUN_0045b210_t*)0x0045b210;
             default:
             {
                 assert(pState->TrackID >= 28);
-                EXT::Version SelectedTrackBuildVersion = DBTracks::GetTrackBuildVersion(pState->TrackID);
+                Version SelectedTrackBuildVersion = Tracks::GetTrackBuildVersion(pState->TrackID);
 
                 char BufferPage[128];
-                rcr_sprintf(BufferPage, "~c~sCustom Tracks - Page %u/%u", pState->CircuitIdx - 3, DBTracks::GetCircuitCount(true) - 4);
+                rcr_sprintf(BufferPage, "~c~sCustom Tracks - Page %u/%u", pState->CircuitIdx - 3, Tracks::GetCircuitCount(true) - 4);
                 pTxtCircuit = StrSanitise(BufferPage);
-                B = DBTracks::COLOR_B;
-                G = DBTracks::COLOR_G;
-                R = DBTracks::COLOR_R;
+                B = Tracks::COLOR_B;
+                G = Tracks::COLOR_G;
+                R = Tracks::COLOR_R;
 
                 rcr_sprintf(local_100, "~f4~sBuild for: %s", SelectedTrackBuildVersion.ToString());
                 if (SelectedTrackBuildVersion > VERSION)
@@ -1117,7 +943,7 @@ static FUN_0045b210_t* FUN_0045b210 = (FUN_0045b210_t*)0x0045b210;
             uint32_t& puVar2 = DAT_0050c918;
             if (DAT_004eb39c == 0)
             {
-                if (DAT_004d6b48 != 0 && (IsFreePlay() == 0 || FUN_0041d6c0()!= 0) && pState->TrackID >= 0 && DBTracks::GetTrackBuildVersion(pState->TrackID) <= VERSION)
+                if (DAT_004d6b48 != 0 && (IsFreePlay() == 0 || FUN_0041d6c0()!= 0) && pState->TrackID >= 0 && Tracks::GetTrackBuildVersion(pState->TrackID) <= VERSION)
                 {
                     if (g_bIsFreePlay != 0)
                     {
@@ -1454,7 +1280,7 @@ static FUN_0045b210_t* FUN_0045b210 = (FUN_0045b210_t*)0x0045b210;
 
         FUN_00469b90(uVar18);
 
-        TrackInfo Info = DBTracks::GetTrackInfo(pState->TrackID);
+        TrackInfo Info = Tracks::GetTrackInfo(pState->TrackID);
         if (DAT_00e295a0 > 0.0)
         {
             DrawHoloPlanet(pState, Info.PlanetIdx, DAT_00e295a0 * 0.5);
@@ -1823,7 +1649,7 @@ static FUN_0045b210_t* FUN_0045b210 = (FUN_0045b210_t*)0x0045b210;
         uint8_t local_40[16];   // Struct?
         float local_30[12];
         
-        const char* pTrackName = DBTracks::GetTrackName(pState->TrackID);
+        const char* pTrackName = Tracks::GetTrackName(pState->TrackID);
         rcr_sprintf(local_60, "~f5~s~c%s", pTrackName);
         UIText(160, 40, 255, 255, 255, 255, local_60);
 
@@ -2035,7 +1861,7 @@ static FUN_0045b210_t* FUN_0045b210 = (FUN_0045b210_t*)0x0045b210;
                     FUN_00409d70(0xffffffff);
                     FUN_00409d70(0);
 
-                    TrackInfo Info = DBTracks::GetTrackInfo(pState->TrackID);
+                    TrackInfo Info = Tracks::GetTrackInfo(pState->TrackID);
                     FUN_00427d90(Info.PlanetIdx, Info.Unkn0);
                     
                     if (!IsFreePlay() || FUN_0041d6c0() != 0)
@@ -2158,7 +1984,7 @@ static FUN_0045b210_t* FUN_0045b210 = (FUN_0045b210_t*)0x0045b210;
                         TrackID = (uint8_t)hmk;
                         pState->TrackID = TrackID;
                     } while (TrackID == 19);
-                } while (DBTracks::GetTrackInfo(TrackID).LoadModel == -1 || DBTracks::GetTrackInfo(TrackID).Unkn0 != 0);
+                } while (Tracks::GetTrackInfo(TrackID).LoadModel == -1 || Tracks::GetTrackInfo(TrackID).Unkn0 != 0);
             }
         }
 
@@ -2216,7 +2042,7 @@ static FUN_0045b210_t* FUN_0045b210 = (FUN_0045b210_t*)0x0045b210;
         Unkn3.Field_0x18 = -1;
         Unkn3.Field_0x20 = 0;
 
-        TrackInfo Info = DBTracks::GetTrackInfo(pState->TrackID);
+        TrackInfo Info = Tracks::GetTrackInfo(pState->TrackID);
         Unkn3.LoadSpline = Info.LoadSpline;
         Unkn3.LoadModel = Info.LoadModel;
 

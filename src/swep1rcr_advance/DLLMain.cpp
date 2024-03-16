@@ -1,5 +1,5 @@
 #include <windows.h>
-#include "DBTracks.h"
+#include "Tracks.h"
 #include "Patching.h"
 
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved)
@@ -12,7 +12,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpReserved)
 // #if DEBUG
 //             MessageBoxA(nullptr, "swep1rcr_advance.dll loaded!", "DLL loaded", MB_ICONINFORMATION | MB_OK);
 // #endif
-            DBTracks::Init();
+            Tracks::Init();
             Patching::PatchAll();
             break;
         }
