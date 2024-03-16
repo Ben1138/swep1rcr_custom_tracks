@@ -1,56 +1,97 @@
 #pragma once
 #include "Globals.h"
 
+#define DEF_TYPE(Addr, RetType, ...) \
+    typedef RetType(FUN_##Addr##_t)(__VA_ARGS__);
+
+#define DEF_FUN(Addr, RetType, ...) \
+    DEF_TYPE(Addr, RetType, __VA_ARGS__); \
+    static FUN_##Addr##_t* FUN_##Addr = (FUN_##Addr##_t*)0x##Addr
+
+#define DEF_ALIAS(Addr, Alias, RetType, ...) \
+    DEF_FUN(Addr, RetType, __VA_ARGS__); \
+    static FUN_##Addr##_t* Alias = (FUN_##Addr##_t*)0x##Addr
+
+//
+// Original and patched functions
+//
 namespace FUN
 {
-    FILE** FileGet(int32_t FileID);                                                         // FUN_0042d600
-    void FileOpen(int32_t FileID);                                                          // FUN_0042d680
-    void FileRead(int32_t FileID, int32_t OffsetAddr, char* pDstBuffer, int32_t NumRead);   // FUN_0042d640
-    void FileClose(int32_t FileID);                                                         // FUN_0042d6f0
+    // FUN_0042d600
+    FILE** FileGet(int32_t FileID);
 
-    void __cdecl HandleCircuit(MenuState* pStruct);                                         // FUN_0043b0b0
-    void MenuTrackSelection();                                                              // FUN_0043b240
-    void MenuTrackInfo(MenuState* pState);                                                  // FUN_0043b880
-    void MenuStartRace(MenuState *pState);                                                  // FUN_004368a0
-    bool IsFreePlay();                                                                      // FUN_0041d6b0
-    const char* GetTrackName(int32_t TrackID);                                              // FUN_00440620
-    bool IsTrackPlayable(MenuState* pStruct, uint8_t CircuitIdx, uint8_t TrackIdx);         // FUN_00440aa0
-    void __cdecl InitTracks(MenuState* pStruct, bool bDrawTracks);                          // FUN_004584a0
-    void DrawTracks(MenuState* param_1, char param_2);                                      // FUN_004360e0
-    int32_t VerifySelectedTrack(MenuState* pStruct, int32_t SelectedTrackIdx);              // FUN_00440af0
-    uint8_t GetRequiredPlaceToProceed(uint8_t CircuitIdx, uint8_t TrackIdx);                // FUN_00440a00
-    int32_t CheckCD();                                                                      // FUN_00425500
+    // FUN_0042d680
+    void FileOpen(int32_t FileID);
 
-    void ImgReset(uint16_t ImgIdx, ImgDat* pImgDat);                                        // FUN_004282f0
-    void ImgResetAll();                                                                     // FUN_00428370
+    // FUN_0042d640
+    void FileRead(int32_t FileID, int32_t OffsetAddr, char* pDstBuffer, int32_t NumRead);
 
+    // FUN_0042d6f0
+    void FileClose(int32_t FileID);
+
+    // FUN_0043b0b0
+    void __cdecl HandleCircuit(MenuState* pStruct);
+
+    // FUN_0043b240
+    void MenuTrackSelection();
+
+    // FUN_0043b880
+    void MenuTrackInfo(MenuState* pState);
+
+    // FUN_004368a0
+    void MenuStartRace(MenuState *pState);
+
+    // FUN_0041d6b0
+    bool IsFreePlay();
+
+    // FUN_00440620
+    const char* GetTrackName(int32_t TrackID);
+
+    // FUN_00440aa0
+    bool IsTrackPlayable(MenuState* pStruct, uint8_t CircuitIdx, uint8_t TrackIdx);
+
+    // FUN_004584a0
+    void __cdecl InitTracks(MenuState* pStruct, bool bDrawTracks);
+
+    // FUN_004360e0
+    void DrawTracks(MenuState* param_1, char param_2);
+
+    // FUN_00440af0
+    int32_t VerifySelectedTrack(MenuState* pStruct, int32_t SelectedTrackIdx);
+
+    // FUN_00440a00
+    uint8_t GetRequiredPlaceToProceed(uint8_t CircuitIdx, uint8_t TrackIdx);
+
+    // FUN_00425500
+    int32_t CheckCD();
+
+    // FUN_004282f0
+    void ImgReset(uint16_t ImgIdx, ImgDat* pImgDat);
+
+    // FUN_00428370
+    void ImgResetAll();
+
+    // FUN_00440a20
     bool FUN_00440a20(int32_t CircuitIdx, int32_t TrackIdx);
+
+    // FUN_0041d6c0
     int32_t FUN_0041d6c0();
-    void FUN_0045b290(MenuState *pState, int* param_2, int param_3);                        // FUN_0045b290
+
+    // FUN_0045b290
+    void FUN_0045b290(MenuState *pState, int* param_2, int param_3);
 
 
-    typedef void(FUN_00456800_t)(MenuState* pState, int PlanetIdx, float Scale);
-    static  FUN_00456800_t* DrawHoloPlanet = (FUN_00456800_t*)0x00456800;
-
-    typedef void(FUN_00456c70_t)(MenuState *pState, int TrackID, float param_3);
-    static  FUN_00456c70_t* DrawTrackPreview = (FUN_00456c70_t*)0x00456c70;
-
-    typedef void(FUN_00440150_t)(void* pUnused, int PosY);
-    static  FUN_00440150_t* MenuAxisHorizontal = (FUN_00440150_t*)0x00440150;
-
-    typedef void(__cdecl FUN_0043b0b0_t)(MenuState* pState);
-    static  FUN_0043b0b0_t* HandleCircuits = (FUN_0043b0b0_t*)0x0043b0b0;
-
-    typedef bool(__cdecl FUN_00440bc0_t)(MenuState* pState);
-    static  FUN_00440bc0_t* BeatEverything1stPlace = (FUN_00440bc0_t*)0x00440bc0;
+    DEF_ALIAS(00456800, DrawHoloPlanet, void, MenuState* pState, int PlanetIdx, float Scale);
+    DEF_ALIAS(00456c70, DrawTrackPreview, void, MenuState *pState, int TrackID, float param_3);
+    DEF_ALIAS(00440150, MenuAxisHorizontal, void, void* pUnused, int PosY);
+    DEF_ALIAS(0043b0b0, HandleCircuits, __cdecl void, MenuState* pState);
+    DEF_ALIAS(00440bc0, BeatEverything1stPlace, __cdecl bool, MenuState* pState);
 
     // "/SCREENTEXT_508/~~Abyss" -> "Abyss"
-    typedef const char* (FUN_00421360_t)(const char* param_1);
-    static  FUN_00421360_t* StrSanitise = (FUN_00421360_t*)0x00421360;
+    DEF_ALIAS(00421360, StrSanitise, const char* , const char* param_1);
 
     // sprintf, but idk yet whether it's custom or the LibC variant
-    typedef int32_t(FUN_0049eb80_t)(char* pDst, const char* pFormat, ...);
-    static  FUN_0049eb80_t* rcr_sprintf = (FUN_0049eb80_t*)0x0049eb80;
+    DEF_ALIAS(0049eb80, rcr_sprintf, int32_t, char* pDst, const char* pFormat, ...);
 
     // Position in pixels from
     //   X:  0 - 320
@@ -60,39 +101,16 @@ namespace FUN
     //  ~f4  Small
     //  ~c   Centered
     //  ~s   Shadow
-    typedef void(FUN_00450530_t)(int16_t PosX, int16_t PosY, uint8_t R, uint8_t G, uint8_t B, uint8_t A, const char* pText);
-    static  FUN_00450530_t* UIText = (FUN_00450530_t*)0x00450530;
-
-    typedef void(FUN_0043fce0_t)(MenuState* pState, uint16_t PosX, uint16_t PosY, int param_4, float param_5, float param_6, const char* pText);
-    static  FUN_0043fce0_t* UITextMenu = (FUN_0043fce0_t*)0x0043fce0;
-
-    typedef void(FUN_004403e0_t)(MenuState *pState, int param_2, int param_3, int32_t param_4, char param_5);
-    static  FUN_004403e0_t* DrawRecord = (FUN_004403e0_t*)0x004403e0;
-
-    typedef void(FUN_00454d40_t)(MenuState* pState, int param_2);
-    static  FUN_00454d40_t* SetMenuIdx = (FUN_00454d40_t*)0x00454d40;
-
-    typedef void(FUN_004286f0_t)(uint16_t ImgIdx, float ScaleX, float ScaleY);
-    static  FUN_004286f0_t* ImgScale = (FUN_004286f0_t*)0x004286f0;
-
-    typedef void(FUN_00428740_t)(uint16_t ImgIdx, uint8_t R, uint8_t G, uint8_t B, uint8_t A);
-    static  FUN_00428740_t* ImgColor = (FUN_00428740_t*)0x00428740;
-
-    typedef void(FUN_004287e0_t)(uint16_t ImgIdx, uint32_t Flag);
-    static  FUN_004287e0_t* ImgSetFlag = (FUN_004287e0_t*)0x004287e0;
-
-    typedef void(FUN_00428800_t)(uint16_t ImgIdx, uint32_t Flag);
-    static  FUN_00428800_t* ImgResetFlag = (FUN_00428800_t*)0x00428800;
-
-    typedef void(FUN_004285d0_t)(uint16_t ImgIdx, int32_t bVisible);
-    static  FUN_004285d0_t* ImgVisible = (FUN_004285d0_t*)0x004285d0;
-
-    typedef void(FUN_00428660_t)(uint16_t ImgIdx, uint16_t PosX, uint16_t PosY);
-    static  FUN_00428660_t* ImgPosition = (FUN_00428660_t*)0x00428660;
-
-    typedef void(FUN_0042f860_t)(float *pDst,float *pLhs,float *pRhs);
-    static  FUN_0042f860_t* Vec3Sub = (FUN_0042f860_t*)0x0042f860;
-    
-    typedef float10(FUN_0042f8c0_t)(float *pSrc);
-    static  FUN_0042f8c0_t* Vec3Mag = (FUN_0042f8c0_t*)0x0042f8c0;
+    DEF_ALIAS(00450530, UIText, void, int16_t PosX, int16_t PosY, uint8_t R, uint8_t G, uint8_t B, uint8_t A, const char* pText);
+    DEF_ALIAS(0043fce0, UITextMenu, void, MenuState* pState, uint16_t PosX, uint16_t PosY, int param_4, float param_5, float param_6, const char* pText);
+    DEF_ALIAS(004403e0, DrawRecord, void, MenuState *pState, int param_2, int param_3, int32_t param_4, char param_5);
+    DEF_ALIAS(00454d40, SetMenuIdx, void, MenuState* pState, int param_2);
+    DEF_ALIAS(004286f0, ImgScale, void, uint16_t ImgIdx, float ScaleX, float ScaleY);
+    DEF_ALIAS(00428740, ImgColor, void, uint16_t ImgIdx, uint8_t R, uint8_t G, uint8_t B, uint8_t A);
+    DEF_ALIAS(004287e0, ImgSetFlag, void, uint16_t ImgIdx, uint32_t Flag);
+    DEF_ALIAS(00428800, ImgResetFlag, void, uint16_t ImgIdx, uint32_t Flag);
+    DEF_ALIAS(004285d0, ImgVisible, void, uint16_t ImgIdx, int32_t bVisible);
+    DEF_ALIAS(00428660, ImgPosition, void, uint16_t ImgIdx, uint16_t PosX, uint16_t PosY);
+    DEF_ALIAS(0042f860, Vec3Sub, void, float *pDst,float *pLhs,float *pRhs); 
+    DEF_ALIAS(0042f8c0, Vec3Mag, float10, float *pSrc);
 }

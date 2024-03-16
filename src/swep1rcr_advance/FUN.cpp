@@ -9,136 +9,54 @@
 
 namespace FUN
 {
-    typedef void(FUN_0045bee0_t)(MenuState* pStruct, int param_2, int param_3, int32_t param_4);
-    static FUN_0045bee0_t* FUN_0045bee0 = (FUN_0045bee0_t*)0x0045bee0;
-
-    typedef void(__cdecl FUN_0043b1d0_t)(MenuState* pStruct);
-    static  FUN_0043b1d0_t* FUN_0043b1d0 = (FUN_0043b1d0_t*)0x0043b1d0;
-
-    typedef float10(FUN_00469b90_t)(float param_1);
-    static  FUN_00469b90_t* FUN_00469b90 = (FUN_00469b90_t*)0x00469b90;
-
-    typedef int32_t(FUN_004816b0_t)();
-    static  FUN_004816b0_t* FUN_004816b0 = (FUN_004816b0_t*)0x004816b0;
-
-    typedef int32_t(FUN_00440620_t)(int32_t param_1);
-    static  FUN_00440620_t* FUN_00440620 = (FUN_00440620_t*)0x00440620;
-
-    typedef void(FUN_0042de10_t)(char* param_1, int param_2);
-    static  FUN_0042de10_t* FUN_0042de10 = (FUN_0042de10_t*)0x0042de10;
-
-    typedef void(FUN_0043fe90_t)(int param_1, int param_2, int param_3);
-    static  FUN_0043fe90_t* FUN_0043fe90 = (FUN_0043fe90_t*)0x0043fe90;
-
-    typedef void(FUN_00469c30_t)(int param_1, float param_2, int param_3);
-    static  FUN_00469c30_t* FUN_00469c30 = (FUN_00469c30_t*)0x00469c30;
-
-    typedef void(FUN_004118b0_t)();
-    static  FUN_004118b0_t* FUN_004118b0 = (FUN_004118b0_t*)0x004118b0;
-
-    typedef void(FUN_00440550_t)(int32_t param_1);
-    static  FUN_00440550_t* FUN_00440550 = (FUN_00440550_t*)0x00440550;
-
-    typedef void(FUN_0041e5a0_t)();
-    static  FUN_0041e5a0_t* FUN_0041e5a0 = (FUN_0041e5a0_t*)0x0041e5a0;
+    DEF_FUN(0045bee0, void, MenuState* pStruct, int param_2, int param_3, int32_t param_4);
+    DEF_FUN(0043b1d0, void, MenuState* pStruct);
+    DEF_FUN(00469b90, float10, float param_1);
+    DEF_FUN(004816b0, int32_t);
+    DEF_FUN(00440620, int32_t, int32_t param_1);
+    DEF_FUN(0042de10, void, char* param_1, int param_2);
+    DEF_FUN(0043fe90, void, int param_1, int param_2, int param_3);
+    DEF_FUN(00469c30, void, int param_1, float param_2, int param_3);
+    DEF_FUN(004118b0, void);
+    DEF_FUN(00440550, void, int32_t param_1);
+    DEF_FUN(0041e5a0, void);
 
     // ImgSize ?
-    typedef void(FUN_004286c0_t)(uint16_t ImgIdx, uint16_t param_2, uint16_t param_3);
-    static  FUN_004286c0_t* FUN_004286c0 = (FUN_004286c0_t*)0x004286c0;
-
-    typedef void(FUN_00412e20_t)();
-    static  FUN_00412e20_t* FUN_00412e20 = (FUN_00412e20_t*)0x00412e20;
-
-    typedef float10(FUN_0042f560_t)(float param_1, float param_2);
-    static  FUN_0042f560_t* FUN_0042f560 = (FUN_0042f560_t*)0x0042f560;
-
-    typedef float10(FUN_0042f3e0_t)(float param_1);
-    static  FUN_0042f3e0_t* FUN_0042f3e0 = (FUN_0042f3e0_t*)0x0042f3e0;
-
-    typedef void(FUN_0042f9b0_t)(float* param_1);
-    static  FUN_0042f9b0_t* FUN_0042f9b0 = (FUN_0042f9b0_t*)0x0042f9b0;
-
-    typedef void(FUN_00450560_t)(int32_t PosX, int32_t PosY, const char *pText);
-    static  FUN_00450560_t* FUN_00450560 = (FUN_00450560_t*)0x00450560;  
-
-    typedef int32_t(FUN_00485880_t)(int param_1, int *param_2);
-    static  FUN_00485880_t* FUN_00485880 = (FUN_00485880_t*)0x00485880;  
-
-    typedef void(FUN_0042fa80_t)(float *param_1,float *param_2,float param_3,float *param_4);
-    static  FUN_0042fa80_t* FUN_0042fa80 = (FUN_0042fa80_t*)0x0042fa80;  
-
-    typedef void(FUN_00431020_t)(uint8_t *param_1,int32_t param_2,int32_t param_3,int32_t param_4);
-    static  FUN_00431020_t* FUN_00431020 = (FUN_00431020_t*)0x00431020;  
-
-    typedef float10(FUN_0042f950_t)(float *param_1,float *param_2);
-    static  FUN_0042f950_t* FUN_0042f950 = (FUN_0042f950_t*)0x0042f950;  
-
-    typedef void(FUN_0044bb10_t)(int32_t *param_1, int param_2);
-    static  FUN_0044bb10_t* FUN_0044bb10 = (FUN_0044bb10_t*)0x0044bb10;  
-
-    typedef void(FUN_0040a120_t)(int param_1);
-    static  FUN_0040a120_t* FUN_0040a120 = (FUN_0040a120_t*)0x0040a120;  
-
-    typedef bool(FUN_00409d70_t)(uint32_t param_1);
-    static  FUN_00409d70_t* FUN_00409d70 = (FUN_00409d70_t*)0x00409d70;  
-
-    typedef void(FUN_00427d90_t)(int PlanetIdx, int param_2);
-    static  FUN_00427d90_t* FUN_00427d90 = (FUN_00427d90_t*)0x00427d90; 
-
+    DEF_FUN(004286c0, void, uint16_t ImgIdx, uint16_t param_2, uint16_t param_3);
+    DEF_FUN(00412e20, void);
+    DEF_FUN(0042f560, float10, float param_1, float param_2);
+    DEF_FUN(0042f3e0, float10, float param_1);
+    DEF_FUN(0042f9b0, void, float* param_1);
+    DEF_FUN(00450560, void, int32_t PosX, int32_t PosY, const char *pText);
+    DEF_FUN(00485880, int32_t, int param_1, int *param_2);
+    DEF_FUN(0042fa80, void, float *param_1,float *param_2,float param_3,float *param_4);
+    DEF_FUN(00431020, void, uint8_t *param_1,int32_t param_2,int32_t param_3,int32_t param_4);
+    DEF_FUN(0042f950, float10, float *param_1,float *param_2);
+    DEF_FUN(0044bb10, void, int32_t *param_1, int param_2);
+    DEF_FUN(0040a120, void, int param_1);
+    DEF_FUN(00409d70, bool, uint32_t param_1);
+    DEF_FUN(00427d90, void, int PlanetIdx, int param_2);
+     
     // Compare two char[3]'s
-    typedef bool(FUN_004409d0_t)(char *param_1, char *param_2);
-    static  FUN_004409d0_t* FUN_004409d0 = (FUN_004409d0_t*)0x004409d0; 
-
-    typedef void(FUN_00440c10_t)(MenuState *pState);
-    static  FUN_00440c10_t* FUN_00440c10 = (FUN_00440c10_t*)0x00440c10; 
-
-    typedef void(FUN_0041e660_t)();
-    static  FUN_0041e660_t* FUN_0041e660 = (FUN_0041e660_t*)0x0041e660; 
-
-    typedef void(FUN_0045a3e0_t)();
-    static  FUN_0045a3e0_t* FUN_0045a3e0 = (FUN_0045a3e0_t*)0x0045a3e0;
-
-    typedef void(FUN_0045bb60_t)();
-    static  FUN_0045bb60_t* FUN_0045bb60 = (FUN_0045bb60_t*)0x0045bb60;
+    DEF_FUN(004409d0, bool, char *param_1, char *param_2);
+    DEF_FUN(00440c10, void, MenuState *pState);
+    DEF_FUN(0041e660, void);
+    DEF_FUN(0045a3e0, void);
+    DEF_FUN(0045bb60, void);
+    DEF_FUN(0045b5d0, void, MenuState *pState);
+    DEF_FUN(00408640, void, uint8_t param_1);
+    DEF_FUN(0041bd90, void, int32_t param_1,int32_t param_2,int32_t param_3);
+    DEF_FUN(00420f90, int);
+    DEF_FUN(0045b610, int*, MenuState *pState,int *param_2);
+    DEF_FUN(0045b7d0, int*, MenuState *pState,int *param_2);
+    DEF_FUN(0041dd50, void, MenuState *pState, UnknStruct3 *pUnkn3);
+    DEF_FUN(0041bd50, void, int32_t param_1);
+    DEF_FUN(00445aa0, void, int param_1);
+    DEF_FUN(00447300, void, int param_1, int32_t param_2);
+    DEF_FUN(00450c50, void, int param_1, UnknStruct3 *pUnkn3);
+    DEF_FUN(00449e30, void);
+    DEF_FUN(0045b210, void, MenuState *pState);
     
-    typedef void(FUN_0045b5d0_t)(MenuState *pState);
-    static FUN_0045b5d0_t* FUN_0045b5d0 = (FUN_0045b5d0_t*)0x0045b5d0;
-
-    typedef void(FUN_00408640_t)(uint8_t param_1);
-    static FUN_00408640_t* FUN_00408640 = (FUN_00408640_t*)0x00408640;
-
-    typedef void(FUN_0041bd90_t)(int32_t param_1,int32_t param_2,int32_t param_3);
-    static FUN_0041bd90_t* FUN_0041bd90 = (FUN_0041bd90_t*)0x0041bd90;
-
-    typedef int(FUN_00420f90_t)();
-    static FUN_00420f90_t* FUN_00420f90 = (FUN_00420f90_t*)0x00420f90;
-
-    typedef int*(FUN_0045b610_t)(MenuState *pState,int *param_2);
-    static FUN_0045b610_t* FUN_0045b610 = (FUN_0045b610_t*)0x0045b610;
-
-    typedef int*(FUN_0045b7d0_t)(MenuState *pState,int *param_2);
-    static FUN_0045b7d0_t* FUN_0045b7d0 = (FUN_0045b7d0_t*)0x0045b7d0;
-
-    typedef void(FUN_0041dd50_t)(MenuState *pState, UnknStruct3 *pUnkn3);
-    static FUN_0041dd50_t* FUN_0041dd50 = (FUN_0041dd50_t*)0x0041dd50;
-
-    typedef void(FUN_0041bd50_t)(int32_t param_1);
-    static FUN_0041bd50_t* FUN_0041bd50 = (FUN_0041bd50_t*)0x0041bd50;
-
-    typedef void(FUN_00445aa0_t)(int param_1);
-    static FUN_00445aa0_t* FUN_00445aa0 = (FUN_00445aa0_t*)0x00445aa0;
-
-    typedef void(FUN_00447300_t)(int param_1, int32_t param_2);
-    static FUN_00447300_t* FUN_00447300 = (FUN_00447300_t*)0x00447300;
-
-    typedef void(FUN_00450c50_t)(int param_1, UnknStruct3 *pUnkn3);
-    static FUN_00450c50_t* FUN_00450c50 = (FUN_00450c50_t*)0x00450c50;
-
-    typedef void(FUN_00449e30_t)();
-    static FUN_00449e30_t* FUN_00449e30 = (FUN_00449e30_t*)0x00449e30;
-
-    typedef void(FUN_0045b210_t)(MenuState *pState);
-    static FUN_0045b210_t* FUN_0045b210 = (FUN_0045b210_t*)0x0045b210;
 
 
 
