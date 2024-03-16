@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include "Types.h"
 
+//
+// Extend functionality
+//
 namespace EXT
 {
     const char* GetFilePath(int32_t FileID);

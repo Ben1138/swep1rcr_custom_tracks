@@ -1,6 +1,7 @@
 #pragma once
 #include <stdint.h>
 #include "Types.h"
+#include "Version.h"
 #include "EXT.h"
 
 

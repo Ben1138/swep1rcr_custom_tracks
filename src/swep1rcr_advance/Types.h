@@ -2,6 +2,12 @@
 #include <stdint.h>
 #include <stddef.h>
 
+
+//
+// Reverse engineered types
+//
+
+
 typedef long double float10;
 
 struct ImgDat;

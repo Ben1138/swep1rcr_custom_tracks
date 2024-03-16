@@ -63,6 +63,7 @@ if(DYN_LOAD)
         "${DIR_SRC}/swep1rcr_advance/FUN.cpp"
         "${DIR_SRC}/swep1rcr_advance/Tracks.cpp"
         "${DIR_SRC}/swep1rcr_advance/EXT.cpp"
+        "${DIR_SRC}/swep1rcr_advance/Version.cpp"
     )
 else()
     target_include_directories(dinput PRIVATE "${DIR_SRC}/swep1rcr_advance")
@@ -77,5 +78,6 @@ else()
         "${DIR_SRC}/swep1rcr_advance/FUN.cpp"
         "${DIR_SRC}/swep1rcr_advance/Tracks.cpp"
         "${DIR_SRC}/swep1rcr_advance/EXT.cpp"
+        "${DIR_SRC}/swep1rcr_advance/Version.cpp"
     )
 endif()
