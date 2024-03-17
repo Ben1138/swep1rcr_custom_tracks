@@ -40,6 +40,7 @@ if(DYN_LOAD)
         "${DIR_SRC}/dinput/DLLMain.cpp"
         "${DIR_SRC}/dinput/DLLWrap.cpp"                                     # Wrapping of DirectInputCreateA
         "${DIR_SRC}/dinput/DynamicLoading.cpp"
+        "${DIR_SRC}/dinput/md5.cpp"
     )
 
     add_library(custom_tracks SHARED)
@@ -73,6 +74,7 @@ else()
         "${DIR_SRC}/dinput/exports.def"                                     # Exports DirectInputCreateA
         "${DIR_SRC}/dinput/DLLMain.cpp"
         "${DIR_SRC}/dinput/DLLWrap.cpp"                                     # Wrapping of DirectInputCreateA
+        "${DIR_SRC}/dinput/md5.cpp"
 
         "${DIR_SRC}/custom_tracks/Patching.cpp"
         "${DIR_SRC}/custom_tracks/FUN.cpp"
