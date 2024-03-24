@@ -7,6 +7,7 @@ set(CMAKE_CXX_EXTENSIONS         OFF)
 
 if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /GR-")
+    add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
 else()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fno-exceptions -fno-rtti -m32 -static-libgcc -static-libstdc++ -Wl,--kill-at")
 endif()

@@ -12,7 +12,6 @@ typedef void* LPDIRECTINPUT;
 typedef void* LPUNKNOWN;
 
 typedef HRESULT(WINAPI DirectInputCreateA_t)(HINSTANCE, DWORD, LPDIRECTINPUT*, LPUNKNOWN);
-
 EXPORT HRESULT WINAPI DirectInputCreateA(HINSTANCE hinst, DWORD dwVersion, LPDIRECTINPUT* lplpDirectInput, LPUNKNOWN punkOuter)
 {
     static DirectInputCreateA_t* s_pDirectInputCreateA = nullptr;

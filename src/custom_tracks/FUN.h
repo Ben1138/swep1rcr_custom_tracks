@@ -30,7 +30,7 @@ namespace FUN
     void FileClose(int32_t FileID);
 
     // FUN_0043b0b0
-    void __cdecl HandleCircuit(MenuState* pStruct);
+    void HandleCircuit(MenuState* pStruct);
 
     // FUN_0043b240
     void MenuTrackSelection();
@@ -51,7 +51,7 @@ namespace FUN
     bool IsTrackPlayable(MenuState* pStruct, uint8_t CircuitIdx, uint8_t TrackIdx);
 
     // FUN_004584a0
-    void __cdecl InitTracks(MenuState* pStruct, bool bDrawTracks);
+    void InitTracks(MenuState* pStruct, bool bDrawTracks);
 
     // FUN_004360e0
     void DrawTracks(MenuState* param_1, char param_2);
@@ -80,12 +80,12 @@ namespace FUN
     // FUN_0045b290
     void FUN_0045b290(MenuState *pState, int* param_2, int param_3);
 
-
     DEF_ALIAS(00456800, DrawHoloPlanet, void, MenuState* pState, int PlanetIdx, float Scale);
     DEF_ALIAS(00456c70, DrawTrackPreview, void, MenuState *pState, int TrackID, float param_3);
     DEF_ALIAS(00440150, MenuAxisHorizontal, void, void* pUnused, int PosY);
-    DEF_ALIAS(0043b0b0, HandleCircuits, __cdecl void, MenuState* pState);
-    DEF_ALIAS(00440bc0, BeatEverything1stPlace, __cdecl bool, MenuState* pState);
+
+    DEF_ALIAS(0043b0b0, HandleCircuits, void, MenuState* pState);
+    DEF_ALIAS(00440bc0, BeatEverything1stPlace, bool, MenuState* pState);
 
     // "/SCREENTEXT_508/~~Abyss" -> "Abyss"
     DEF_ALIAS(00421360, StrSanitise, const char* , const char* param_1);
