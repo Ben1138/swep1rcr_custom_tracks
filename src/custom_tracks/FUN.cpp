@@ -174,7 +174,7 @@ namespace FUN
 
         fseek(pFile, OffsetAddr, 0);
         const size_t BytesRead = fread(pDstBuffer, 1, NumRead, pFile);
-        if (BytesRead < NumRead) // This check didn't exist before
+        if (BytesRead < size_t(NumRead)) // This check didn't exist before
         {
             snprintf(Message, sizeof(Message), "Wanted to read %d bytes, but %d are read from file with FileID: %d!", NumRead, BytesRead, FileID);
             MessageBoxA(nullptr, Message, "File Error", MB_ICONERROR | MB_OK);
